@@ -1,3 +1,8 @@
+/*
+Kristian Smolko
+
+ */
+
 import javafx.animation.ParallelTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
