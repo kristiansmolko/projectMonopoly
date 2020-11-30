@@ -11,8 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -26,17 +25,22 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.util.Optional;
 import java.util.Random;
 
 
 public class Test extends Application{
+    private int turn = 1;
+    private int numOfPlayers;
     @Override
     public void start(Stage stage) throws Exception {
+        //layouts
         BorderPane root = new BorderPane();
         BorderPane border = new BorderPane();
         Group center = new Group();
+        //dice creating
         Rectangle rect = makeDice();
-        int x = 250;
+        int x = 250; //move
         //moves
         TranslateTransition back = moveBack(rect, x);
         ParallelTransition par = parallel(rect, x);
@@ -48,8 +52,58 @@ public class Test extends Application{
         Circle[] set4 = get4(rect, x);
         Circle[] set5 = get5(rect, x);
         Circle[] set6 = get6(rect, x);
-        //figure
-        ImageView figureView = figure();
+        //dialog window
+        Alert alert = makeDialog();
+        ButtonType b1 = new ButtonType("Two");
+        ButtonType b2 = new ButtonType("Three");
+        ButtonType b3 = new ButtonType("Four");
+        ButtonType can = new ButtonType("Cancel");
+        alert.getButtonTypes().setAll(b1, b2, b3, can);
+        //get number of players
+        Optional<ButtonType> result = alert.showAndWait();
+        //button actions
+        if (result.get() == b1)
+            numOfPlayers = 2;
+        else if (result.get() == b2)
+            numOfPlayers = 3;
+        else if (result.get() == b3)
+            numOfPlayers = 4;
+        else if (result.get() == can)
+            System.exit(0);
+        //set new players
+        Player player1 = new Player(1);
+        Player player2 = new Player(2);
+        Player player3 = new Player(3);
+        Player player4 = new Player(4);
+        //add figures to players
+        switch (numOfPlayers) {
+            case 3 :
+                player1.setFigure("figure.png");
+                player2.setFigure("figure2.png");
+                player3.setFigure("figure3.png");break;
+            case 4 :
+                player1.setFigure("figure.png");
+                player2.setFigure("figure2.png");
+                player3.setFigure("figure3.png");
+                player4.setFigure("figure4.png");
+                break;
+            default :
+                player1.setFigure("figure.png");
+                player2.setFigure("figure2.png");
+        }
+        //figures
+        ImageView figure1 = makeFigure(player1.getFigure());
+        ImageView figure2 = makeFigure(player2.getFigure());
+        ImageView figure3 = makeFigure(player3.getFigure());
+        ImageView figure4 = makeFigure(player4.getFigure());
+        figure1.setTranslateX(900);
+        figure1.setTranslateY(700);
+        figure2.setTranslateX(900);
+        figure2.setTranslateY(700);
+        figure3.setTranslateX(900);
+        figure3.setTranslateY(600);
+        figure4.setTranslateX(900);
+        figure4.setTranslateY(500);
         //mouse click action
         EventHandler<MouseEvent> mouse = mouseEvent -> {
             if (mouseEvent.getSource() == rect){
@@ -59,9 +113,8 @@ public class Test extends Application{
         //when dice throw is completed
         par.setOnFinished(actionEvent -> {
             int finalRn = randomNum();
-            if (finalRn == 1){
+            if (finalRn == 1)
                 root.getChildren().add(c1);
-            }
             else if (finalRn == 2)
                 for (Circle setC : set2)
                     root.getChildren().addAll(setC);
@@ -80,10 +133,19 @@ public class Test extends Application{
 
             translateFigure.setByX(-(finalRn*90)+50);
             translateFigure.setDuration(Duration.millis(1000));
-            translateFigure.setNode(figureView);
+            if (turn == 1)  //find out who is on turn
+                translateFigure.setNode(figure1);
+            if (turn == 2)
+                translateFigure.setNode(figure2);
+            if (turn == 3)
+                translateFigure.setNode(figure3);
+            if (turn == 4)
+                translateFigure.setNode(figure4);
             translateFigure.play();
             actionEvent.consume();
+            nextTurn(); //next player
         });
+
         //when move with figure is completed
         translateFigure.setOnFinished(actionEvent -> {
             back.play();
@@ -105,7 +167,13 @@ public class Test extends Application{
         //layout
         //center of game = board and figure
         // + later thing
-        center.getChildren().addAll(lbl,figureView);
+        center.getChildren().addAll(lbl);
+        if (player4.isPlaying())
+            center.getChildren().add(figure4);
+        if (player3.isPlaying())
+            center.getChildren().add(figure3);
+        center.getChildren().add(figure2);
+        center.getChildren().add(figure1);
 
         //game setup
         border.setCenter(center);
@@ -120,12 +188,12 @@ public class Test extends Application{
         launch(args);
     }
 
-    private static int randomNum(){
+    private int randomNum(){
         Random rnd = new Random();
         return (rnd.nextInt(6)+1);
     }
 
-    private static Circle get1(Rectangle rect, int x){
+    private Circle get1(Rectangle rect, int x){
         Circle c = new Circle();
         c.setCenterX(rect.getX() + x + (rect.getWidth()/2));
         c.setCenterY(rect.getY() + (rect.getHeight()/2));
@@ -134,7 +202,7 @@ public class Test extends Application{
         return c;
     }
 
-    private static Circle[] get2(Rectangle rect, int x){
+    private Circle[] get2(Rectangle rect, int x){
         Circle c1 = new Circle();
         Circle c2 = new Circle();
         c1.setCenterX(rect.getX() + x + (rect.getWidth()/2) + 10);
@@ -279,11 +347,25 @@ public class Test extends Application{
         return lbl;
     }
 
-    private ImageView figure(){
-        Image figure = new Image("figure.png");
-        ImageView figureView = new ImageView(figure);
-        figureView.setTranslateX(900);
-        figureView.setTranslateY(700);
-        return  figureView;
+    private ImageView makeFigure(Image img){
+        ImageView iw = new ImageView(img);
+        iw.setFitWidth(70);
+        iw.setFitHeight(90);
+        return iw;
+    }
+
+    private Alert makeDialog(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Players");
+        alert.setHeaderText("Choose how many players");
+        alert.setContentText("Choose");
+        return alert;
+    }
+
+    private void nextTurn(){
+        if (turn == numOfPlayers)
+            turn = 1;
+        else
+            turn -= -1;
     }
 }
