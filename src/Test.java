@@ -4,6 +4,7 @@ Kristian Smolko
  */
 
 import javafx.animation.ParallelTransition;
+import javafx.animation.PauseTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
@@ -45,6 +46,10 @@ public class Test extends Application{
         TranslateTransition back = moveBack(rect, x);
         ParallelTransition par = parallel(rect, x);
         TranslateTransition translateFigure = new TranslateTransition();
+        TranslateTransition translateFigure2 = new TranslateTransition();
+        TranslateTransition transY = new TranslateTransition();
+        TranslateTransition transY2 = new TranslateTransition();
+        PauseTransition pauseMove = new PauseTransition();
         //dots in dice
         Circle c1 = get1(rect, x);
         Circle[] set2 = get2(rect, x);
@@ -96,14 +101,14 @@ public class Test extends Application{
         ImageView figure2 = makeFigure(player2.getFigure());
         ImageView figure3 = makeFigure(player3.getFigure());
         ImageView figure4 = makeFigure(player4.getFigure());
-        figure1.setTranslateX(900);
-        figure1.setTranslateY(700);
-        figure2.setTranslateX(900);
+        figure1.setTranslateX(880);
+        figure1.setTranslateY(705);
+        figure2.setTranslateX(890);
         figure2.setTranslateY(700);
         figure3.setTranslateX(900);
-        figure3.setTranslateY(600);
-        figure4.setTranslateX(900);
-        figure4.setTranslateY(500);
+        figure3.setTranslateY(695);
+        figure4.setTranslateX(910);
+        figure4.setTranslateY(690);
         //mouse click action
         EventHandler<MouseEvent> mouse = mouseEvent -> {
             if (mouseEvent.getSource() == rect){
@@ -131,18 +136,312 @@ public class Test extends Application{
                 for (Circle setC : set6)
                     root.getChildren().addAll(setC);
 
-            translateFigure.setByX(-(finalRn*90)+50);
-            translateFigure.setDuration(Duration.millis(1000));
-            if (turn == 1)  //find out who is on turn
+            int move = (finalRn * 50) + 70;
+            int moveUp = (finalRn * 50) + 60;
+            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//       ALGORITH FOR MOVING DON'T FREAKING TOUCH IT, DON'T EVEN LOOK AT IT, I WARN YOU!
+            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            translateFigure.setDuration(Duration.millis(2000));
+            translateFigure2.setDuration(Duration.millis(2000));
+            transY.setDuration(Duration.millis(2000));
+            transY2.setDuration(Duration.millis(2000));
+            pauseMove.setDuration(Duration.millis(500));
+            //turns
+            if (turn == 1) {  //find out who is on turn
+                translateFigure.stop();
+                transY.stop();
                 translateFigure.setNode(figure1);
-            if (turn == 2)
-                translateFigure.setNode(figure2);
-            if (turn == 3)
-                translateFigure.setNode(figure3);
-            if (turn == 4)
+                transY.setNode(figure1);
+                translateFigure.setByX(0);
+                translateFigure.setByY(0);
+                transY.setByY(0);
+                transY.setByX(0);
+                pauseMove.setDuration(Duration.millis(500));
+                double nextTile = player1.getTile() + finalRn;
+                double rest = 0;
+                if (player1.getTile() >= 0 && player1.getTile() < 10){
+                    if (nextTile > 10){
+                        rest = ((nextTile-10) * 50) + 70;
+                        translateFigure.setByX(-(move - rest));
+                        transY.setByY(- (((nextTile - 10) * 50) + 60));
+                        translateFigure.play();
+                        translateFigure.setOnFinished(actionEvent13 -> transY.play());
+                        actionEvent.consume();
+                    }
+                    else{
+                        if (player1.getTile() == 0)
+                            translateFigure.setByX(-(move + 10));
+                        else
+                            translateFigure.setByX(-move);
+                        translateFigure.play();
+                    }
+                }
+                if (player1.getTile() >= 10 && player1.getTile() < 20){
+                    if (nextTile > 20){
+                        rest = ((nextTile-20) * 50) + 70;
+                        translateFigure.setByY(-(moveUp - ((nextTile-20) * 50) + 60));
+                        transY.setByX(rest);
+                        translateFigure.play();
+                        translateFigure.setOnFinished(actionEvent13 -> transY.play());
+                        actionEvent.consume();
+                    }
+                    else{
+                        transY.setByY(-moveUp);
+                        transY.play();
+                    }
+                }
+                if (player1.getTile() >= 20 && player1.getTile() < 30){
+                    if (nextTile > 30){
+                        rest = ((nextTile-30) * 50) + 60;
+                        translateFigure.setByX(move - (((nextTile-30) * 50 ) + 70));
+                        transY.setByY(rest);
+                        translateFigure.play();
+                        translateFigure.setOnFinished(actionEvent15 -> transY.play());
+                    }
+                    else if (player1.getTile() >= 20){
+                        translateFigure.setByX(move);
+                        translateFigure.play();
+                    }
+                }
+                if (player1.getTile() >= 30 && player1.getTile() < 40){
+                    if (nextTile > 40){
+                        rest = ((nextTile - 40) * 50) + 70;
+                        translateFigure.setByY((moveUp - (((nextTile-40) * 50 ) + 60)));
+                        transY.setByX(-rest);
+                        translateFigure.play();
+                        translateFigure.setOnFinished(actionEvent1 -> transY.play());
+                    }
+                    else{
+                        transY.setByY(moveUp);
+                        transY.play();
+                    }
+                }
+                player1.addTile(finalRn);
+                if (player1.getTile() >= 40) {
+                    player1.addTile(-40);
+                }
+                actionEvent.consume();
+            }
+            else if (turn == 2) {
+                translateFigure2.stop();
+                transY2.stop();
+                translateFigure2.setNode(figure2);
+                transY2.setNode(figure2);
+                translateFigure2.setByX(0);
+                translateFigure2.setByY(0);
+                transY2.setByY(0);
+                transY2.setByX(0);
+                pauseMove.setDuration(Duration.millis(500));
+                double nextTile = player2.getTile() + finalRn;
+                double rest;
+                if (player2.getTile() >= 0 && player2.getTile() < 10){
+                    if (nextTile > 10){
+                        rest = ((nextTile-10) * 50) + 70;
+                        translateFigure2.setByX(-(move - rest));
+                        transY2.setByY(- (((nextTile - 10) * 50) + 60));
+                        translateFigure2.play();
+                        translateFigure2.setOnFinished(actionEvent1 -> transY2.play());
+                    }
+                    else{
+                        if (player2.getTile() == 0)
+                            translateFigure2.setByX(-(move + 30));
+                        else
+                            translateFigure2.setByX(-move);
+                        translateFigure2.play();
+                    }
+                }
+                if (player2.getTile() >= 10 && player2.getTile() < 20){
+                    if (nextTile > 20){
+                        rest = ((nextTile-20) * 50) + 70;
+                        translateFigure2.setByY(-(moveUp - (((nextTile-20) * 50) + 60)));
+                        transY2.setByX(rest);
+                        translateFigure2.play();
+                        translateFigure2.setOnFinished(actionEvent1 -> transY2.play());
+                    }
+                    else{
+                        transY2.setByY(-moveUp);
+                        transY2.play();
+                    }
+                }
+                if (player2.getTile() >= 20 && player2.getTile() < 30){
+                    if (nextTile > 30){
+                        rest = ((nextTile-30) * 50) + 70;
+                        translateFigure2.setByX((move - rest));
+                        transY2.setByY(((nextTile-30) * 50) + 60);
+                        translateFigure2.play();
+                        translateFigure2.setOnFinished(actionEvent1 -> transY2.play());
+                    }
+                    else{
+                        translateFigure2.setByX(move);
+                        translateFigure2.play();
+                    }
+                }
+                if (player2.getTile() >= 30 && player2.getTile() < 40){
+                    if (nextTile > 40){
+                        rest = ((nextTile - 40) * 50) + 70;
+                        translateFigure2.setByY((moveUp - (((nextTile-40) * 50 ) + 55)));
+                        transY2.setByX(-rest);
+                        translateFigure2.play();
+                        translateFigure2.setOnFinished(actionEvent1 -> transY2.play());
+                    }
+                    else{
+                        transY2.setByY(moveUp);
+                        transY2.play();
+                    }
+                }
+                player2.addTile(finalRn);
+                if (player2.getTile() >= 40)
+                    player2.addTile(-40);
+                actionEvent.consume();
+            }
+            else if (turn == 3) {
+                translateFigure2.stop();
+                transY2.stop();
+                translateFigure2.setNode(figure3);
+                transY2.setNode(figure3);
+                translateFigure2.setByX(0);
+                translateFigure2.setByY(0);
+                transY2.setByY(0);
+                transY2.setByX(0);
+                pauseMove.setDuration(Duration.millis(500));
+                double nextTile = player3.getTile() + finalRn;
+                double rest;
+                if (player3.getTile() >= 0 && player3.getTile() < 10){
+                    if (nextTile > 10){
+                        rest = ((nextTile-10) * 50) + 70;
+                        translateFigure2.setByX(-(move - rest));
+                        transY2.setByY(-(((nextTile - 10) * 50) + 60));
+                        translateFigure2.play();
+                        translateFigure2.setOnFinished(actionEvent1 -> transY2.play());
+                    }
+                    else{
+                        if (player3.getTile() == 0)
+                            translateFigure2.setByX(-(move + 30));
+                        else
+                            translateFigure2.setByX(-move);
+                        translateFigure2.play();
+                    }
+                }
+                if (player3.getTile() >= 10 && player3.getTile() < 20){
+                    if (nextTile > 20){
+                        rest = ((nextTile-20) * 50) + 70;
+                        translateFigure2.setByY(-(moveUp - (((nextTile-20) * 50) + 60)));
+                        transY2.setByX(rest);
+                        translateFigure2.play();
+                        translateFigure2.setOnFinished(actionEvent1 -> transY2.play());
+                    }
+                    else{
+                        transY2.setByY(-moveUp);
+                        transY2.play();
+                    }
+                }
+                if (player3.getTile() >= 20 && player3.getTile() < 30){
+                    if (nextTile > 30){
+                        rest = ((nextTile-30) * 50) + 70;
+                        translateFigure2.setByX((move - rest));
+                        transY2.setByY(((nextTile-30) * 50) + 60);
+                        translateFigure2.play();
+                        translateFigure2.setOnFinished(actionEvent1 -> transY2.play());
+                    }
+                    else{
+                        translateFigure2.setByX(move);
+                        translateFigure2.play();
+                    }
+                }
+                if (player3.getTile() >= 30 && player3.getTile() < 40){
+                    if (nextTile > 40){
+                        rest = ((nextTile - 40) * 50) + 70;
+                        translateFigure2.setByY((moveUp - (((nextTile-40) * 50 ) + 60)));
+                        transY2.setByX(-rest);
+                        translateFigure2.play();
+                        translateFigure2.setOnFinished(actionEvent1 -> transY2.play());
+                    }
+                    else{
+                        transY2.setByY(moveUp);
+                        transY2.play();
+                    }
+                }
+                player3.addTile(finalRn);
+                if (player3.getTile() >= 40)
+                    player3.addTile(-40);
+                actionEvent.consume();
+            }
+            else if (turn == 4){
+                translateFigure.stop();
+                transY.stop();
                 translateFigure.setNode(figure4);
-            translateFigure.play();
-            actionEvent.consume();
+                transY.setNode(figure4);
+                translateFigure.setByX(0);
+                translateFigure.setByY(0);
+                transY.setByY(0);
+                transY.setByX(0);
+                pauseMove.setDuration(Duration.millis(500));
+                double nextTile = player4.getTile() + finalRn;
+                double rest = 0;
+                if (player4.getTile() >= 0 && player4.getTile() < 10){
+                    if (nextTile > 10){
+                        rest = ((nextTile-10) * 50) + 70;
+                        translateFigure.setByX(-(move - rest));
+                        transY.setByY(- (((nextTile - 10) * 50) + 60));
+                        translateFigure.play();
+                        translateFigure.setOnFinished(actionEvent13 -> transY.play());
+                        actionEvent.consume();
+                    }
+                    else{
+                        if (player1.getTile() == 0)
+                            translateFigure.setByX(-(move + 10));
+                        else
+                            translateFigure.setByX(-move);
+                        translateFigure.play();
+                    }
+                }
+                if (player4.getTile() >= 10 && player4.getTile() < 20){
+                    if (nextTile > 20){
+                        rest = ((nextTile-20) * 50) + 70;
+                        translateFigure.setByY(-(moveUp - ((nextTile-20) * 50) + 60));
+                        transY.setByX(rest);
+                        translateFigure.play();
+                        translateFigure.setOnFinished(actionEvent13 -> transY.play());
+                        actionEvent.consume();
+                    }
+                    else{
+                        transY.setByY(-moveUp);
+                        transY.play();
+                    }
+                }
+                if (player4.getTile() >= 20 && player4.getTile() < 30){
+                    if (nextTile > 30){
+                        rest = ((nextTile-30) * 50) + 60;
+                        translateFigure.setByX(move - (((nextTile-30) * 50 ) + 70));
+                        transY.setByY(rest);
+                        translateFigure.play();
+                        translateFigure.setOnFinished(actionEvent15 -> transY.play());
+                    }
+                    else if (player1.getTile() >= 20){
+                        translateFigure.setByX(move);
+                        translateFigure.play();
+                    }
+                }
+                if (player4.getTile() >= 30 && player4.getTile() < 40){
+                    if (nextTile > 40){
+                        rest = ((nextTile - 40) * 50) + 70;
+                        translateFigure.setByY((moveUp - (((nextTile-40) * 50 ) + 60)));
+                        transY.setByX(-rest);
+                        translateFigure.play();
+                        translateFigure.setOnFinished(actionEvent1 -> transY.play());
+                    }
+                    else{
+                        transY.setByY(moveUp);
+                        transY.play();
+                    }
+                }
+                player4.addTile(finalRn);
+                if (player4.getTile() >= 40) {
+                    player4.addTile(-40);
+                }
+                actionEvent.consume();
+            }
+
             nextTurn(); //next player
         });
 
@@ -155,6 +454,44 @@ public class Test extends Application{
             root.getChildren().removeAll(set5);
             root.getChildren().removeAll(set6);
             root.getChildren().removeAll(c1);
+            translateFigure.stop();
+            actionEvent.consume();
+        });
+
+        translateFigure2.setOnFinished(actionEvent -> {
+            back.play();
+            root.getChildren().removeAll(set2);
+            root.getChildren().removeAll(set3);
+            root.getChildren().removeAll(set4);
+            root.getChildren().removeAll(set5);
+            root.getChildren().removeAll(set6);
+            root.getChildren().removeAll(c1);
+            translateFigure2.stop();
+            actionEvent.consume();
+        });
+
+        transY2.setOnFinished(actionEvent -> {
+            back.play();
+            root.getChildren().removeAll(set2);
+            root.getChildren().removeAll(set3);
+            root.getChildren().removeAll(set4);
+            root.getChildren().removeAll(set5);
+            root.getChildren().removeAll(set6);
+            root.getChildren().removeAll(c1);
+            transY2.stop();
+            actionEvent.consume();
+        });
+
+        transY.setOnFinished(actionEvent -> {
+            back.play();
+            root.getChildren().removeAll(set2);
+            root.getChildren().removeAll(set3);
+            root.getChildren().removeAll(set4);
+            root.getChildren().removeAll(set5);
+            root.getChildren().removeAll(set6);
+            root.getChildren().removeAll(c1);
+            transY.stop();
+            actionEvent.consume();
         });
 
         //actions
