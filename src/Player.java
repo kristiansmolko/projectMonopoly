@@ -39,7 +39,6 @@ public class Player {
     }
 
     public Image getFigure(){
-
         return figure;
     }
 
