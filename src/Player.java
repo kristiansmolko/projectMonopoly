@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Player {
     private int account;
-    private int pos;
+    private int pos, tile = 0;
     private ArrayList<String> owned;
     private Image figure;
 
@@ -51,5 +51,13 @@ public class Player {
 
     public int getPos() {
         return pos;
+    }
+
+    public int getTile(){
+        return tile;
+    }
+
+    public void addTile(int num){
+        tile -= -num;
     }
 }
