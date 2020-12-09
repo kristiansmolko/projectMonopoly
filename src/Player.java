@@ -10,7 +10,7 @@ public class Player {
 
     public Player(int num){
         account = 500;
-        owned = null;
+        owned = new ArrayList<>();
         pos = num;
     }
 
