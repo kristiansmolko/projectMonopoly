@@ -232,6 +232,7 @@ public class Test extends Application{
                 player1.addTile(finalRn);
                 if (player1.getTile() >= 40) {
                     player1.addTile(-40);
+                    player1.setAccount(player1.getAccount() + 200);
                 }
                 actionEvent.consume();
                 if (tiles.get(player1.getTile()).equals("CHANCE")){
@@ -336,8 +337,10 @@ public class Test extends Application{
                     }
                 }
                 player2.addTile(finalRn);
-                if (player2.getTile() >= 40)
+                if (player2.getTile() >= 40) {
                     player2.addTile(-40);
+                    player2.setAccount(player2.getAccount() + 200);
+                }
                 actionEvent.consume();
                 if (tiles.get(player2.getTile()).equals("CHANCE")){
                     console.setText("Player " + player2.getPos() + " turn.\n");
