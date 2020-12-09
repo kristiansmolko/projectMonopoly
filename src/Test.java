@@ -26,6 +26,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Random;
 
@@ -33,12 +34,17 @@ import java.util.Random;
 public class Test extends Application{
     private int turn = 1;
     private int numOfPlayers;
+    private ArrayList<String> tiles = new ArrayList<>();
+    private final int[] values = new int[] {200, 60, 0, 60, 100, 150, 100, 0, 100, 120, 0, 140, 0, 140, 160, 150, 180, 0, 180, 200, 0,
+            220, 0, 220, 240, 150, 260, 260, 0, 280, 0, 300, 300, 0, 320, 150, 0, 350, 200, 400};
+
     @Override
     public void start(Stage stage) throws Exception {
         //layouts
         BorderPane root = new BorderPane();
         BorderPane border = new BorderPane();
         Group center = new Group();
+        BorderPane buy = new BorderPane();
         //dice creating
         Rectangle rect = makeDice();
         int x = 250; //move
@@ -138,6 +144,10 @@ public class Test extends Application{
 
             int move = (finalRn * 50) + 70;
             int moveUp = (finalRn * 50) + 60;
+
+            //replace later
+            tiles = makeTiles();
+
             //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //       ALGORITH FOR MOVING DON'T FREAKING TOUCH IT, DON'T EVEN LOOK AT IT, I WARN YOU!
             //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -146,6 +156,8 @@ public class Test extends Application{
             transY.setDuration(Duration.millis(2000));
             transY2.setDuration(Duration.millis(2000));
             pauseMove.setDuration(Duration.millis(500));
+
+            TextArea console = new TextArea();
             //turns
             if (turn == 1) {  //find out who is on turn
                 translateFigure.stop();
@@ -157,6 +169,7 @@ public class Test extends Application{
                 transY.setByY(0);
                 transY.setByX(0);
                 pauseMove.setDuration(Duration.millis(500));
+                console.setText("Player " + player1.getPos() + " turn.\n");
                 double nextTile = player1.getTile() + finalRn;
                 double rest = 0;
                 if (player1.getTile() >= 0 && player1.getTile() < 10){
@@ -221,6 +234,38 @@ public class Test extends Application{
                     player1.addTile(-40);
                 }
                 actionEvent.consume();
+                if (tiles.get(player1.getTile()).equals("CHANCE")){
+                    console.setText("Player " + player1.getPos() + " turn.\n");
+                    /* here comes chance */
+                }
+                else if (tiles.get(player1.getTile()).equals("TAX")){
+                    player1.setAccount(player1.getAccount() - values[player1.getTile()]);
+                    console.appendText("\nPlayer " + player1.getPos() + " paid tax: " + values[player1.getTile()] + "\n");
+                }
+                else if (tiles.get(player1.getTile()).equals("JAIL")){
+                    console.setText("Player " + player1.getPos() + " turn.\n");
+                }
+                else if (tiles.get(player1.getTile()).equals("PORTAL")){
+                    player1.addTile(10);
+                    //later change
+                    figure1.setTranslateX(950);
+                    figure1.setTranslateY(700);
+                }
+                else{
+                    Label text = new Label("Do you want to buy " + tiles.get(player1.getTile()) + " for " + values[player1.getTile()] + "?");
+                    Button yes = new Button("Buy");
+                    yes.setOnAction(actionEvent12 -> {
+                        player1.addOwned(tiles.get(player1.getTile()));
+                        player1.setAccount(player1.getAccount() - values[player1.getTile()]);
+                        console.appendText("\nPlayer " + player1.getPos() + " bought " + tiles.get(player1.getTile()));
+                    });
+                    buy.setTop(text);
+                    buy.setCenter(yes);
+                }
+                //buy.setBottom(new Label(player1.getAccount() + " " + player1.getOwned() + "\n" + player1.getTile()));
+                console.appendText(tiles.get(player1.getTile()) + " " + player1.getAccount());
+                buy.setBottom(console);
+                border.setRight(buy);
             }
             else if (turn == 2) {
                 translateFigure2.stop();
@@ -232,6 +277,7 @@ public class Test extends Application{
                 transY2.setByY(0);
                 transY2.setByX(0);
                 pauseMove.setDuration(Duration.millis(500));
+                console.setText("Player " + player2.getPos() + " turn.\n");
                 double nextTile = player2.getTile() + finalRn;
                 double rest;
                 if (player2.getTile() >= 0 && player2.getTile() < 10){
@@ -293,6 +339,37 @@ public class Test extends Application{
                 if (player2.getTile() >= 40)
                     player2.addTile(-40);
                 actionEvent.consume();
+                if (tiles.get(player2.getTile()).equals("CHANCE")){
+                    console.setText("Player " + player2.getPos() + " turn.\n");
+                    /* here comes chance */
+                }
+                else if (tiles.get(player2.getTile()).equals("TAX")){
+                    player2.setAccount(player2.getAccount() - values[player2.getTile()]);
+                    console.appendText("\nPlayer " + player2.getPos() + " paid tax: " + values[player2.getTile()] + "\n");
+                }
+                else if (tiles.get(player2.getTile()).equals("JAIL")){
+                    console.setText("Player " + player2.getPos() + " turn.\n");
+                }
+                else if (tiles.get(player2.getTile()).equals("PORTAL")){
+                    player2.addTile(10);
+                    figure2.setTranslateX(950);
+                    figure2.setTranslateY(700);
+                }
+                else{
+                    Label text = new Label("Do you want to buy " + tiles.get(player2.getTile()) + " for " + values[player2.getTile()] + "?");
+                    Button yes = new Button("Buy");
+                    yes.setOnAction(actionEvent12 -> {
+                        player2.addOwned(tiles.get(player2.getTile()));
+                        player2.setAccount(player2.getAccount() - values[player2.getTile()]);
+                        console.appendText("\nPlayer " + player2.getPos() + " bought " + tiles.get(player2.getTile()));
+                    });
+                    buy.setTop(text);
+                    buy.setCenter(yes);
+                }
+                //buy.setBottom(new Label(player1.getAccount() + " " + player1.getOwned() + "\n" + player1.getTile()));
+                console.appendText(tiles.get(player2.getTile()) + " " + player2.getAccount());
+                buy.setBottom(console);
+                border.setRight(buy);
             }
             else if (turn == 3) {
                 translateFigure2.stop();
@@ -673,7 +750,7 @@ public class Test extends Application{
     }
 
     private Label makeBoard(){
-        Image board = new Image("monopoly.png");
+        Image board = new Image("monopoly2.png");
         ImageView boardView = new ImageView(board);
         boardView.setFitHeight(800);
         boardView.setFitWidth(1000);
@@ -704,5 +781,50 @@ public class Test extends Application{
             turn = 1;
         else
             turn -= -1;
+    }
+
+    private ArrayList<String> makeTiles(){
+        ArrayList<String> array = new ArrayList<>();
+        array.add("START");
+        array.add("Dirt House");
+        array.add("CHANCE");
+        array.add("Hole in the ground");
+        array.add("TAX");
+        array.add("EXTRA");
+        array.add("Cobble mine");
+        array.add("CHANCE");
+        array.add("Crafting Table");
+        array.add("Wooden House");
+        array.add("JAIL");
+        array.add("Wheat Farm");
+        array.add("CHANCE");
+        array.add("Melon Farm");
+        array.add("Pumpkin Farm");
+        array.add("EXTRA");
+        array.add("Sponge");
+        array.add("CHANCE");
+        array.add("Cauldron");
+        array.add("Enchanting Table");
+        array.add("FREE");
+        array.add("Coal Mine");
+        array.add("CHANCE");
+        array.add("Iron Mine");
+        array.add("Gold Mine");
+        array.add("EXTRA");
+        array.add("Jungle Temple");
+        array.add("Desert Temple");
+        array.add("CHANCE");
+        array.add("Village");
+        array.add("PORTAL");
+        array.add("Sheep Farm");
+        array.add("Pig Farm");
+        array.add("CHANCE");
+        array.add("Cow Farm");
+        array.add("EXTRA");
+        array.add("CHANCE");
+        array.add("Diamond Farm");
+        array.add("TAX");
+        array.add("Emerald Farm");
+        return array;
     }
 }
