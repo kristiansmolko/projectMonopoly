@@ -158,6 +158,10 @@ public class Test extends Application{
             pauseMove.setDuration(Duration.millis(500));
 
             TextArea console = new TextArea();
+            console.setEditable(false);
+            console.setMaxHeight(100);
+            console.setMaxWidth(200);
+            buy.setMaxSize(200,200);
             //turns
             if (turn == 1) {  //find out who is on turn
                 translateFigure.stop();
@@ -169,6 +173,8 @@ public class Test extends Application{
                 transY.setByY(0);
                 transY.setByX(0);
                 pauseMove.setDuration(Duration.millis(500));
+                buy.setTop(null);
+                buy.setCenter(null);
                 console.setText("Player " + player1.getPos() + " turn.\n");
                 double nextTile = player1.getTile() + finalRn;
                 double rest = 0;
@@ -241,7 +247,7 @@ public class Test extends Application{
                 }
                 else if (tiles.get(player1.getTile()).equals("TAX")){
                     player1.setAccount(player1.getAccount() - values[player1.getTile()]);
-                    console.appendText("\nPlayer " + player1.getPos() + " paid tax: " + values[player1.getTile()] + "\n");
+                    console.appendText("Player " + player1.getPos() + " paid tax: " + values[player1.getTile()] + "\n");
                 }
                 else if (tiles.get(player1.getTile()).equals("JAIL")){
                     console.setText("Player " + player1.getPos() + " turn.\n");
@@ -253,12 +259,12 @@ public class Test extends Application{
                     figure1.setTranslateY(700);
                 }
                 else{
-                    Label text = new Label("Do you want to buy " + tiles.get(player1.getTile()) + " for " + values[player1.getTile()] + "?");
+                    Label text = new Label("Do you want to buy \n" + tiles.get(player1.getTile()) + " for " + values[player1.getTile()] + "?\n");
                     Button yes = new Button("Buy");
                     yes.setOnAction(actionEvent12 -> {
                         player1.addOwned(tiles.get(player1.getTile()));
                         player1.setAccount(player1.getAccount() - values[player1.getTile()]);
-                        console.appendText("\nPlayer " + player1.getPos() + " bought " + tiles.get(player1.getTile()));
+                        console.appendText("\nPlayer " + player1.getPos() + " bought: \n" + tiles.get(player1.getTile()));
                     });
                     buy.setTop(text);
                     buy.setCenter(yes);
@@ -278,6 +284,8 @@ public class Test extends Application{
                 transY2.setByY(0);
                 transY2.setByX(0);
                 pauseMove.setDuration(Duration.millis(500));
+                buy.setTop(null);
+                buy.setCenter(null);
                 console.setText("Player " + player2.getPos() + " turn.\n");
                 double nextTile = player2.getTile() + finalRn;
                 double rest;
@@ -348,7 +356,7 @@ public class Test extends Application{
                 }
                 else if (tiles.get(player2.getTile()).equals("TAX")){
                     player2.setAccount(player2.getAccount() - values[player2.getTile()]);
-                    console.appendText("\nPlayer " + player2.getPos() + " paid tax: " + values[player2.getTile()] + "\n");
+                    console.appendText("Player " + player2.getPos() + " paid tax: " + values[player2.getTile()] + "\n");
                 }
                 else if (tiles.get(player2.getTile()).equals("JAIL")){
                     console.setText("Player " + player2.getPos() + " turn.\n");
@@ -359,12 +367,12 @@ public class Test extends Application{
                     figure2.setTranslateY(700);
                 }
                 else{
-                    Label text = new Label("Do you want to buy " + tiles.get(player2.getTile()) + " for " + values[player2.getTile()] + "?");
+                    Label text = new Label("Do you want to buy \n" + tiles.get(player2.getTile()) + " for " + values[player2.getTile()] + "?\n");
                     Button yes = new Button("Buy");
                     yes.setOnAction(actionEvent12 -> {
                         player2.addOwned(tiles.get(player2.getTile()));
                         player2.setAccount(player2.getAccount() - values[player2.getTile()]);
-                        console.appendText("\nPlayer " + player2.getPos() + " bought " + tiles.get(player2.getTile()));
+                        console.appendText("\nPlayer " + player2.getPos() + " bought: \n" + tiles.get(player2.getTile()));
                     });
                     buy.setTop(text);
                     buy.setCenter(yes);
@@ -591,10 +599,10 @@ public class Test extends Application{
             center.getChildren().add(figure3);
         center.getChildren().add(figure2);
         center.getChildren().add(figure1);
+        center.getChildren().add(root);
 
         //game setup
         border.setCenter(center);
-        border.setLeft(root);
 
         Scene scene = new Scene(border, 1200,800);
         stage.setScene(scene);
@@ -734,7 +742,7 @@ public class Test extends Application{
     }
 
     private Rectangle makeDice(){
-        Rectangle rect = new Rectangle(20,500,50,50);
+        Rectangle rect = new Rectangle(120,500,50,50);
         Stop[] stops = new Stop[] {new Stop(0,Color.BLUE), new Stop(1, Color.AQUAMARINE)};
         LinearGradient linear = new LinearGradient(0,0,1,0,true, CycleMethod.NO_CYCLE, stops);
         rect.setFill(linear);
