@@ -208,7 +208,7 @@ public class Test extends Application{
                     }
                     else{
                         if (nextTile == 20)
-                            transY.setByY(-(moveUp ));
+                            transY.setByY(-(moveUp + 20));
                         transY.setByY(-moveUp);
                         transY.play();
                     }
@@ -317,7 +317,7 @@ public class Test extends Application{
                     }
                     else{
                         if (nextTile == 20)
-                            transY2.setByY(-(moveUp));
+                            transY2.setByY(-(moveUp + 20));
                         transY2.setByY(-moveUp);
                         transY2.play();
                     }
