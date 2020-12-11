@@ -55,6 +55,7 @@ public class Test extends Application{
         TranslateTransition translateFigure2 = new TranslateTransition();
         TranslateTransition transY = new TranslateTransition();
         TranslateTransition transY2 = new TranslateTransition();
+        TranslateTransition portal = new TranslateTransition();
         PauseTransition pauseMove = new PauseTransition();
         //dots in dice
         Circle c1 = get1(rect, x);
@@ -149,6 +150,7 @@ public class Test extends Application{
             translateFigure2.setDuration(Duration.millis(2000));
             transY.setDuration(Duration.millis(2000));
             transY2.setDuration(Duration.millis(2000));
+            portal.setDuration(Duration.millis(5000));
             pauseMove.setDuration(Duration.millis(500));
             //console displaying player turn and action
             TextArea console = new TextArea();
@@ -164,8 +166,10 @@ public class Test extends Application{
             if (turn == 1) {  //find out who is on turn
                 translateFigure.stop();
                 transY.stop();
+                portal.stop();
                 translateFigure.setNode(figure1);
                 transY.setNode(figure1);
+                portal.setNode(figure1);
                 translateFigure.setByX(0);
                 translateFigure.setByY(0);
                 transY.setByY(0);
@@ -247,7 +251,9 @@ public class Test extends Application{
                     console.setText("Player " + player1.getPos() + " turn.\n");
                 }
                 else if (tiles.get(player1.getTile()).equals("PORTAL")){
-                    //add portal later
+                    pauseMove.play();
+                    portal.setToX(20); portal.setToY(705);
+                    portal.play();
                 }
                 else{
                     text = new Label("Do you want to buy \n" + tiles.get(player1.getTile()) + " for " + values[player1.getTile()] + "?");
@@ -268,8 +274,10 @@ public class Test extends Application{
             else if (turn == 2) {
                 translateFigure2.stop();
                 transY2.stop();
+                portal.stop();
                 translateFigure2.setNode(figure2);
                 transY2.setNode(figure2);
+                portal.setNode(figure2);
                 translateFigure2.setByX(0);
                 translateFigure2.setByY(0);
                 transY2.setByY(0);
@@ -293,7 +301,7 @@ public class Test extends Application{
                 }
                 if (player2.getTile() >= 9 && player2.getTile() < 16){
                     if (nextTile > 16){
-                        rest = (nextTile-16) * 85;
+                        rest = (nextTile-16) * 100;
                         translateFigure2.setByY(-(move - (nextTile-16) * 100));
                         transY2.setByX(rest);
                         translateFigure2.play();
@@ -348,6 +356,9 @@ public class Test extends Application{
                     console.setText("Player " + player2.getPos() + " turn.\n");
                 }
                 else if (tiles.get(player2.getTile()).equals("PORTAL")){
+                    pauseMove.play();
+                    portal.setToX(25); portal.setToY(710);
+                    portal.play();
                 }
                 else{
                     text = new Label("Do you want to buy \n" + tiles.get(player2.getTile()) + " for " + values[player2.getTile()] + "?");
@@ -474,11 +485,11 @@ public class Test extends Application{
                 console.appendText("Player " + player4.getPos() + " turn.\n");
                 double nextTile = player4.getTile() + finalRn;
                 double rest;
-                if (player4.getTile() >= 0 && player4.getTile() < 10){
-                    if (nextTile > 10){
-                        rest = (nextTile-10) * 100;
+                if (player4.getTile() >= 0 && player4.getTile() < 9){
+                    if (nextTile > 9){
+                        rest = (nextTile-9) * 100;
                         translateFigure.setByX(-(move - rest));
-                        transY.setByY(- ((nextTile - 10) * 100));
+                        transY.setByY(- ((nextTile - 9) * 100));
                         translateFigure.play();
                         translateFigure.setOnFinished(actionEvent13 -> transY.play());
                         actionEvent.consume();
@@ -488,10 +499,10 @@ public class Test extends Application{
                         translateFigure.play();
                     }
                 }
-                if (player4.getTile() >= 10 && player4.getTile() < 20){
-                    if (nextTile > 20){
-                        rest = (nextTile-20) * 100;
-                        translateFigure.setByY(-(move - ((nextTile-20) * 100)));
+                if (player4.getTile() >= 9 && player4.getTile() < 16){
+                    if (nextTile > 16){
+                        rest = (nextTile-16) * 100;
+                        translateFigure.setByY(-(move - ((nextTile-16) * 100)));
                         transY.setByX(rest);
                         translateFigure.play();
                         translateFigure.setOnFinished(actionEvent13 -> transY.play());
@@ -502,23 +513,22 @@ public class Test extends Application{
                         transY.play();
                     }
                 }
-                if (player4.getTile() >= 20 && player4.getTile() < 30){
-                    if (nextTile > 30){
-                        rest = (nextTile-30) * 100;
-                        translateFigure.setByX(move - ((nextTile-30) * 100));
+                if (player4.getTile() >= 16 && player4.getTile() < 25){
+                    if (nextTile > 25){
+                        rest = (nextTile-25) * 100;
+                        translateFigure.setByX(move - ((nextTile-25) * 100));
                         transY.setByY(rest);
                         translateFigure.play();
                         translateFigure.setOnFinished(actionEvent15 -> transY.play());
                     }
-                    else if (player1.getTile() >= 20){
-                        translateFigure.setByX(move);
-                        translateFigure.play();
-                    }
+                    translateFigure.setByX(move);
+                    translateFigure.play();
+
                 }
-                if (player4.getTile() >= 30 && player4.getTile() < 40){
-                    if (nextTile > 40){
-                        rest = (nextTile - 40) * 100;
-                        translateFigure.setByY(move - ((nextTile-40) * 100));
+                if (player4.getTile() >= 25 && player4.getTile() < 32){
+                    if (nextTile > 32){
+                        rest = (nextTile - 32) * 100;
+                        translateFigure.setByY(move - ((nextTile-32) * 100));
                         transY.setByX(-rest);
                         translateFigure.play();
                         translateFigure.setOnFinished(actionEvent1 -> transY.play());
@@ -574,7 +584,7 @@ public class Test extends Application{
             root.getChildren().removeAll(set5);
             root.getChildren().removeAll(set6);
             root.getChildren().removeAll(c1);
-            translateFigure.stop();
+            //translateFigure.stop();
             actionEvent.consume();
         });
 
@@ -586,7 +596,7 @@ public class Test extends Application{
             root.getChildren().removeAll(set5);
             root.getChildren().removeAll(set6);
             root.getChildren().removeAll(c1);
-            translateFigure2.stop();
+            //translateFigure2.stop();
             actionEvent.consume();
         });
 
@@ -598,7 +608,7 @@ public class Test extends Application{
             root.getChildren().removeAll(set5);
             root.getChildren().removeAll(set6);
             root.getChildren().removeAll(c1);
-            transY2.stop();
+            //transY2.stop();
             actionEvent.consume();
         });
 
@@ -610,9 +620,11 @@ public class Test extends Application{
             root.getChildren().removeAll(set5);
             root.getChildren().removeAll(set6);
             root.getChildren().removeAll(c1);
-            transY.stop();
+            //transY.stop();
             actionEvent.consume();
         });
+
+        portal.setOnFinished(actionEvent -> {portal.stop(); actionEvent.consume();});
 
         //actions
         rect.addEventHandler(MouseEvent.MOUSE_CLICKED, mouse);
