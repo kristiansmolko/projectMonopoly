@@ -107,14 +107,10 @@ public class Test extends Application{
         ImageView figure2 = makeFigure(player2.getFigure());
         ImageView figure3 = makeFigure(player3.getFigure());
         ImageView figure4 = makeFigure(player4.getFigure());
-        figure1.setTranslateX(920);
-        figure1.setTranslateY(705);
-        figure2.setTranslateX(925);
-        figure2.setTranslateY(710);
-        figure3.setTranslateX(915);
-        figure3.setTranslateY(705);
-        figure4.setTranslateX(920);
-        figure4.setTranslateY(710);
+        figure1.setTranslateX(920); figure1.setTranslateY(705);
+        figure2.setTranslateX(925); figure2.setTranslateY(710);
+        figure3.setTranslateX(915); figure3.setTranslateY(705);
+        figure4.setTranslateX(920); figure4.setTranslateY(710);
         //mouse click action
         EventHandler<MouseEvent> mouse = mouseEvent -> {
             if (mouseEvent.getSource() == rect){
@@ -141,10 +137,9 @@ public class Test extends Application{
             else if (finalRn == 6)
                 for (Circle setC : set6)
                     root.getChildren().addAll(setC);
-
+            //move
             int move = finalRn * 100;
-
-            //replace later
+            //values of tiles
             tiles = makeTiles();
 
             //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -155,7 +150,7 @@ public class Test extends Application{
             transY.setDuration(Duration.millis(2000));
             transY2.setDuration(Duration.millis(2000));
             pauseMove.setDuration(Duration.millis(500));
-
+            //console displaying player turn and action
             TextArea console = new TextArea();
             console.setEditable(false);
             console.setMaxHeight(100);
