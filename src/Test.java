@@ -3,12 +3,12 @@ Kristian Smolko
 
  */
 
+import graphics.Board;
 import javafx.animation.ParallelTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -27,16 +27,16 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.Random;
-
 
 public class Test extends Application{
     private int turn = 1;
     private int numOfPlayers;
     private ArrayList<String> tiles = new ArrayList<>();
-    private final int[] values = new int[] {200, 60, 0, 60, 100, 150, 100, 0, 100, 120, 0, 140, 0, 140, 160, 150, 180, 0, 180, 200, 0,
-            220, 0, 220, 240, 150, 260, 260, 0, 280, 0, 300, 300, 0, 320, 150, 0, 350, 200, 400};
+    private final int[] values = new int[] {200, 60, 60, 100, 80, 100, 100, 0, 120, 0, 140, 140, 160, 0, 180, 200,
+            0, 220, 100, 220, 240, 260, 260, 0, 280, 0, 300, 300, 320, 0, 350, 400};
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -107,14 +107,14 @@ public class Test extends Application{
         ImageView figure2 = makeFigure(player2.getFigure());
         ImageView figure3 = makeFigure(player3.getFigure());
         ImageView figure4 = makeFigure(player4.getFigure());
-        figure1.setTranslateX(880);
+        figure1.setTranslateX(920);
         figure1.setTranslateY(705);
-        figure2.setTranslateX(890);
-        figure2.setTranslateY(700);
-        figure3.setTranslateX(900);
-        figure3.setTranslateY(695);
-        figure4.setTranslateX(910);
-        figure4.setTranslateY(690);
+        figure2.setTranslateX(925);
+        figure2.setTranslateY(710);
+        figure3.setTranslateX(915);
+        figure3.setTranslateY(705);
+        figure4.setTranslateX(920);
+        figure4.setTranslateY(710);
         //mouse click action
         EventHandler<MouseEvent> mouse = mouseEvent -> {
             if (mouseEvent.getSource() == rect){
@@ -142,8 +142,7 @@ public class Test extends Application{
                 for (Circle setC : set6)
                     root.getChildren().addAll(setC);
 
-            int move = (finalRn * 85) + 10;
-            int moveUp = (finalRn * 65) + 10;
+            int move = finalRn * 100;
 
             //replace later
             tiles = makeTiles();
@@ -180,72 +179,65 @@ public class Test extends Application{
                 console.setText("Player " + player1.getPos() + " turn.\n");
                 double nextTile = player1.getTile() + finalRn;
                 double rest;
-                if (player1.getTile() >= 0 && player1.getTile() < 10){
-                    if (nextTile > 10){
-                        rest = ((nextTile-10) * 85 + 10);
+                if (player1.getTile() >= 0 && player1.getTile() < 9){
+                    if (nextTile > 9){
+                        rest = ((nextTile-9) * 100);
                         translateFigure.setByX(-(move - rest));
-                        transY.setByY(- (((nextTile - 10) * 65 + 10)));
+                        transY.setByY(- (((nextTile - 9) * 100)));
                         translateFigure.play();
                         translateFigure.setOnFinished(actionEvent13 -> transY.play());
                         actionEvent.consume();
                     }
                     else{
-                        if (nextTile == 10)
-                            translateFigure.setByX(-(move + 20));
-                        else
-                            translateFigure.setByX(-move);
+                        translateFigure.setByX(-move);
                         translateFigure.play();
                     }
                 }
-                if (player1.getTile() >= 10 && player1.getTile() < 20){
-                    if (nextTile > 20){
-                        rest = ((nextTile-20) * 85 + 10);
-                        translateFigure.setByY(-(moveUp - ((nextTile-20) * 65) + 10));
+                if (player1.getTile() >= 9 && player1.getTile() < 16){
+                    if (nextTile > 16){
+                        rest = ((nextTile-16) * 100);
+                        translateFigure.setByY(-(move - ((nextTile-16) * 100)));
                         transY.setByX(rest);
                         translateFigure.play();
                         translateFigure.setOnFinished(actionEvent13 -> transY.play());
                         actionEvent.consume();
                     }
                     else{
-                        if (nextTile == 20)
-                            transY.setByY(-(moveUp + 20));
-                        transY.setByY(-moveUp);
+                        transY.setByY(-move);
                         transY.play();
                     }
                 }
-                if (player1.getTile() >= 20 && player1.getTile() < 30){
-                    if (nextTile > 30){
-                        rest = ((nextTile-30) * 65 + 10);
-                        translateFigure.setByX(move - (((nextTile-30) * 85) + 10) + 20);
+                if (player1.getTile() >= 16 && player1.getTile() < 25){
+                    if (nextTile > 25){
+                        rest = ((nextTile-25) * 100);
+                        translateFigure.setByX(move - (((nextTile-25) * 100)));
                         transY.setByY(rest);
                         translateFigure.play();
                         translateFigure.setOnFinished(actionEvent15 -> transY.play());
                     }
                     else {
-                        if (player1.getTile() == 30)
-                            translateFigure.setByX(move + 20);
                         translateFigure.setByX(move);
                         translateFigure.play();
                     }
                 }
-                if (player1.getTile() >= 30 && player1.getTile() < 40){
-                    if (nextTile > 40){
-                        rest = ((nextTile - 40) * 85 + 10);
-                        translateFigure.setByY(moveUp - (((nextTile-40) * 65) + 10));
+                if (player1.getTile() >= 25 && player1.getTile() < 32){
+                    if (nextTile > 32){
+                        rest = ((nextTile - 32) * 100);
+                        translateFigure.setByY(move - ((nextTile-32) * 100));
                         transY.setByX(-rest);
                         translateFigure.play();
                         translateFigure.setOnFinished(actionEvent1 -> transY.play());
                     }
                     else{
-                        transY.setByY(moveUp);
+                        transY.setByY(move);
                         transY.play();
                     }
                 }
                 player1.addTile(finalRn);
-                if (player1.getTile() >= 40) {
-                    player1.setAccount(player1.getAccount() + 200);
+                if (player1.getTile() >= 32) {
+                    player1.addToAccount(200);
                     console.appendText("Player " + player1.getPos() + " has crossed Start\n");
-                    player1.addTile(-40);
+                    player1.addTile(-32);
                 }
                 actionEvent.consume();
                 if (tiles.get(player1.getTile()).equals("CHANCE")){
@@ -253,7 +245,7 @@ public class Test extends Application{
                     /* here comes chance */
                 }
                 else if (tiles.get(player1.getTile()).equals("TAX")){
-                    player1.setAccount(player1.getAccount() - values[player1.getTile()]);
+                    player1.takeFromAccount(values[player1.getTile()]);
                     console.appendText("\nPlayer " + player1.getPos() + " paid tax: " + values[player1.getTile()] + "\n");
                 }
                 else if (tiles.get(player1.getTile()).equals("JAIL")){
@@ -267,14 +259,14 @@ public class Test extends Application{
                     yes = new Button("Buy");
                     yes.setOnAction(actionEvent12 -> {
                         player1.addOwned(tiles.get(player1.getTile()));
-                        player1.setAccount(player1.getAccount() - values[player1.getTile()]);
+                        player1.takeFromAccount(values[player1.getTile()]);
                         console.appendText("\nPlayer " + player1.getPos() + " bought:\n" + tiles.get(player1.getTile()));
                     });
                     buy.setTop(text);
                     buy.setCenter(yes);
                 }
                 //buy.setBottom(new Label(player1.getAccount() + " " + player1.getOwned() + "\n" + player1.getTile()));
-                console.appendText(tiles.get(player1.getTile()) + " " + figure1.getTranslateX() + "\n" + figure1.getTranslateY());
+                console.appendText(tiles.get(player1.getTile()) + " " + player1.getAccount());
                 buy.setBottom(console);
                 border.setRight(buy);
             }
@@ -291,69 +283,62 @@ public class Test extends Application{
                 console.setText("Player " + player2.getPos() + " turn.\n");
                 double nextTile = player2.getTile() + finalRn;
                 double rest;
-                if (player2.getTile() >= 0 && player2.getTile() < 10){
-                    if (nextTile > 10){
-                        rest = ((nextTile-10) * 85);
+                if (player2.getTile() >= 0 && player2.getTile() < 9){
+                    if (nextTile > 9){
+                        rest = (nextTile-9) * 100;
                         translateFigure2.setByX(-(move - rest));
-                        transY2.setByY(- (((nextTile - 10) * 65)));
+                        transY2.setByY(- ((nextTile - 9) * 100));
                         translateFigure2.play();
                         translateFigure2.setOnFinished(actionEvent1 -> transY2.play());
                     }
                     else{
-                        if (nextTile == 10)
-                            translateFigure2.setByX(-(move ));
-                        else
-                            translateFigure2.setByX(-move);
+                        translateFigure2.setByX(-move);
                         translateFigure2.play();
                     }
                 }
-                if (player2.getTile() >= 10 && player2.getTile() < 20){
-                    if (nextTile > 20){
-                        rest = ((nextTile-20) * 85) ;
-                        translateFigure2.setByY(-(moveUp - (((nextTile-20) * 65)) ));
+                if (player2.getTile() >= 9 && player2.getTile() < 16){
+                    if (nextTile > 16){
+                        rest = (nextTile-16) * 85;
+                        translateFigure2.setByY(-(move - (nextTile-16) * 100));
                         transY2.setByX(rest);
                         translateFigure2.play();
                         translateFigure2.setOnFinished(actionEvent1 -> transY2.play());
                     }
                     else{
-                        if (nextTile == 20)
-                            transY2.setByY(-(moveUp + 20));
-                        transY2.setByY(-moveUp);
+                        transY2.setByY(-move);
                         transY2.play();
                     }
                 }
-                if (player2.getTile() >= 20 && player2.getTile() < 30){
-                    if (nextTile > 30){
-                        rest = ((nextTile-30) * 85 );
-                        translateFigure2.setByX((move - rest) + 20);
-                        transY2.setByY(((nextTile-30) * 65) );
+                if (player2.getTile() >= 16 && player2.getTile() < 25){
+                    if (nextTile > 25){
+                        rest = (nextTile-25) * 100;
+                        translateFigure2.setByX(move - rest);
+                        transY2.setByY((nextTile-25) * 100);
                         translateFigure2.play();
                         translateFigure2.setOnFinished(actionEvent1 -> transY2.play());
                     }
                     else{
-                        if (player2.getTile() == 30)
-                            translateFigure2.setByX(move + 20);
                         translateFigure2.setByX(move);
                         translateFigure2.play();
                     }
                 }
-                if (player2.getTile() >= 30 && player2.getTile() < 40){
-                    if (nextTile > 40){
-                        rest = ((nextTile - 40) * 85) ;
-                        translateFigure2.setByY((moveUp - (((nextTile-40) * 65))) );
+                if (player2.getTile() >= 25 && player2.getTile() < 32){
+                    if (nextTile > 32){
+                        rest = (nextTile - 32) * 100;
+                        translateFigure2.setByY(move - ((nextTile-32) * 100));
                         transY2.setByX(-rest);
                         translateFigure2.play();
                         translateFigure2.setOnFinished(actionEvent1 -> transY2.play());
                     }
                     else{
-                        transY2.setByY(moveUp + 20);
+                        transY2.setByY(move);
                         transY2.play();
                     }
                 }
                 player2.addTile(finalRn);
-                if (player2.getTile() >= 40) {
-                    player2.addTile(-40);
-                    player2.setAccount(player2.getAccount() + 200);
+                if (player2.getTile() >= 32) {
+                    player2.addTile(-32);
+                    player2.addToAccount(200);
                     console.appendText("Player " + player2.getPos() + " crossed Start\n");
                 }
                 actionEvent.consume();
@@ -361,7 +346,7 @@ public class Test extends Application{
                     /* here comes chance */
                 }
                 else if (tiles.get(player2.getTile()).equals("TAX")){
-                    player2.setAccount(player2.getAccount() - values[player2.getTile()]);
+                    player2.takeFromAccount(values[player2.getTile()]);
                     console.appendText("Player " + player2.getPos() + " paid tax: " + values[player2.getTile()] + "\n");
                 }
                 else if (tiles.get(player2.getTile()).equals("JAIL")){
@@ -374,13 +359,13 @@ public class Test extends Application{
                     yes = new Button("Buy");
                     yes.setOnAction(actionEvent12 -> {
                         player2.addOwned(tiles.get(player2.getTile()));
-                        player2.setAccount(player2.getAccount() - values[player2.getTile()]);
+                        player2.takeFromAccount(values[player2.getTile()]);
                         console.appendText("\nPlayer " + player2.getPos() + " bought:\n" + tiles.get(player2.getTile()));
                     });
                     buy.setTop(text);
                     buy.setCenter(yes);
                 }
-                console.appendText(tiles.get(player2.getTile()) + " " + figure2.getTranslateX() + "\n" + figure2.getTranslateY());
+                console.appendText(tiles.get(player2.getTile()) + " " + player2.getAccount());
                 buy.setBottom(console);
             }
             else if (turn == 3) {
@@ -393,42 +378,40 @@ public class Test extends Application{
                 transY2.setByY(0);
                 transY2.setByX(0);
                 pauseMove.setDuration(Duration.millis(500));
+                console.setText("Player " + player3.getPos() + " turn.\n");
                 double nextTile = player3.getTile() + finalRn;
                 double rest;
-                if (player3.getTile() >= 0 && player3.getTile() < 10){
-                    if (nextTile > 10){
-                        rest = ((nextTile-10) * 50) + 70;
+                if (player3.getTile() >= 0 && player3.getTile() < 9){
+                    if (nextTile > 9){
+                        rest = (nextTile-9) * 100;
                         translateFigure2.setByX(-(move - rest));
-                        transY2.setByY(-(((nextTile - 10) * 50) + 60));
+                        transY2.setByY(-((nextTile - 9) * 100));
                         translateFigure2.play();
                         translateFigure2.setOnFinished(actionEvent1 -> transY2.play());
                     }
                     else{
-                        if (player3.getTile() == 0)
-                            translateFigure2.setByX(-(move + 30));
-                        else
-                            translateFigure2.setByX(-move);
+                        translateFigure2.setByX(-move);
                         translateFigure2.play();
                     }
                 }
-                if (player3.getTile() >= 10 && player3.getTile() < 20){
-                    if (nextTile > 20){
-                        rest = ((nextTile-20) * 50) + 70;
-                        translateFigure2.setByY(-(moveUp - (((nextTile-20) * 50) + 60)));
+                if (player3.getTile() >= 9 && player3.getTile() < 16){
+                    if (nextTile > 16){
+                        rest = (nextTile-16) * 100;
+                        translateFigure2.setByY(-(move - ((nextTile-16) * 100)));
                         transY2.setByX(rest);
                         translateFigure2.play();
                         translateFigure2.setOnFinished(actionEvent1 -> transY2.play());
                     }
                     else{
-                        transY2.setByY(-moveUp);
+                        transY2.setByY(-move);
                         transY2.play();
                     }
                 }
-                if (player3.getTile() >= 20 && player3.getTile() < 30){
-                    if (nextTile > 30){
-                        rest = ((nextTile-30) * 50) + 70;
+                if (player3.getTile() >= 16 && player3.getTile() < 25){
+                    if (nextTile > 25){
+                        rest = (nextTile-25) * 100;
                         translateFigure2.setByX((move - rest));
-                        transY2.setByY(((nextTile-30) * 50) + 60);
+                        transY2.setByY((nextTile-25) * 100);
                         translateFigure2.play();
                         translateFigure2.setOnFinished(actionEvent1 -> transY2.play());
                     }
@@ -437,23 +420,51 @@ public class Test extends Application{
                         translateFigure2.play();
                     }
                 }
-                if (player3.getTile() >= 30 && player3.getTile() < 40){
-                    if (nextTile > 40){
-                        rest = ((nextTile - 40) * 50) + 70;
-                        translateFigure2.setByY((moveUp - (((nextTile-40) * 50 ) + 60)));
+                if (player3.getTile() >= 25 && player3.getTile() < 32){
+                    if (nextTile > 32){
+                        rest = (nextTile - 32) * 100;
+                        translateFigure2.setByY((move - ((nextTile-32) * 100)));
                         transY2.setByX(-rest);
                         translateFigure2.play();
                         translateFigure2.setOnFinished(actionEvent1 -> transY2.play());
                     }
                     else{
-                        transY2.setByY(moveUp);
+                        transY2.setByY(move);
                         transY2.play();
                     }
                 }
                 player3.addTile(finalRn);
-                if (player3.getTile() >= 40)
-                    player3.addTile(-40);
+                if (player3.getTile() >= 32) {
+                    player3.addTile(-32);
+                    player3.addToAccount(values[player3.getTile()]);
+                    console.appendText("Player " + player3.getPos() + " crossed Start\n");
+                }
                 actionEvent.consume();
+                if (tiles.get(player3.getTile()).equals("CHANCE")){
+                    /* here comes chance */
+                }
+                else if (tiles.get(player3.getTile()).equals("TAX")){
+                    player3.takeFromAccount(values[player3.getTile()]);
+                    console.appendText("Player " + player3.getPos() + " paid tax: " + values[player3.getTile()] + "\n");
+                }
+                else if (tiles.get(player3.getTile()).equals("JAIL")){
+                    console.setText("Player " + player3.getPos() + " turn.\n");
+                }
+                else if (tiles.get(player3.getTile()).equals("PORTAL")){
+                }
+                else{
+                    text = new Label("Do you want to buy \n" + tiles.get(player3.getTile()) + " for " + values[player3.getTile()] + "?");
+                    yes = new Button("Buy");
+                    yes.setOnAction(actionEvent12 -> {
+                        player3.addOwned(tiles.get(player3.getTile()));
+                        player3.takeFromAccount(values[player3.getTile()]);
+                        console.appendText("\nPlayer " + player3.getPos() + " bought:\n" + tiles.get(player3.getTile()));
+                    });
+                    buy.setTop(text);
+                    buy.setCenter(yes);
+                }
+                console.appendText(tiles.get(player3.getTile()) + " " + player3.getAccount());
+                buy.setBottom(console);
             }
             else if (turn == 4){
                 translateFigure.stop();
@@ -465,43 +476,41 @@ public class Test extends Application{
                 transY.setByY(0);
                 transY.setByX(0);
                 pauseMove.setDuration(Duration.millis(500));
+                console.appendText("Player " + player4.getPos() + " turn.\n");
                 double nextTile = player4.getTile() + finalRn;
-                double rest = 0;
+                double rest;
                 if (player4.getTile() >= 0 && player4.getTile() < 10){
                     if (nextTile > 10){
-                        rest = ((nextTile-10) * 50) + 70;
+                        rest = (nextTile-10) * 100;
                         translateFigure.setByX(-(move - rest));
-                        transY.setByY(- (((nextTile - 10) * 50) + 60));
+                        transY.setByY(- ((nextTile - 10) * 100));
                         translateFigure.play();
                         translateFigure.setOnFinished(actionEvent13 -> transY.play());
                         actionEvent.consume();
                     }
                     else{
-                        if (player1.getTile() == 0)
-                            translateFigure.setByX(-(move + 10));
-                        else
-                            translateFigure.setByX(-move);
+                        translateFigure.setByX(-move);
                         translateFigure.play();
                     }
                 }
                 if (player4.getTile() >= 10 && player4.getTile() < 20){
                     if (nextTile > 20){
-                        rest = ((nextTile-20) * 50) + 70;
-                        translateFigure.setByY(-(moveUp - ((nextTile-20) * 50) + 60));
+                        rest = (nextTile-20) * 100;
+                        translateFigure.setByY(-(move - ((nextTile-20) * 100)));
                         transY.setByX(rest);
                         translateFigure.play();
                         translateFigure.setOnFinished(actionEvent13 -> transY.play());
                         actionEvent.consume();
                     }
                     else{
-                        transY.setByY(-moveUp);
+                        transY.setByY(-move);
                         transY.play();
                     }
                 }
                 if (player4.getTile() >= 20 && player4.getTile() < 30){
                     if (nextTile > 30){
-                        rest = ((nextTile-30) * 50) + 60;
-                        translateFigure.setByX(move - (((nextTile-30) * 50 ) + 70));
+                        rest = (nextTile-30) * 100;
+                        translateFigure.setByX(move - ((nextTile-30) * 100));
                         transY.setByY(rest);
                         translateFigure.play();
                         translateFigure.setOnFinished(actionEvent15 -> transY.play());
@@ -513,22 +522,49 @@ public class Test extends Application{
                 }
                 if (player4.getTile() >= 30 && player4.getTile() < 40){
                     if (nextTile > 40){
-                        rest = ((nextTile - 40) * 50) + 70;
-                        translateFigure.setByY((moveUp - (((nextTile-40) * 50 ) + 60)));
+                        rest = (nextTile - 40) * 100;
+                        translateFigure.setByY(move - ((nextTile-40) * 100));
                         transY.setByX(-rest);
                         translateFigure.play();
                         translateFigure.setOnFinished(actionEvent1 -> transY.play());
                     }
                     else{
-                        transY.setByY(moveUp);
+                        transY.setByY(move);
                         transY.play();
                     }
                 }
                 player4.addTile(finalRn);
-                if (player4.getTile() >= 40) {
-                    player4.addTile(-40);
+                if (player4.getTile() >= 32) {
+                    player4.addTile(-32);
+                    player4.addToAccount(values[player4.getTile()]);
+                    console.appendText("Player " + player4.getPos() + " crossed Start\n");
                 }
                 actionEvent.consume();
+                if (tiles.get(player4.getTile()).equals("CHANCE")){
+                    /* here comes chance */
+                }
+                else if (tiles.get(player4.getTile()).equals("TAX")){
+                    player4.takeFromAccount(values[player4.getTile()]);
+                    console.appendText("Player " + player4.getPos() + " paid tax: " + values[player4.getTile()] + "\n");
+                }
+                else if (tiles.get(player4.getTile()).equals("JAIL")){
+                    console.setText("Player " + player4.getPos() + " turn.\n");
+                }
+                else if (tiles.get(player4.getTile()).equals("PORTAL")){
+                }
+                else{
+                    text = new Label("Do you want to buy \n" + tiles.get(player4.getTile()) + " for " + values[player4.getTile()] + "?");
+                    yes = new Button("Buy");
+                    yes.setOnAction(actionEvent12 -> {
+                        player4.addOwned(tiles.get(player4.getTile()));
+                        player4.takeFromAccount(values[player4.getTile()]);
+                        console.appendText("\nPlayer " + player4.getPos() + " bought:\n" + tiles.get(player4.getTile()));
+                    });
+                    buy.setTop(text);
+                    buy.setCenter(yes);
+                }
+                console.appendText(tiles.get(player4.getTile()) + " " + figure4.getTranslateX() + "\n" + figure4.getTranslateY());
+                buy.setBottom(console);
             }
 
             nextTurn(); //next player
@@ -588,12 +624,13 @@ public class Test extends Application{
         root.getChildren().addAll(rect);
 
         //board
-        Label lbl = makeBoard();
+        Board graphics = new Board();
+        BorderPane board = graphics.makeBoard();
 
         //layout
         //center of game = board and figure
         // + later thing
-        center.getChildren().addAll(lbl);
+        center.getChildren().addAll(board);
         if (player4.isPlaying())
             center.getChildren().add(figure4);
         if (player3.isPlaying())
@@ -761,18 +798,6 @@ public class Test extends Application{
         return back;
     }
 
-    private Label makeBoard(){
-        Image board = new Image("monopoly2.png");
-        ImageView boardView = new ImageView(board);
-        boardView.setFitHeight(800);
-        boardView.setFitWidth(1000);
-        Label lbl = new Label();
-        lbl.setGraphic(boardView);
-        lbl.setMaxHeight(800);
-        lbl.setMaxWidth(1000);
-        return lbl;
-    }
-
     private ImageView makeFigure(Image img){
         ImageView iw = new ImageView(img);
         iw.setFitWidth(70);
@@ -796,47 +821,10 @@ public class Test extends Application{
     }
 
     private ArrayList<String> makeTiles(){
-        ArrayList<String> array = new ArrayList<>();
-        array.add("START");
-        array.add("Dirt House");
-        array.add("CHANCE");
-        array.add("Hole in the ground");
-        array.add("TAX");
-        array.add("EXTRA");
-        array.add("Cobble mine");
-        array.add("CHANCE");
-        array.add("Crafting Table");
-        array.add("Wooden House");
-        array.add("JAIL");
-        array.add("Wheat Farm");
-        array.add("CHANCE");
-        array.add("Melon Farm");
-        array.add("Pumpkin Farm");
-        array.add("EXTRA");
-        array.add("Sponge");
-        array.add("CHANCE");
-        array.add("Cauldron");
-        array.add("Enchanting Table");
-        array.add("FREE");
-        array.add("Coal Mine");
-        array.add("CHANCE");
-        array.add("Iron Mine");
-        array.add("Gold Mine");
-        array.add("EXTRA");
-        array.add("Jungle Temple");
-        array.add("Desert Temple");
-        array.add("CHANCE");
-        array.add("Village");
-        array.add("PORTAL");
-        array.add("Sheep Farm");
-        array.add("Pig Farm");
-        array.add("CHANCE");
-        array.add("Cow Farm");
-        array.add("EXTRA");
-        array.add("CHANCE");
-        array.add("Diamond Farm");
-        array.add("TAX");
-        array.add("Emerald Farm");
-        return array;
+        String[] tiles = new String[] {"START", "Wood", "Stick", "TAX", "Crafting Table", "Stone Pickaxe",
+                "Cobblestone", "CHANCE", "Iron Ore", "JAIL", "Iron Hoe", "Wheat", "Carrot", "CHANCE", "Arrow",
+                "Bow", "FREE", "Iron Pickaxe", "TAX", "Gold Bar", "Redstone", "Iron Sword", "Shield", "CHANCE",
+                "Iron Armor", "PORTAL", "Enchanting Table", "Brew Stand", "Shulker Box", "CHANCE", "Diamond", "Emerald"};
+        return new ArrayList<>(Arrays.asList(tiles));
     }
 }
