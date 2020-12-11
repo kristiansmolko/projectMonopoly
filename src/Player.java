@@ -22,6 +22,14 @@ public class Player {
         this.account = account;
     }
 
+    public void addToAccount(int value){
+        account -= -value;
+    }
+
+    public void takeFromAccount(int value){
+        account -= value;
+    }
+
     public ArrayList<String> getOwned() {
         return owned;
     }
