@@ -15,6 +15,7 @@ import javafx.scene.text.Text;
 
 public class Board {
     private static ImageView background;
+    private int color = 0;
 
     public BorderPane makeBoard(){
         BorderPane board = new BorderPane();
@@ -32,20 +33,18 @@ public class Board {
         StackPane startTile = makeStart();
         StackPane free = makeFree();
         StackPane jail = makeJail();
-        StackPane crafting = makeTile("crafting.png", "Crafting Table", 80);
         StackPane wood = makeTile("wood.png", "Wood", 60);
-        StackPane hoe = makeTile("hoe.png", "Iron Hoe", 140);
-        StackPane wheat = makeTile("wheat.png", "Wheat", 140);
-        StackPane carrot = makeTile("carrot.png", "Carrot", 160);
-        StackPane iron = makeTile("ironpick.png", "Iron Pickaxe", 220);
-        StackPane bow = makeTile("bow.png", "Bow", 200);
-        StackPane arrow = makeTile("arrow.png", "Arrow", 180);
-        StackPane diamond = makeTile("diamond.png", "Diamond",350);
-        StackPane emerald = makeTile("emerald.png", "Emerald", 400);
+        StackPane stick = makeTile("stick.png", "Stick", 60);
+        StackPane crafting = makeTile("crafting.png", "Crafting Table", 80);
         StackPane stonePick = makeTile("cobpick.png", "Stone Pickaxe", 100);
         StackPane cobble = makeTile("cobble.jpg", "Cobblestone", 100);
         StackPane ironOre = makeTile("ironore.jpeg", "Iron Ore", 120);
-        StackPane stick = makeTile("stick.png", "Stick", 60);
+        StackPane hoe = makeTile("hoe.png", "Iron Hoe", 140);
+        StackPane wheat = makeTile("wheat.png", "Wheat", 140);
+        StackPane carrot = makeTile("carrot.png", "Carrot", 160);
+        StackPane arrow = makeTile("arrow.png", "Arrow", 180);
+        StackPane bow = makeTile("bow.png", "Bow", 200);
+        StackPane iron = makeTile("ironpick.png", "Iron Pickaxe", 220);
         StackPane gold = makeTile("gold.png", "Gold Bar" , 220);
         StackPane redstone = makeTile("redstone.png", "Redstone", 240);
         StackPane sword = makeTile("ironsword.png", "Iron Sword", 260);
@@ -54,6 +53,8 @@ public class Board {
         StackPane ench = makeTile("enchanting.png", "Enchanting" , 300);
         StackPane brew = makeTile("brewing.png", "Brewing", 300);
         StackPane shulker = makeTile("shulker.png", "Shulker Box", 320);
+        StackPane diamond = makeTile("diamond.png", "Diamond",350);
+        StackPane emerald = makeTile("emerald.png", "Emerald", 400);
 
         right.addRow(1, ench);
         right.addRow(2, brew);
@@ -78,11 +79,16 @@ public class Board {
         return board;
     }
 
-    private static StackPane makeTile(String fileName, String name, int value){
+    private StackPane makeTile(String fileName, String name, int value){
         StackPane tile = new StackPane();
         Rectangle back = new Rectangle();
         back.setWidth(100); back.setHeight(100);
-        back.setFill(Color.LIMEGREEN);
+        if (color++ == 0)
+            back.setFill(Color.LIMEGREEN);
+        else
+            back.setFill(Color.GREEN);
+        if (color > 1)
+            color = 0;
         ImageView img = new ImageView(new Image(fileName));
         img.setFitHeight(80); img.setFitWidth(80);
         img.setTranslateY(10);
