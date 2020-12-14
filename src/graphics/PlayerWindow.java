@@ -16,7 +16,7 @@ public class PlayerWindow {
         BorderPane window = new BorderPane();
         GridPane center = new GridPane();
         ImageView img = new ImageView(player.getFigure());
-        img.setFitWidth(30); img.setFitHeight(60);
+        img.setFitWidth(40); img.setFitHeight(60);
         img.setTranslateX(-10); img.setTranslateY(10);
         window.setLeft(img);
         Label name = new Label("Player " + player.getPos());
