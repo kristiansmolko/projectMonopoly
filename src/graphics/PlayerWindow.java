@@ -19,7 +19,7 @@ public class PlayerWindow {
         img.setFitWidth(30); img.setFitHeight(60);
         img.setTranslateX(-10); img.setTranslateY(10);
         window.setLeft(img);
-        Label name = new Label("extra.Player " + player.getPos());
+        Label name = new Label("Player " + player.getPos());
         name.setMaxSize(120,20);
         money = new Label("Account: " + player.getAccount());
         money.setMaxSize(120,20);
