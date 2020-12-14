@@ -94,18 +94,18 @@ public class Test extends Application{
         //add figures to players
         switch (numOfPlayers) {
             case 3 :
-                player1.setFigure("figure.png");
-                player2.setFigure("figure2.png");
-                player3.setFigure("figure3.png");break;
+                player1.setFigure("diamond steve.png");
+                player2.setFigure("creeper.png");
+                player3.setFigure("steve.png");break;
             case 4 :
-                player1.setFigure("figure.png");
-                player2.setFigure("figure2.png");
-                player3.setFigure("figure3.png");
-                player4.setFigure("figure4.png");
+                player1.setFigure("diamond steve.png");
+                player2.setFigure("creeper.png");
+                player3.setFigure("steve.png");
+                player4.setFigure("zombified piglin.png");
                 break;
             default :
-                player1.setFigure("figure.png");
-                player2.setFigure("figure2.png");
+                player1.setFigure("diamond steve.png");
+                player2.setFigure("creeper.png");
         }
         //figures
         ImageView figure1 = makeFigure(player1.getFigure());
@@ -113,9 +113,7 @@ public class Test extends Application{
         ImageView figure3 = makeFigure(player3.getFigure());
         ImageView figure4 = makeFigure(player4.getFigure());
         figure1.setTranslateX(920); figure1.setTranslateY(705);
-        figure1.setFitWidth(50);
         figure2.setTranslateX(925); figure2.setTranslateY(710);
-        figure2.setFitWidth(40);
         figure3.setTranslateX(915); figure3.setTranslateY(705);
         figure4.setTranslateX(920); figure4.setTranslateY(710);
 
@@ -856,7 +854,7 @@ public class Test extends Application{
 
     private ImageView makeFigure(Image img){
         ImageView iw = new ImageView(img);
-        iw.setFitWidth(70);
+        iw.setFitWidth(50);
         iw.setFitHeight(90);
         return iw;
     }
