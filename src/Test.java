@@ -3,7 +3,9 @@ Kristian Smolko
 
  */
 
+import extra.Player;
 import graphics.Board;
+import graphics.PlayerWindow;
 import javafx.animation.ParallelTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.RotateTransition;
@@ -45,6 +47,8 @@ public class Test extends Application{
         BorderPane border = new BorderPane();
         Group center = new Group();
         BorderPane buy = new BorderPane();
+        BorderPane right = new BorderPane();
+        GridPane playerWindows = new GridPane();
         //dice creating
         Rectangle rect = makeDice();
         int x = 250; //move
@@ -109,9 +113,22 @@ public class Test extends Application{
         ImageView figure3 = makeFigure(player3.getFigure());
         ImageView figure4 = makeFigure(player4.getFigure());
         figure1.setTranslateX(920); figure1.setTranslateY(705);
+        figure1.setFitWidth(50);
         figure2.setTranslateX(925); figure2.setTranslateY(710);
+        figure2.setFitWidth(40);
         figure3.setTranslateX(915); figure3.setTranslateY(705);
         figure4.setTranslateX(920); figure4.setTranslateY(710);
+
+        //player windows
+        PlayerWindow w1 = new PlayerWindow();
+        PlayerWindow w2 = new PlayerWindow();
+        PlayerWindow w3 = new PlayerWindow();
+        PlayerWindow w4 = new PlayerWindow();
+
+        BorderPane P1W = w1.makeWindow(player1);
+        BorderPane P2W = w2.makeWindow(player2);
+        BorderPane P3W = w3.makeWindow(player3);
+        BorderPane P4W = w4.makeWindow(player4);
         //mouse click action
         EventHandler<MouseEvent> mouse = mouseEvent -> {
             if (mouseEvent.getSource() == rect){
@@ -162,6 +179,7 @@ public class Test extends Application{
             buy.setTop(null);
             buy.setCenter(null);
             buy.setMaxSize(200,200);
+
             //turns
             if (turn == 1) {  //find out who is on turn
                 translateFigure.stop();
@@ -217,6 +235,11 @@ public class Test extends Application{
                     else {
                         translateFigure.setByX(move);
                         translateFigure.play();
+                        if (nextTile == 25){
+                            pauseMove.play();
+                            portal.setToX(20); portal.setToY(705);
+                            portal.play();
+                        }
                     }
                 }
                 if (player1.getTile() >= 25 && player1.getTile() < 32){
@@ -237,6 +260,7 @@ public class Test extends Application{
                     player1.addToAccount(200);
                     console.appendText("Player " + player1.getPos() + " has crossed Start\n");
                     player1.addTile(-32);
+                    w1.update(player1);
                 }
                 actionEvent.consume();
                 if (tiles.get(player1.getTile()).equals("CHANCE")){
@@ -246,15 +270,16 @@ public class Test extends Application{
                 else if (tiles.get(player1.getTile()).equals("TAX")){
                     player1.takeFromAccount(values[player1.getTile()]);
                     console.appendText("\nPlayer " + player1.getPos() + " paid tax: " + values[player1.getTile()] + "\n");
+                    w1.update(player1);
                 }
                 else if (tiles.get(player1.getTile()).equals("JAIL")){
                     console.setText("Player " + player1.getPos() + " turn.\n");
                 }
-                else if (tiles.get(player1.getTile()).equals("PORTAL")){
+                /*else if (tiles.get(player1.getTile()).equals("PORTAL")){
                     pauseMove.play();
                     portal.setToX(20); portal.setToY(705);
                     portal.play();
-                }
+                }*/
                 else{
                     text = new Label("Do you want to buy \n" + tiles.get(player1.getTile()) + " for " + values[player1.getTile()] + "?");
                     yes = new Button("Buy");
@@ -262,14 +287,16 @@ public class Test extends Application{
                         player1.addOwned(tiles.get(player1.getTile()));
                         player1.takeFromAccount(values[player1.getTile()]);
                         console.appendText("\nPlayer " + player1.getPos() + " bought:\n" + tiles.get(player1.getTile()));
+                        w1.update(player1);
+                        buy.setTop(null);
+                        buy.setCenter(null);
                     });
                     buy.setTop(text);
                     buy.setCenter(yes);
                 }
                 //buy.setBottom(new Label(player1.getAccount() + " " + player1.getOwned() + "\n" + player1.getTile()));
-                console.appendText(tiles.get(player1.getTile()) + " " + player1.getAccount());
+                console.appendText(tiles.get(player1.getTile()));
                 buy.setBottom(console);
-                border.setRight(buy);
             }
             else if (turn == 2) {
                 translateFigure2.stop();
@@ -343,6 +370,7 @@ public class Test extends Application{
                     player2.addTile(-32);
                     player2.addToAccount(200);
                     console.appendText("Player " + player2.getPos() + " crossed Start\n");
+                    w2.update(player2);
                 }
                 actionEvent.consume();
                 if (tiles.get(player2.getTile()).equals("CHANCE")){
@@ -351,6 +379,7 @@ public class Test extends Application{
                 else if (tiles.get(player2.getTile()).equals("TAX")){
                     player2.takeFromAccount(values[player2.getTile()]);
                     console.appendText("Player " + player2.getPos() + " paid tax: " + values[player2.getTile()] + "\n");
+                    w2.update(player2);
                 }
                 else if (tiles.get(player2.getTile()).equals("JAIL")){
                     console.setText("Player " + player2.getPos() + " turn.\n");
@@ -367,11 +396,14 @@ public class Test extends Application{
                         player2.addOwned(tiles.get(player2.getTile()));
                         player2.takeFromAccount(values[player2.getTile()]);
                         console.appendText("\nPlayer " + player2.getPos() + " bought:\n" + tiles.get(player2.getTile()));
+                        w2.update(player2);
+                        buy.setTop(null);
+                        buy.setCenter(null);
                     });
                     buy.setTop(text);
                     buy.setCenter(yes);
                 }
-                console.appendText(tiles.get(player2.getTile()) + " " + player2.getAccount());
+                console.appendText(tiles.get(player2.getTile()));
                 buy.setBottom(console);
             }
             else if (turn == 3) {
@@ -444,6 +476,7 @@ public class Test extends Application{
                     player3.addTile(-32);
                     player3.addToAccount(values[player3.getTile()]);
                     console.appendText("Player " + player3.getPos() + " crossed Start\n");
+                    w3.update(player3);
                 }
                 actionEvent.consume();
                 if (tiles.get(player3.getTile()).equals("CHANCE")){
@@ -452,6 +485,7 @@ public class Test extends Application{
                 else if (tiles.get(player3.getTile()).equals("TAX")){
                     player3.takeFromAccount(values[player3.getTile()]);
                     console.appendText("Player " + player3.getPos() + " paid tax: " + values[player3.getTile()] + "\n");
+                    w3.update(player3);
                 }
                 else if (tiles.get(player3.getTile()).equals("JAIL")){
                     console.setText("Player " + player3.getPos() + " turn.\n");
@@ -465,11 +499,12 @@ public class Test extends Application{
                         player3.addOwned(tiles.get(player3.getTile()));
                         player3.takeFromAccount(values[player3.getTile()]);
                         console.appendText("\nPlayer " + player3.getPos() + " bought:\n" + tiles.get(player3.getTile()));
+                        w3.update(player3);
                     });
                     buy.setTop(text);
                     buy.setCenter(yes);
                 }
-                console.appendText(tiles.get(player3.getTile()) + " " + player3.getAccount());
+                console.appendText(tiles.get(player3.getTile()));
                 buy.setBottom(console);
             }
             else if (turn == 4){
@@ -543,6 +578,7 @@ public class Test extends Application{
                     player4.addTile(-32);
                     player4.addToAccount(values[player4.getTile()]);
                     console.appendText("Player " + player4.getPos() + " crossed Start\n");
+                    w4.update(player4);
                 }
                 actionEvent.consume();
                 if (tiles.get(player4.getTile()).equals("CHANCE")){
@@ -551,6 +587,7 @@ public class Test extends Application{
                 else if (tiles.get(player4.getTile()).equals("TAX")){
                     player4.takeFromAccount(values[player4.getTile()]);
                     console.appendText("Player " + player4.getPos() + " paid tax: " + values[player4.getTile()] + "\n");
+                    w4.update(player4);
                 }
                 else if (tiles.get(player4.getTile()).equals("JAIL")){
                     console.setText("Player " + player4.getPos() + " turn.\n");
@@ -564,11 +601,12 @@ public class Test extends Application{
                         player4.addOwned(tiles.get(player4.getTile()));
                         player4.takeFromAccount(values[player4.getTile()]);
                         console.appendText("\nPlayer " + player4.getPos() + " bought:\n" + tiles.get(player4.getTile()));
+                        w4.update(player4);
                     });
                     buy.setTop(text);
                     buy.setCenter(yes);
                 }
-                console.appendText(tiles.get(player4.getTile()) + " " + figure4.getTranslateX() + "\n" + figure4.getTranslateY());
+                console.appendText(tiles.get(player4.getTile()));
                 buy.setBottom(console);
             }
 
@@ -634,20 +672,31 @@ public class Test extends Application{
         Board graphics = new Board();
         BorderPane board = graphics.makeBoard();
 
+        //right side
+        right.setTop(buy);
+        right.setCenter(playerWindows);
+        playerWindows.addRow(0, P1W);
+        playerWindows.addRow(1, P2W);
+
         //layout
         //center of game = board and figure
         // + later thing
         center.getChildren().addAll(board);
-        if (player4.isPlaying())
+        if (player4.isPlaying()) {
             center.getChildren().add(figure4);
-        if (player3.isPlaying())
+            playerWindows.addRow(3, P4W);
+        }
+        if (player3.isPlaying()) {
             center.getChildren().add(figure3);
+            playerWindows.addRow(2, P3W);
+        }
         center.getChildren().add(figure2);
         center.getChildren().add(figure1);
         center.getChildren().add(root);
 
         //game setup
         border.setCenter(center);
+        border.setRight(right);
 
         Scene scene = new Scene(border, 1200,800);
         stage.setScene(scene);
