@@ -1,3 +1,5 @@
+package extra;
+
 import javafx.scene.image.Image;
 
 import java.util.ArrayList;
