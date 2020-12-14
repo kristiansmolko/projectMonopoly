@@ -11,6 +11,7 @@ import javafx.animation.PauseTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -234,9 +235,12 @@ public class Test extends Application{
                         translateFigure.setByX(move);
                         translateFigure.play();
                         if (nextTile == 25){
-                            pauseMove.play();
-                            portal.setToX(20); portal.setToY(705);
-                            portal.play();
+                            translateFigure.setOnFinished(actionEvent14 -> {
+                                pauseMove.play();
+                                portal.setToX(20); portal.setToY(705);
+                                portal.play();
+                                player1.addTile(-16);
+                            });
                         }
                     }
                 }
@@ -279,18 +283,41 @@ public class Test extends Application{
                     portal.play();
                 }*/
                 else{
-                    text = new Label("Do you want to buy \n" + tiles.get(player1.getTile()) + " for " + values[player1.getTile()] + "?");
-                    yes = new Button("Buy");
-                    yes.setOnAction(actionEvent12 -> {
-                        player1.addOwned(tiles.get(player1.getTile()));
-                        player1.takeFromAccount(values[player1.getTile()]);
-                        console.appendText("\nPlayer " + player1.getPos() + " bought:\n" + tiles.get(player1.getTile()));
-                        w1.update(player1);
-                        buy.setTop(null);
-                        buy.setCenter(null);
-                    });
-                    buy.setTop(text);
-                    buy.setCenter(yes);
+                    if (player2.getOwned().contains(tiles.get(player1.getTile()))){
+                        player2.addToAccount(values[player1.getTile()]/2);
+                        player1.takeFromAccount(values[player1.getTile()]/2);
+                        w2.update(player2); w1.update(player1);
+                        console.appendText("Player " + player1.getPos() + " paid Player " + player2.getPos() + ": " + (values[player1.getTile()]/2) + "\n");
+                    }
+                    else if (player3.getOwned().contains(tiles.get(player1.getTile()))){
+                        player3.addToAccount(values[player1.getTile()]/2);
+                        player1.takeFromAccount(values[player1.getTile()]/2);
+                        w3.update(player3); w1.update(player1);
+                        console.appendText("Player " + player1.getPos() + " paid Player " + player3.getPos() + ": " + (values[player1.getTile()]/2) + "\n");
+                    }
+                    else if (player4.getOwned().contains(tiles.get(player1.getTile()))){
+                        player4.addToAccount(values[player1.getTile()]/2);
+                        player1.takeFromAccount(values[player1.getTile()]/2);
+                        w4.update(player4); w1.update(player1);
+                        console.appendText("Player " + player1.getPos() + " paid Player " + player4.getPos() + ": " + (values[player1.getTile()]/2) + "\n");
+                    }
+                    else {
+                        text = new Label("Do you want to buy \n" + tiles.get(player1.getTile()) + " for " + values[player1.getTile()] + "?");
+                        text.setTranslateX(20);
+                        yes = new Button("Buy");
+                        yes.setTranslateY(30);
+                        yes.setPrefSize(60,40);
+                        yes.setOnAction(actionEvent12 -> {
+                            player1.addOwned(tiles.get(player1.getTile()));
+                            player1.takeFromAccount(values[player1.getTile()]);
+                            console.appendText("\nPlayer " + player1.getPos() + " bought:\n" + tiles.get(player1.getTile()));
+                            w1.update(player1);
+                            buy.setTop(null);
+                            buy.setCenter(null);
+                        });
+                        buy.setTop(text);
+                        buy.setCenter(yes);
+                    }
                 }
                 //buy.setBottom(new Label(player1.getAccount() + " " + player1.getOwned() + "\n" + player1.getTile()));
                 console.appendText(tiles.get(player1.getTile()));
@@ -348,6 +375,14 @@ public class Test extends Application{
                     else{
                         translateFigure2.setByX(move);
                         translateFigure2.play();
+                        if (nextTile == 25){
+                            translateFigure2.setOnFinished(actionEvent14 -> {
+                                pauseMove.play();
+                                portal.setToX(20); portal.setToY(705);
+                                portal.play();
+                                player2.addTile(-16);
+                            });
+                        }
                     }
                 }
                 if (player2.getTile() >= 25 && player2.getTile() < 32){
@@ -388,18 +423,41 @@ public class Test extends Application{
                     portal.play();
                 }
                 else{
-                    text = new Label("Do you want to buy \n" + tiles.get(player2.getTile()) + " for " + values[player2.getTile()] + "?");
-                    yes = new Button("Buy");
-                    yes.setOnAction(actionEvent12 -> {
-                        player2.addOwned(tiles.get(player2.getTile()));
-                        player2.takeFromAccount(values[player2.getTile()]);
-                        console.appendText("\nPlayer " + player2.getPos() + " bought:\n" + tiles.get(player2.getTile()));
-                        w2.update(player2);
-                        buy.setTop(null);
-                        buy.setCenter(null);
-                    });
-                    buy.setTop(text);
-                    buy.setCenter(yes);
+                    if (player1.getOwned().contains(tiles.get(player2.getTile()))){
+                        player1.addToAccount(values[player2.getTile()]/2);
+                        player2.takeFromAccount(values[player2.getTile()]/2);
+                        w1.update(player1); w2.update(player2);
+                        console.appendText("Player " + player2.getPos() + " paid Player " + player1.getPos() + ": " + (values[player2.getTile()]/2) + "\n");
+                    }
+                    else if (player3.getOwned().contains(tiles.get(player2.getTile()))){
+                        player3.addToAccount(values[player2.getTile()]/2);
+                        player2.takeFromAccount(values[player2.getTile()]/2);
+                        w3.update(player3); w2.update(player2);
+                        console.appendText("Player " + player2.getPos() + " paid Player " + player3.getPos() + ": " + (values[player2.getTile()]/2) + "\n");
+                    }
+                    else if (player4.getOwned().contains(tiles.get(player2.getTile()))){
+                        player4.addToAccount(values[player2.getTile()]/2);
+                        player2.takeFromAccount(values[player2.getTile()]/2);
+                        w4.update(player4); w2.update(player2);
+                        console.appendText("Player " + player2.getPos() + " paid Player " + player4.getPos() + ": " + (values[player2.getTile()]/2) + "\n");
+                    }
+                    else {
+                        text = new Label("Do you want to buy \n" + tiles.get(player2.getTile()) + " for " + values[player2.getTile()] + "?");
+                        text.setTranslateX(20);
+                        yes = new Button("Buy");
+                        yes.setTranslateY(30);
+                        yes.setPrefSize(60,40);
+                        yes.setOnAction(actionEvent12 -> {
+                            player2.addOwned(tiles.get(player2.getTile()));
+                            player2.takeFromAccount(values[player2.getTile()]);
+                            console.appendText("\nPlayer " + player2.getPos() + " bought:\n" + tiles.get(player2.getTile()));
+                            w2.update(player2);
+                            buy.setTop(null);
+                            buy.setCenter(null);
+                        });
+                        buy.setTop(text);
+                        buy.setCenter(yes);
+                    }
                 }
                 console.appendText(tiles.get(player2.getTile()));
                 buy.setBottom(console);
@@ -491,16 +549,39 @@ public class Test extends Application{
                 else if (tiles.get(player3.getTile()).equals("PORTAL")){
                 }
                 else{
-                    text = new Label("Do you want to buy \n" + tiles.get(player3.getTile()) + " for " + values[player3.getTile()] + "?");
-                    yes = new Button("Buy");
-                    yes.setOnAction(actionEvent12 -> {
-                        player3.addOwned(tiles.get(player3.getTile()));
-                        player3.takeFromAccount(values[player3.getTile()]);
-                        console.appendText("\nPlayer " + player3.getPos() + " bought:\n" + tiles.get(player3.getTile()));
-                        w3.update(player3);
-                    });
-                    buy.setTop(text);
-                    buy.setCenter(yes);
+                    if (player1.getOwned().contains(tiles.get(player3.getTile()))){
+                        player1.addToAccount(values[player3.getTile()]/2);
+                        player3.takeFromAccount(values[player3.getTile()]/2);
+                        w1.update(player1); w3.update(player3);
+                        console.appendText("Player " + player3.getPos() + " paid Player " + player1.getPos() + ": " + (values[player3.getTile()]/2) + "\n");
+                    }
+                    else if (player2.getOwned().contains(tiles.get(player3.getTile()))){
+                        player2.addToAccount(values[player3.getTile()]/2);
+                        player3.takeFromAccount(values[player3.getTile()]/2);
+                        w2.update(player2); w3.update(player3);
+                        console.appendText("Player " + player3.getPos() + " paid Player " + player2.getPos() + ": " + (values[player3.getTile()]/2) + "\n");
+                    }
+                    else if (player4.getOwned().contains(tiles.get(player3.getTile()))){
+                        player4.addToAccount(values[player3.getTile()]/2);
+                        player3.takeFromAccount(values[player3.getTile()]/2);
+                        w4.update(player4); w3.update(player3);
+                        console.appendText("Player " + player3.getPos() + " paid Player " + player4.getPos() + ": " + (values[player3.getTile()]/2) + "\n");
+                    }
+                    else {
+                        text = new Label("Do you want to buy \n" + tiles.get(player3.getTile()) + " for " + values[player3.getTile()] + "?");
+                        text.setTranslateX(20);
+                        yes = new Button("Buy");
+                        yes.setTranslateY(30);
+                        yes.setPrefSize(60,40);
+                        yes.setOnAction(actionEvent12 -> {
+                            player3.addOwned(tiles.get(player3.getTile()));
+                            player3.takeFromAccount(values[player3.getTile()]);
+                            console.appendText("\nPlayer " + player3.getPos() + " bought:\n" + tiles.get(player3.getTile()));
+                            w3.update(player3);
+                        });
+                        buy.setTop(text);
+                        buy.setCenter(yes);
+                    }
                 }
                 console.appendText(tiles.get(player3.getTile()));
                 buy.setBottom(console);
@@ -593,21 +674,45 @@ public class Test extends Application{
                 else if (tiles.get(player4.getTile()).equals("PORTAL")){
                 }
                 else{
-                    text = new Label("Do you want to buy \n" + tiles.get(player4.getTile()) + " for " + values[player4.getTile()] + "?");
-                    yes = new Button("Buy");
-                    yes.setOnAction(actionEvent12 -> {
-                        player4.addOwned(tiles.get(player4.getTile()));
-                        player4.takeFromAccount(values[player4.getTile()]);
-                        console.appendText("\nPlayer " + player4.getPos() + " bought:\n" + tiles.get(player4.getTile()));
-                        w4.update(player4);
-                    });
-                    buy.setTop(text);
-                    buy.setCenter(yes);
+                    if (player1.getOwned().contains(tiles.get(player4.getTile()))){
+                        player1.addToAccount(values[player4.getTile()]/2);
+                        player4.takeFromAccount(values[player4.getTile()]/2);
+                        w1.update(player1); w4.update(player4);
+                        console.appendText("Player " + player4.getPos() + " paid Player " + player1.getPos() + ": " + (values[player4.getTile()]/2) + "\n");
+                    }
+                    else  if (player2.getOwned().contains(tiles.get(player4.getTile()))){
+                        player2.addToAccount(values[player4.getTile()]/2);
+                        player4.takeFromAccount(values[player4.getTile()]/2);
+                        w2.update(player2); w4.update(player4);
+                        console.appendText("Player " + player4.getPos() + " paid Player " + player2.getPos() + ": " + (values[player4.getTile()]/2) + "\n");
+                    }
+                    else  if (player3.getOwned().contains(tiles.get(player4.getTile()))){
+                        player3.addToAccount(values[player4.getTile()]/2);
+                        player4.takeFromAccount(values[player4.getTile()]/2);
+                        w3.update(player3); w4.update(player4);
+                        console.appendText("Player " + player4.getPos() + " paid Player " + player3.getPos() + ": " + (values[player4.getTile()]/2) + "\n");
+                    }
+                    else {
+                        text = new Label("Do you want to buy \n" + tiles.get(player4.getTile()) + " for " + values[player4.getTile()] + "?");
+                        text.setTranslateX(20);
+                        yes = new Button("Buy");
+                        yes.setTranslateY(30);
+                        yes.setPrefSize(60,40);
+                        yes.setOnAction(actionEvent12 -> {
+                            player4.addOwned(tiles.get(player4.getTile()));
+                            player4.takeFromAccount(values[player4.getTile()]);
+                            console.appendText("\nPlayer " + player4.getPos() + " bought:\n" + tiles.get(player4.getTile()));
+                            w4.update(player4);
+                        });
+                        buy.setTop(text);
+                        buy.setCenter(yes);
+                    }
                 }
                 console.appendText(tiles.get(player4.getTile()));
                 buy.setBottom(console);
             }
 
+            console.setTranslateY(150);
             nextTurn(); //next player
         });
 
@@ -675,6 +780,8 @@ public class Test extends Application{
         right.setCenter(playerWindows);
         playerWindows.addRow(0, P1W);
         playerWindows.addRow(1, P2W);
+        playerWindows.setVgap(20);
+        playerWindows.setTranslateY(200);
 
         //layout
         //center of game = board and figure
