@@ -9,11 +9,14 @@ public class Player {
     private int pos, tile = 0;
     private ArrayList<String> owned;
     private Image figure;
+    private boolean inPrison;
+    private int prisonCount = 1;
 
     public Player(int num){
         account = 500;
         owned = new ArrayList<>();
         pos = num;
+        inPrison = false;
     }
 
     public int getAccount() {
@@ -68,5 +71,25 @@ public class Player {
 
     public void addTile(int num){
         tile -= -num;
+    }
+
+    public boolean isInPrison(){
+        return inPrison;
+    }
+
+    public void toPrison(){
+        inPrison = true;
+    }
+
+    public void addPrison(){
+        prisonCount++;
+        if (prisonCount > 2){
+            inPrison = false;
+            prisonCount = 1;
+        }
+    }
+
+    public int getPrisonCount(){
+        return prisonCount;
     }
 }

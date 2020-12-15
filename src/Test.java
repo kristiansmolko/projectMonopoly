@@ -240,6 +240,7 @@ public class Test extends Application{
                                 portal.setToX(20); portal.setToY(705);
                                 portal.play();
                                 player1.addTile(-16);
+                                player1.toPrison();
                             });
                         }
                     }
@@ -276,12 +277,10 @@ public class Test extends Application{
                 }
                 else if (tiles.get(player1.getTile()).equals("JAIL")){
                     console.setText("Player " + player1.getPos() + " turn.\n");
+                    if (player1.isInPrison()){
+                        console.setText("You are in prison! Remaining rounds: " + (3-player1.getPrisonCount()));
+                    }
                 }
-                /*else if (tiles.get(player1.getTile()).equals("PORTAL")){
-                    pauseMove.play();
-                    portal.setToX(20); portal.setToY(705);
-                    portal.play();
-                }*/
                 else{
                     if (player2.getOwned().contains(tiles.get(player1.getTile()))){
                         player2.addToAccount(values[player1.getTile()]/2);
@@ -381,6 +380,7 @@ public class Test extends Application{
                                 portal.setToX(20); portal.setToY(705);
                                 portal.play();
                                 player2.addTile(-16);
+                                player2.toPrison();
                             });
                         }
                     }
@@ -416,11 +416,9 @@ public class Test extends Application{
                 }
                 else if (tiles.get(player2.getTile()).equals("JAIL")){
                     console.setText("Player " + player2.getPos() + " turn.\n");
-                }
-                else if (tiles.get(player2.getTile()).equals("PORTAL")){
-                    pauseMove.play();
-                    portal.setToX(25); portal.setToY(710);
-                    portal.play();
+                    if (player2.isInPrison()){
+                        console.setText("You are in prison! Remaining rounds: " + (3-player2.getPrisonCount()));
+                    }
                 }
                 else{
                     if (player1.getOwned().contains(tiles.get(player2.getTile()))){
@@ -512,6 +510,15 @@ public class Test extends Application{
                     else{
                         translateFigure2.setByX(move);
                         translateFigure2.play();
+                        if (nextTile == 25){
+                            translateFigure2.setOnFinished(actionEvent14 -> {
+                                pauseMove.play();
+                                portal.setToX(20); portal.setToY(705);
+                                portal.play();
+                                player3.addTile(-16);
+                                player3.toPrison();
+                            });
+                        }
                     }
                 }
                 if (player3.getTile() >= 25 && player3.getTile() < 32){
@@ -545,8 +552,9 @@ public class Test extends Application{
                 }
                 else if (tiles.get(player3.getTile()).equals("JAIL")){
                     console.setText("Player " + player3.getPos() + " turn.\n");
-                }
-                else if (tiles.get(player3.getTile()).equals("PORTAL")){
+                    if (player3.isInPrison()){
+                        console.setText("You are in prison! Remaining rounds: " + (3-player3.getPrisonCount()));
+                    }
                 }
                 else{
                     if (player1.getOwned().contains(tiles.get(player3.getTile()))){
@@ -635,9 +643,20 @@ public class Test extends Application{
                         translateFigure.play();
                         translateFigure.setOnFinished(actionEvent15 -> transY.play());
                     }
-                    translateFigure.setByX(move);
-                    translateFigure.play();
-
+                    else {
+                        translateFigure.setByX(move);
+                        translateFigure.play();
+                        if (nextTile == 25) {
+                            translateFigure.setOnFinished(actionEvent14 -> {
+                                pauseMove.play();
+                                portal.setToX(20);
+                                portal.setToY(705);
+                                portal.play();
+                                player4.addTile(-16);
+                                player4.toPrison();
+                            });
+                        }
+                    }
                 }
                 if (player4.getTile() >= 25 && player4.getTile() < 32){
                     if (nextTile > 32){
@@ -670,8 +689,8 @@ public class Test extends Application{
                 }
                 else if (tiles.get(player4.getTile()).equals("JAIL")){
                     console.setText("Player " + player4.getPos() + " turn.\n");
-                }
-                else if (tiles.get(player4.getTile()).equals("PORTAL")){
+                    if (player4.isInPrison())
+                        console.setText("You are in prison! Remaining rounds: " + (3-player4.getPrisonCount()));
                 }
                 else{
                     if (player1.getOwned().contains(tiles.get(player4.getTile()))){
@@ -714,6 +733,22 @@ public class Test extends Application{
 
             console.setTranslateY(150);
             nextTurn(); //next player
+            if (player1.isInPrison()){
+                player1.addPrison();
+                nextTurn();
+            }
+            if (player2.isInPrison()){
+                player2.addPrison();
+                nextTurn();
+            }
+            if (player3.isInPrison()){
+                player3.addPrison();
+                nextTurn();
+            }
+            if (player4.isInPrison()){
+                player4.addPrison();
+                nextTurn();
+            }
         });
 
         //when move with figure is completed
