@@ -178,558 +178,249 @@ public class Test extends Application{
             buy.setTop(null);
             buy.setCenter(null);
             buy.setMaxSize(200,200);
+            Player[] playerList = new Player[numOfPlayers];
+            playerList[0] = player1;
+            playerList[1] = player2;
+            if (player3.isPlaying())
+                playerList[2] = player3;
+            if (player4.isPlaying())
+                playerList[3] = player4;
 
-            //turns
-            if (turn == 1) {  //find out who is on turn
-                translateFigure.stop();
-                transY.stop();
-                portal.stop();
-                translateFigure.setNode(figure1);
-                transY.setNode(figure1);
-                portal.setNode(figure1);
-                translateFigure.setByX(0);
-                translateFigure.setByY(0);
-                transY.setByY(0);
-                transY.setByX(0);
-                pauseMove.setDuration(Duration.millis(500));
-                console.setText("Player " + player1.getPos() + " turn.\n");
-                double nextTile = player1.getTile() + finalRn;
-                double rest;
-                if (player1.getTile() >= 0 && player1.getTile() < 9){
-                    if (nextTile > 9){
-                        rest = ((nextTile-9) * 100);
-                        translateFigure.setByX(-(move - rest));
-                        transY.setByY(- (((nextTile - 9) * 100)));
-                        translateFigure.play();
-                        translateFigure.setOnFinished(actionEvent13 -> transY.play());
-                        actionEvent.consume();
+            for (Player player : playerList){
+                if (turn == player.getPos()) {
+                    if (turn == 1) {
+                        translateFigure.setNode(figure1);
+                        transY.setNode(figure1);
+                        portal.setNode(figure1);
+                    } else if (turn == 2) {
+                        translateFigure.setNode(figure2);
+                        transY.setNode(figure2);
+                        portal.setNode(figure2);
+                    } else if (turn == 3) {
+                        translateFigure.setNode(figure3);
+                        transY.setNode(figure3);
+                        portal.setNode(figure3);
+                    } else if (turn == 4) {
+                        translateFigure.setNode(figure4);
+                        transY.setNode(figure4);
+                        portal.setNode(figure4);
                     }
-                    else{
-                        translateFigure.setByX(-move);
-                        translateFigure.play();
-                    }
-                }
-                if (player1.getTile() >= 9 && player1.getTile() < 16){
-                    if (nextTile > 16){
-                        rest = ((nextTile-16) * 100);
-                        translateFigure.setByY(-(move - ((nextTile-16) * 100)));
-                        transY.setByX(rest);
-                        translateFigure.play();
-                        translateFigure.setOnFinished(actionEvent13 -> transY.play());
-                        actionEvent.consume();
-                    }
-                    else{
-                        transY.setByY(-move);
-                        transY.play();
-                    }
-                }
-                if (player1.getTile() >= 16 && player1.getTile() < 25){
-                    if (nextTile > 25){
-                        rest = ((nextTile-25) * 100);
-                        translateFigure.setByX(move - (((nextTile-25) * 100)));
-                        transY.setByY(rest);
-                        translateFigure.play();
-                        translateFigure.setOnFinished(actionEvent15 -> transY.play());
-                    }
-                    else {
-                        translateFigure.setByX(move);
-                        translateFigure.play();
-                        if (nextTile == 25){
-                            translateFigure.setOnFinished(actionEvent14 -> {
-                                pauseMove.play();
-                                portal.setToX(20); portal.setToY(705);
-                                portal.play();
-                                player1.addTile(-16);
-                                player1.toPrison();
-                            });
+
+                    translateFigure.setByX(0);
+                    translateFigure.setByY(0);
+                    transY.setByY(0);
+                    transY.setByX(0);
+                    console.setText("Player " + player.getPos() + " turn.\n");
+                    double nextTile = player.getTile() + finalRn;
+                    double rest;
+                    if (player.getTile() >= 0 && player.getTile() < 9) {
+                        if (nextTile > 9) {
+                            rest = ((nextTile - 9) * 100);
+                            translateFigure.setByX(-(move - rest));
+                            transY.setByY(-(((nextTile - 9) * 100)));
+                            translateFigure.play();
+                            translateFigure.setOnFinished(actionEvent13 -> transY.play());
+                            actionEvent.consume();
+                        } else {
+                            translateFigure.setByX(-move);
+                            translateFigure.play();
                         }
                     }
-                }
-                if (player1.getTile() >= 25 && player1.getTile() < 32){
-                    if (nextTile > 32){
-                        rest = ((nextTile - 32) * 100);
-                        translateFigure.setByY(move - ((nextTile-32) * 100));
-                        transY.setByX(-rest);
-                        translateFigure.play();
-                        translateFigure.setOnFinished(actionEvent1 -> transY.play());
+                    if (player.getTile() >= 9 && player.getTile() < 16) {
+                        if (nextTile > 16) {
+                            rest = ((nextTile - 16) * 100);
+                            translateFigure.setByY(-(move - ((nextTile - 16) * 100)));
+                            transY.setByX(rest);
+                            translateFigure.play();
+                            translateFigure.setOnFinished(actionEvent13 -> transY.play());
+                            actionEvent.consume();
+                        } else {
+                            transY.setByY(-move);
+                            transY.play();
+                        }
                     }
-                    else{
-                        transY.setByY(move);
-                        transY.play();
+                    if (player.getTile() >= 16 && player.getTile() < 25) {
+                        if (nextTile > 25) {
+                            rest = ((nextTile - 25) * 100);
+                            translateFigure.setByX(move - (((nextTile - 25) * 100)));
+                            transY.setByY(rest);
+                            translateFigure.play();
+                            translateFigure.setOnFinished(actionEvent15 -> transY.play());
+                        } else {
+                            translateFigure.setByX(move);
+                            translateFigure.play();
+                            if (nextTile == 25) {
+                                translateFigure.setOnFinished(actionEvent14 -> {
+                                    pauseMove.play();
+                                    portal.setToX(20);
+                                    portal.setToY(705);
+                                    portal.play();
+                                    player.addTile(-16);
+                                    player.toPrison();
+                                });
+                            }
+                        }
                     }
-                }
-                player1.addTile(finalRn);
-                if (player1.getTile() >= 32) {
-                    player1.addToAccount(200);
-                    console.appendText("Player " + player1.getPos() + " has crossed Start\n");
-                    player1.addTile(-32);
-                    w1.update(player1);
-                }
-                actionEvent.consume();
-                if (tiles.get(player1.getTile()).equals("CHANCE")){
-                    console.setText("Player " + player1.getPos() + " turn.\n");
-                    /* here comes chance */
-                }
-                else if (tiles.get(player1.getTile()).equals("TAX")){
-                    player1.takeFromAccount(values[player1.getTile()]);
-                    console.appendText("\nPlayer " + player1.getPos() + " paid tax: " + values[player1.getTile()] + "\n");
-                    w1.update(player1);
-                }
-                else if (tiles.get(player1.getTile()).equals("JAIL")){
-                    console.setText("Player " + player1.getPos() + " turn.\n");
-                    if (player1.isInPrison()){
-                        console.setText("You are in prison! Remaining rounds: " + (3-player1.getPrisonCount()));
+                    if (player.getTile() >= 25 && player.getTile() < 32) {
+                        if (nextTile > 32) {
+                            rest = ((nextTile - 32) * 100);
+                            translateFigure.setByY(move - ((nextTile - 32) * 100));
+                            transY.setByX(-rest);
+                            translateFigure.play();
+                            translateFigure.setOnFinished(actionEvent1 -> transY.play());
+                        } else {
+                            transY.setByY(move);
+                            transY.play();
+                        }
                     }
-                }
-                else{
-                    if (player2.getOwned().contains(tiles.get(player1.getTile()))){
-                        player2.addToAccount(values[player1.getTile()]/2);
-                        player1.takeFromAccount(values[player1.getTile()]/2);
-                        w2.update(player2); w1.update(player1);
-                        console.appendText("Player " + player1.getPos() + " paid Player " + player2.getPos() + ": " + (values[player1.getTile()]/2) + "\n");
+                    player.addTile(finalRn);
+                    if (player.getTile() >= 32) {
+                        player.addToAccount(200);
+                        console.appendText("Player " + player.getPos() + " has crossed Start\n");
+                        player.addTile(-32);
+                        switch (player.getPos()) {
+                            case 1:
+                                w1.update(player);
+                                break;
+                            case 2:
+                                w2.update(player);
+                                break;
+                            case 3:
+                                w3.update(player);
+                                break;
+                            case 4:
+                                w4.update(player);
+                                break;
+                        }
                     }
-                    else if (player3.getOwned().contains(tiles.get(player1.getTile()))){
-                        player3.addToAccount(values[player1.getTile()]/2);
-                        player1.takeFromAccount(values[player1.getTile()]/2);
-                        w3.update(player3); w1.update(player1);
-                        console.appendText("Player " + player1.getPos() + " paid Player " + player3.getPos() + ": " + (values[player1.getTile()]/2) + "\n");
-                    }
-                    else if (player4.getOwned().contains(tiles.get(player1.getTile()))){
-                        player4.addToAccount(values[player1.getTile()]/2);
-                        player1.takeFromAccount(values[player1.getTile()]/2);
-                        w4.update(player4); w1.update(player1);
-                        console.appendText("Player " + player1.getPos() + " paid Player " + player4.getPos() + ": " + (values[player1.getTile()]/2) + "\n");
-                    }
-                    else {
-                        text = new Label("Do you want to buy \n" + tiles.get(player1.getTile()) + " for " + values[player1.getTile()] + "?");
-                        text.setTranslateX(20);
-                        yes = new Button("Buy");
-                        yes.setTranslateY(30);
-                        yes.setPrefSize(60,40);
-                        yes.setOnAction(actionEvent12 -> {
-                            player1.addOwned(tiles.get(player1.getTile()));
-                            player1.takeFromAccount(values[player1.getTile()]);
-                            console.appendText("\nPlayer " + player1.getPos() + " bought:\n" + tiles.get(player1.getTile()));
+                    actionEvent.consume();
+                    if (tiles.get(player.getTile()).equals("CHANCE")) {
+                        console.setText("Player " + player.getPos() + " turn.\n");
+                        /* here comes chance */
+                    } else if (tiles.get(player.getTile()).equals("TAX")) {
+                        player.takeFromAccount(values[player.getTile()]);
+                        console.appendText("\nPlayer " + player.getPos() + " paid tax: " + values[player.getTile()] + "\n");
+                        switch (player.getPos()) {
+                            case 1:
+                                w1.update(player);
+                                break;
+                            case 2:
+                                w2.update(player);
+                                break;
+                            case 3:
+                                w3.update(player);
+                                break;
+                            case 4:
+                                w4.update(player);
+                                break;
+                        }
+                    } else if (tiles.get(player.getTile()).equals("JAIL")) {
+                        console.setText("Player " + player.getPos() + " turn.\n");
+                        if (player.isInPrison()) {
+                            console.setText("You are in prison! Remaining rounds: " + (3 - player.getPrisonCount()));
+                        }
+                    } else {
+                        if (player1.getOwned().contains(tiles.get(player.getTile()))) {
+                            player1.addToAccount(values[player.getTile()] / 2);
+                            player.takeFromAccount(values[player.getTile()] / 2);
                             w1.update(player1);
-                            buy.setTop(null);
-                            buy.setCenter(null);
-                        });
-                        buy.setTop(text);
-                        buy.setCenter(yes);
-                    }
-                }
-                //buy.setBottom(new Label(player1.getAccount() + " " + player1.getOwned() + "\n" + player1.getTile()));
-                console.appendText(tiles.get(player1.getTile()));
-                buy.setBottom(console);
-            }
-            else if (turn == 2) {
-                translateFigure2.stop();
-                transY2.stop();
-                portal.stop();
-                translateFigure2.setNode(figure2);
-                transY2.setNode(figure2);
-                portal.setNode(figure2);
-                translateFigure2.setByX(0);
-                translateFigure2.setByY(0);
-                transY2.setByY(0);
-                transY2.setByX(0);
-                pauseMove.setDuration(Duration.millis(500));
-                console.setText("Player " + player2.getPos() + " turn.\n");
-                double nextTile = player2.getTile() + finalRn;
-                double rest;
-                if (player2.getTile() >= 0 && player2.getTile() < 9){
-                    if (nextTile > 9){
-                        rest = (nextTile-9) * 100;
-                        translateFigure2.setByX(-(move - rest));
-                        transY2.setByY(- ((nextTile - 9) * 100));
-                        translateFigure2.play();
-                        translateFigure2.setOnFinished(actionEvent1 -> transY2.play());
-                    }
-                    else{
-                        translateFigure2.setByX(-move);
-                        translateFigure2.play();
-                    }
-                }
-                if (player2.getTile() >= 9 && player2.getTile() < 16){
-                    if (nextTile > 16){
-                        rest = (nextTile-16) * 100;
-                        translateFigure2.setByY(-(move - (nextTile-16) * 100));
-                        transY2.setByX(rest);
-                        translateFigure2.play();
-                        translateFigure2.setOnFinished(actionEvent1 -> transY2.play());
-                    }
-                    else{
-                        transY2.setByY(-move);
-                        transY2.play();
-                    }
-                }
-                if (player2.getTile() >= 16 && player2.getTile() < 25){
-                    if (nextTile > 25){
-                        rest = (nextTile-25) * 100;
-                        translateFigure2.setByX(move - rest);
-                        transY2.setByY((nextTile-25) * 100);
-                        translateFigure2.play();
-                        translateFigure2.setOnFinished(actionEvent1 -> transY2.play());
-                    }
-                    else{
-                        translateFigure2.setByX(move);
-                        translateFigure2.play();
-                        if (nextTile == 25){
-                            translateFigure2.setOnFinished(actionEvent14 -> {
-                                pauseMove.play();
-                                portal.setToX(20); portal.setToY(705);
-                                portal.play();
-                                player2.addTile(-16);
-                                player2.toPrison();
-                            });
-                        }
-                    }
-                }
-                if (player2.getTile() >= 25 && player2.getTile() < 32){
-                    if (nextTile > 32){
-                        rest = (nextTile - 32) * 100;
-                        translateFigure2.setByY(move - ((nextTile-32) * 100));
-                        transY2.setByX(-rest);
-                        translateFigure2.play();
-                        translateFigure2.setOnFinished(actionEvent1 -> transY2.play());
-                    }
-                    else{
-                        transY2.setByY(move);
-                        transY2.play();
-                    }
-                }
-                player2.addTile(finalRn);
-                if (player2.getTile() >= 32) {
-                    player2.addTile(-32);
-                    player2.addToAccount(200);
-                    console.appendText("Player " + player2.getPos() + " crossed Start\n");
-                    w2.update(player2);
-                }
-                actionEvent.consume();
-                if (tiles.get(player2.getTile()).equals("CHANCE")){
-                    /* here comes chance */
-                }
-                else if (tiles.get(player2.getTile()).equals("TAX")){
-                    player2.takeFromAccount(values[player2.getTile()]);
-                    console.appendText("Player " + player2.getPos() + " paid tax: " + values[player2.getTile()] + "\n");
-                    w2.update(player2);
-                }
-                else if (tiles.get(player2.getTile()).equals("JAIL")){
-                    console.setText("Player " + player2.getPos() + " turn.\n");
-                    if (player2.isInPrison()){
-                        console.setText("You are in prison! Remaining rounds: " + (3-player2.getPrisonCount()));
-                    }
-                }
-                else{
-                    if (player1.getOwned().contains(tiles.get(player2.getTile()))){
-                        player1.addToAccount(values[player2.getTile()]/2);
-                        player2.takeFromAccount(values[player2.getTile()]/2);
-                        w1.update(player1); w2.update(player2);
-                        console.appendText("Player " + player2.getPos() + " paid Player " + player1.getPos() + ": " + (values[player2.getTile()]/2) + "\n");
-                    }
-                    else if (player3.getOwned().contains(tiles.get(player2.getTile()))){
-                        player3.addToAccount(values[player2.getTile()]/2);
-                        player2.takeFromAccount(values[player2.getTile()]/2);
-                        w3.update(player3); w2.update(player2);
-                        console.appendText("Player " + player2.getPos() + " paid Player " + player3.getPos() + ": " + (values[player2.getTile()]/2) + "\n");
-                    }
-                    else if (player4.getOwned().contains(tiles.get(player2.getTile()))){
-                        player4.addToAccount(values[player2.getTile()]/2);
-                        player2.takeFromAccount(values[player2.getTile()]/2);
-                        w4.update(player4); w2.update(player2);
-                        console.appendText("Player " + player2.getPos() + " paid Player " + player4.getPos() + ": " + (values[player2.getTile()]/2) + "\n");
-                    }
-                    else {
-                        text = new Label("Do you want to buy \n" + tiles.get(player2.getTile()) + " for " + values[player2.getTile()] + "?");
-                        text.setTranslateX(20);
-                        yes = new Button("Buy");
-                        yes.setTranslateY(30);
-                        yes.setPrefSize(60,40);
-                        yes.setOnAction(actionEvent12 -> {
-                            player2.addOwned(tiles.get(player2.getTile()));
-                            player2.takeFromAccount(values[player2.getTile()]);
-                            console.appendText("\nPlayer " + player2.getPos() + " bought:\n" + tiles.get(player2.getTile()));
+                            switch (player.getPos()) {
+                                case 2:
+                                    w2.update(player);
+                                    break;
+                                case 3:
+                                    w3.update(player);
+                                    break;
+                                case 4:
+                                    w4.update(player);
+                                    break;
+                            }
+                            console.appendText("Player " + player.getPos() + " paid Player " + player1.getPos() + ": " + (values[player.getTile()] / 2) + "\n");
+                        } else if (player2.getOwned().contains(tiles.get(player.getTile()))) {
+                            player2.addToAccount(values[player.getTile()] / 2);
+                            player.takeFromAccount(values[player.getTile()] / 2);
                             w2.update(player2);
-                            buy.setTop(null);
-                            buy.setCenter(null);
-                        });
-                        buy.setTop(text);
-                        buy.setCenter(yes);
-                    }
-                }
-                console.appendText(tiles.get(player2.getTile()));
-                buy.setBottom(console);
-            }
-            else if (turn == 3) {
-                translateFigure2.stop();
-                transY2.stop();
-                translateFigure2.setNode(figure3);
-                transY2.setNode(figure3);
-                translateFigure2.setByX(0);
-                translateFigure2.setByY(0);
-                transY2.setByY(0);
-                transY2.setByX(0);
-                pauseMove.setDuration(Duration.millis(500));
-                console.setText("Player " + player3.getPos() + " turn.\n");
-                double nextTile = player3.getTile() + finalRn;
-                double rest;
-                if (player3.getTile() >= 0 && player3.getTile() < 9){
-                    if (nextTile > 9){
-                        rest = (nextTile-9) * 100;
-                        translateFigure2.setByX(-(move - rest));
-                        transY2.setByY(-((nextTile - 9) * 100));
-                        translateFigure2.play();
-                        translateFigure2.setOnFinished(actionEvent1 -> transY2.play());
-                    }
-                    else{
-                        translateFigure2.setByX(-move);
-                        translateFigure2.play();
-                    }
-                }
-                if (player3.getTile() >= 9 && player3.getTile() < 16){
-                    if (nextTile > 16){
-                        rest = (nextTile-16) * 100;
-                        translateFigure2.setByY(-(move - ((nextTile-16) * 100)));
-                        transY2.setByX(rest);
-                        translateFigure2.play();
-                        translateFigure2.setOnFinished(actionEvent1 -> transY2.play());
-                    }
-                    else{
-                        transY2.setByY(-move);
-                        transY2.play();
-                    }
-                }
-                if (player3.getTile() >= 16 && player3.getTile() < 25){
-                    if (nextTile > 25){
-                        rest = (nextTile-25) * 100;
-                        translateFigure2.setByX((move - rest));
-                        transY2.setByY((nextTile-25) * 100);
-                        translateFigure2.play();
-                        translateFigure2.setOnFinished(actionEvent1 -> transY2.play());
-                    }
-                    else{
-                        translateFigure2.setByX(move);
-                        translateFigure2.play();
-                        if (nextTile == 25){
-                            translateFigure2.setOnFinished(actionEvent14 -> {
-                                pauseMove.play();
-                                portal.setToX(20); portal.setToY(705);
-                                portal.play();
-                                player3.addTile(-16);
-                                player3.toPrison();
-                            });
-                        }
-                    }
-                }
-                if (player3.getTile() >= 25 && player3.getTile() < 32){
-                    if (nextTile > 32){
-                        rest = (nextTile - 32) * 100;
-                        translateFigure2.setByY((move - ((nextTile-32) * 100)));
-                        transY2.setByX(-rest);
-                        translateFigure2.play();
-                        translateFigure2.setOnFinished(actionEvent1 -> transY2.play());
-                    }
-                    else{
-                        transY2.setByY(move);
-                        transY2.play();
-                    }
-                }
-                player3.addTile(finalRn);
-                if (player3.getTile() >= 32) {
-                    player3.addTile(-32);
-                    player3.addToAccount(values[player3.getTile()]);
-                    console.appendText("Player " + player3.getPos() + " crossed Start\n");
-                    w3.update(player3);
-                }
-                actionEvent.consume();
-                if (tiles.get(player3.getTile()).equals("CHANCE")){
-                    /* here comes chance */
-                }
-                else if (tiles.get(player3.getTile()).equals("TAX")){
-                    player3.takeFromAccount(values[player3.getTile()]);
-                    console.appendText("Player " + player3.getPos() + " paid tax: " + values[player3.getTile()] + "\n");
-                    w3.update(player3);
-                }
-                else if (tiles.get(player3.getTile()).equals("JAIL")){
-                    console.setText("Player " + player3.getPos() + " turn.\n");
-                    if (player3.isInPrison()){
-                        console.setText("You are in prison! Remaining rounds: " + (3-player3.getPrisonCount()));
-                    }
-                }
-                else{
-                    if (player1.getOwned().contains(tiles.get(player3.getTile()))){
-                        player1.addToAccount(values[player3.getTile()]/2);
-                        player3.takeFromAccount(values[player3.getTile()]/2);
-                        w1.update(player1); w3.update(player3);
-                        console.appendText("Player " + player3.getPos() + " paid Player " + player1.getPos() + ": " + (values[player3.getTile()]/2) + "\n");
-                    }
-                    else if (player2.getOwned().contains(tiles.get(player3.getTile()))){
-                        player2.addToAccount(values[player3.getTile()]/2);
-                        player3.takeFromAccount(values[player3.getTile()]/2);
-                        w2.update(player2); w3.update(player3);
-                        console.appendText("Player " + player3.getPos() + " paid Player " + player2.getPos() + ": " + (values[player3.getTile()]/2) + "\n");
-                    }
-                    else if (player4.getOwned().contains(tiles.get(player3.getTile()))){
-                        player4.addToAccount(values[player3.getTile()]/2);
-                        player3.takeFromAccount(values[player3.getTile()]/2);
-                        w4.update(player4); w3.update(player3);
-                        console.appendText("Player " + player3.getPos() + " paid Player " + player4.getPos() + ": " + (values[player3.getTile()]/2) + "\n");
-                    }
-                    else {
-                        text = new Label("Do you want to buy \n" + tiles.get(player3.getTile()) + " for " + values[player3.getTile()] + "?");
-                        text.setTranslateX(20);
-                        yes = new Button("Buy");
-                        yes.setTranslateY(30);
-                        yes.setPrefSize(60,40);
-                        yes.setOnAction(actionEvent12 -> {
-                            player3.addOwned(tiles.get(player3.getTile()));
-                            player3.takeFromAccount(values[player3.getTile()]);
-                            console.appendText("\nPlayer " + player3.getPos() + " bought:\n" + tiles.get(player3.getTile()));
+                            switch (player.getPos()) {
+                                case 1:
+                                    w1.update(player);
+                                    break;
+                                case 3:
+                                    w3.update(player);
+                                    break;
+                                case 4:
+                                    w4.update(player);
+                                    break;
+                            }
+                            console.appendText("Player " + player.getPos() + " paid Player " + player2.getPos() + ": " + (values[player.getTile()] / 2) + "\n");
+                        } else if (player3.getOwned().contains(tiles.get(player.getTile()))) {
+                            player3.addToAccount(values[player.getTile()] / 2);
+                            player.takeFromAccount(values[player.getTile()] / 2);
                             w3.update(player3);
-                        });
-                        buy.setTop(text);
-                        buy.setCenter(yes);
-                    }
-                }
-                console.appendText(tiles.get(player3.getTile()));
-                buy.setBottom(console);
-            }
-            else if (turn == 4){
-                translateFigure.stop();
-                transY.stop();
-                translateFigure.setNode(figure4);
-                transY.setNode(figure4);
-                translateFigure.setByX(0);
-                translateFigure.setByY(0);
-                transY.setByY(0);
-                transY.setByX(0);
-                pauseMove.setDuration(Duration.millis(500));
-                console.appendText("Player " + player4.getPos() + " turn.\n");
-                double nextTile = player4.getTile() + finalRn;
-                double rest;
-                if (player4.getTile() >= 0 && player4.getTile() < 9){
-                    if (nextTile > 9){
-                        rest = (nextTile-9) * 100;
-                        translateFigure.setByX(-(move - rest));
-                        transY.setByY(- ((nextTile - 9) * 100));
-                        translateFigure.play();
-                        translateFigure.setOnFinished(actionEvent13 -> transY.play());
-                        actionEvent.consume();
-                    }
-                    else{
-                        translateFigure.setByX(-move);
-                        translateFigure.play();
-                    }
-                }
-                if (player4.getTile() >= 9 && player4.getTile() < 16){
-                    if (nextTile > 16){
-                        rest = (nextTile-16) * 100;
-                        translateFigure.setByY(-(move - ((nextTile-16) * 100)));
-                        transY.setByX(rest);
-                        translateFigure.play();
-                        translateFigure.setOnFinished(actionEvent13 -> transY.play());
-                        actionEvent.consume();
-                    }
-                    else{
-                        transY.setByY(-move);
-                        transY.play();
-                    }
-                }
-                if (player4.getTile() >= 16 && player4.getTile() < 25){
-                    if (nextTile > 25){
-                        rest = (nextTile-25) * 100;
-                        translateFigure.setByX(move - ((nextTile-25) * 100));
-                        transY.setByY(rest);
-                        translateFigure.play();
-                        translateFigure.setOnFinished(actionEvent15 -> transY.play());
-                    }
-                    else {
-                        translateFigure.setByX(move);
-                        translateFigure.play();
-                        if (nextTile == 25) {
-                            translateFigure.setOnFinished(actionEvent14 -> {
-                                pauseMove.play();
-                                portal.setToX(20);
-                                portal.setToY(705);
-                                portal.play();
-                                player4.addTile(-16);
-                                player4.toPrison();
+                            switch (player.getPos()) {
+                                case 1:
+                                    w1.update(player);
+                                    break;
+                                case 2:
+                                    w2.update(player);
+                                    break;
+                                case 4:
+                                    w4.update(player);
+                                    break;
+                            }
+                            console.appendText("Player " + player.getPos() + " paid Player " + player3.getPos() + ": " + (values[player.getTile()] / 2) + "\n");
+                        } else if (player4.getOwned().contains(tiles.get(player.getTile()))) {
+                            player4.addToAccount(values[player.getTile()] / 2);
+                            player1.takeFromAccount(values[player.getTile()] / 2);
+                            w4.update(player4);
+                            switch (player.getPos()) {
+                                case 1:
+                                    w1.update(player);
+                                    break;
+                                case 2:
+                                    w2.update(player);
+                                    break;
+                                case 3:
+                                    w3.update(player);
+                                    break;
+                            }
+                            console.appendText("Player " + player.getPos() + " paid Player " + player4.getPos() + ": " + (values[player.getTile()] / 2) + "\n");
+                        } else {
+                            text = new Label("Do you want to buy \n" + tiles.get(player.getTile()) + " for " + values[player.getTile()] + "?");
+                            text.setTranslateX(20);
+                            yes = new Button("Buy");
+                            yes.setTranslateY(30);
+                            yes.setPrefSize(60, 40);
+                            yes.setOnAction(actionEvent12 -> {
+                                player.addOwned(tiles.get(player.getTile()));
+                                player.takeFromAccount(values[player.getTile()]);
+                                console.appendText("\nPlayer " + player.getPos() + " bought:\n" + tiles.get(player.getTile()));
+                                switch (player.getPos()) {
+                                    case 1:
+                                        w1.update(player);
+                                        break;
+                                    case 2:
+                                        w2.update(player);
+                                        break;
+                                    case 3:
+                                        w3.update(player);
+                                        break;
+                                    case 4:
+                                        w4.update(player);
+                                        break;
+                                }
+                                buy.setTop(null);
+                                buy.setCenter(null);
                             });
+                            buy.setTop(text);
+                            buy.setCenter(yes);
                         }
                     }
+                    //buy.setBottom(new Label(player1.getAccount() + " " + player1.getOwned() + "\n" + player1.getTile()));
+                    console.appendText(tiles.get(player.getTile()));
+                    buy.setBottom(console);
                 }
-                if (player4.getTile() >= 25 && player4.getTile() < 32){
-                    if (nextTile > 32){
-                        rest = (nextTile - 32) * 100;
-                        translateFigure.setByY(move - ((nextTile-32) * 100));
-                        transY.setByX(-rest);
-                        translateFigure.play();
-                        translateFigure.setOnFinished(actionEvent1 -> transY.play());
-                    }
-                    else{
-                        transY.setByY(move);
-                        transY.play();
-                    }
-                }
-                player4.addTile(finalRn);
-                if (player4.getTile() >= 32) {
-                    player4.addTile(-32);
-                    player4.addToAccount(values[player4.getTile()]);
-                    console.appendText("Player " + player4.getPos() + " crossed Start\n");
-                    w4.update(player4);
-                }
-                actionEvent.consume();
-                if (tiles.get(player4.getTile()).equals("CHANCE")){
-                    /* here comes chance */
-                }
-                else if (tiles.get(player4.getTile()).equals("TAX")){
-                    player4.takeFromAccount(values[player4.getTile()]);
-                    console.appendText("Player " + player4.getPos() + " paid tax: " + values[player4.getTile()] + "\n");
-                    w4.update(player4);
-                }
-                else if (tiles.get(player4.getTile()).equals("JAIL")){
-                    console.setText("Player " + player4.getPos() + " turn.\n");
-                    if (player4.isInPrison())
-                        console.setText("You are in prison! Remaining rounds: " + (3-player4.getPrisonCount()));
-                }
-                else{
-                    if (player1.getOwned().contains(tiles.get(player4.getTile()))){
-                        player1.addToAccount(values[player4.getTile()]/2);
-                        player4.takeFromAccount(values[player4.getTile()]/2);
-                        w1.update(player1); w4.update(player4);
-                        console.appendText("Player " + player4.getPos() + " paid Player " + player1.getPos() + ": " + (values[player4.getTile()]/2) + "\n");
-                    }
-                    else  if (player2.getOwned().contains(tiles.get(player4.getTile()))){
-                        player2.addToAccount(values[player4.getTile()]/2);
-                        player4.takeFromAccount(values[player4.getTile()]/2);
-                        w2.update(player2); w4.update(player4);
-                        console.appendText("Player " + player4.getPos() + " paid Player " + player2.getPos() + ": " + (values[player4.getTile()]/2) + "\n");
-                    }
-                    else  if (player3.getOwned().contains(tiles.get(player4.getTile()))){
-                        player3.addToAccount(values[player4.getTile()]/2);
-                        player4.takeFromAccount(values[player4.getTile()]/2);
-                        w3.update(player3); w4.update(player4);
-                        console.appendText("Player " + player4.getPos() + " paid Player " + player3.getPos() + ": " + (values[player4.getTile()]/2) + "\n");
-                    }
-                    else {
-                        text = new Label("Do you want to buy \n" + tiles.get(player4.getTile()) + " for " + values[player4.getTile()] + "?");
-                        text.setTranslateX(20);
-                        yes = new Button("Buy");
-                        yes.setTranslateY(30);
-                        yes.setPrefSize(60,40);
-                        yes.setOnAction(actionEvent12 -> {
-                            player4.addOwned(tiles.get(player4.getTile()));
-                            player4.takeFromAccount(values[player4.getTile()]);
-                            console.appendText("\nPlayer " + player4.getPos() + " bought:\n" + tiles.get(player4.getTile()));
-                            w4.update(player4);
-                        });
-                        buy.setTop(text);
-                        buy.setCenter(yes);
-                    }
-                }
-                console.appendText(tiles.get(player4.getTile()));
-                buy.setBottom(console);
             }
+
 
             console.setTranslateY(150);
             nextTurn(); //next player
