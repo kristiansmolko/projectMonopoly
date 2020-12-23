@@ -3,15 +3,14 @@ Kristian Smolko
 
  */
 
-import extra.Player;
 import graphics.Board;
+import extra.Player;
 import graphics.PlayerWindow;
 import javafx.animation.ParallelTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -19,7 +18,10 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -29,6 +31,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
@@ -40,6 +43,8 @@ public class Test extends Application{
     private ArrayList<String> tiles = new ArrayList<>();
     private final int[] values = new int[] {200, 60, 60, 100, 80, 100, 100, 0, 120, 0, 140, 140, 160, 0, 180, 200,
             0, 220, 100, 220, 240, 260, 260, 0, 280, 0, 300, 300, 320, 0, 350, 400};
+    private MediaPlayer wood, villager, chestOpen, nether, ironHoe, eat, arrow, bow, water, ironPick, ironSword, shield, ironArmor,
+            portalEffect, enchant, brewing, shulker, start;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -62,6 +67,8 @@ public class Test extends Application{
         TranslateTransition transY2 = new TranslateTransition();
         TranslateTransition portal = new TranslateTransition();
         PauseTransition pauseMove = new PauseTransition();
+        //creating sounds
+        makeSounds();
         //dots in dice
         Circle c1 = get1(rect, x);
         Circle[] set2 = get2(rect, x);
@@ -108,15 +115,16 @@ public class Test extends Application{
                 player1.setFigure("diamond steve.png");
                 player2.setFigure("creeper.png");
         }
+
         //figures
         ImageView figure1 = makeFigure(player1.getFigure());
         ImageView figure2 = makeFigure(player2.getFigure());
         ImageView figure3 = makeFigure(player3.getFigure());
         ImageView figure4 = makeFigure(player4.getFigure());
-        figure1.setTranslateX(920); figure1.setTranslateY(705);
-        figure2.setTranslateX(925); figure2.setTranslateY(710);
-        figure3.setTranslateX(915); figure3.setTranslateY(705);
-        figure4.setTranslateX(920); figure4.setTranslateY(710);
+        figure1.setTranslateX(920); figure1.setTranslateY(700);
+        figure2.setTranslateX(925); figure2.setTranslateY(705);
+        figure3.setTranslateX(915); figure3.setTranslateY(700);
+        figure4.setTranslateX(920); figure4.setTranslateY(705);
 
         //player windows
         PlayerWindow w1 = new PlayerWindow();
@@ -213,6 +221,59 @@ public class Test extends Application{
                     console.setText("Player " + player.getPos() + " turn.\n");
                     double nextTile = player.getTile() + finalRn;
                     double rest;
+
+                    translateFigure.setOnFinished(actionEvent2 -> {
+                        back.play();
+                        root.getChildren().removeAll(set2);
+                        root.getChildren().removeAll(set3);
+                        root.getChildren().removeAll(set4);
+                        root.getChildren().removeAll(set5);
+                        root.getChildren().removeAll(set6);
+                        root.getChildren().removeAll(c1);
+                        switch ((int) nextTile){
+                            case 1 -> {
+                                wood.setCycleCount(4);
+                                wood.play();
+                            }
+                            case 3, 18 -> villager.play();
+                            case 7, 23 -> chestOpen.play();
+                            case 9 -> nether.play();
+                            case 17 -> ironPick.play();
+                            case 21 -> ironSword.play();
+                            case 22 -> shield.play();
+                            case 24 -> ironArmor.play();
+                        }
+                        actionEvent.consume();
+                        actionEvent2.consume();
+                    });
+
+                    transY.setOnFinished(actionEvent2-> {
+                        back.play();
+                        root.getChildren().removeAll(set2);
+                        root.getChildren().removeAll(set3);
+                        root.getChildren().removeAll(set4);
+                        root.getChildren().removeAll(set5);
+                        root.getChildren().removeAll(set6);
+                        root.getChildren().removeAll(c1);
+                        switch ((int) nextTile){
+                            case 10 -> ironHoe.play();
+                            case 12 -> {
+                                eat.setCycleCount(2);
+                                eat.play();
+                            }
+                            case 13, 29 -> chestOpen.play();
+                            case 14 -> arrow.play();
+                            case 15 -> bow.play();
+                            case 16 -> water.play();
+                            case 26 -> enchant.play();
+                            case 27 -> brewing.play();
+                            case 28 -> shulker.play();
+                            case 0 -> start.play();
+                        }
+                        actionEvent.consume();
+                        actionEvent2.consume();
+                    });
+
                     if (player.getTile() >= 0 && player.getTile() < 9) {
                         if (nextTile > 9) {
                             rest = ((nextTile - 9) * 100);
@@ -255,8 +316,10 @@ public class Test extends Application{
                                     portal.setToX(20);
                                     portal.setToY(705);
                                     portal.play();
+                                    portal.setDuration(Duration.millis(0));
                                     player.addTile(-16);
                                     player.toPrison();
+                                    portalEffect.play();
                                 });
                             }
                         }
@@ -325,7 +388,7 @@ public class Test extends Application{
                             player.takeFromAccount(values[player.getTile()] / 2);
                             w1.update(player1);
                             switch (player.getPos()) {
-                                case 2:
+                                case 1:
                                     w2.update(player);
                                     break;
                                 case 3:
@@ -421,7 +484,7 @@ public class Test extends Application{
                 }
             }
 
-
+            musicStop();
             console.setTranslateY(150);
             nextTurn(); //next player
             if (player1.isInPrison()){
@@ -443,53 +506,7 @@ public class Test extends Application{
         });
 
         //when move with figure is completed
-        translateFigure.setOnFinished(actionEvent -> {
-            back.play();
-            root.getChildren().removeAll(set2);
-            root.getChildren().removeAll(set3);
-            root.getChildren().removeAll(set4);
-            root.getChildren().removeAll(set5);
-            root.getChildren().removeAll(set6);
-            root.getChildren().removeAll(c1);
-            //translateFigure.stop();
-            actionEvent.consume();
-        });
 
-        translateFigure2.setOnFinished(actionEvent -> {
-            back.play();
-            root.getChildren().removeAll(set2);
-            root.getChildren().removeAll(set3);
-            root.getChildren().removeAll(set4);
-            root.getChildren().removeAll(set5);
-            root.getChildren().removeAll(set6);
-            root.getChildren().removeAll(c1);
-            //translateFigure2.stop();
-            actionEvent.consume();
-        });
-
-        transY2.setOnFinished(actionEvent -> {
-            back.play();
-            root.getChildren().removeAll(set2);
-            root.getChildren().removeAll(set3);
-            root.getChildren().removeAll(set4);
-            root.getChildren().removeAll(set5);
-            root.getChildren().removeAll(set6);
-            root.getChildren().removeAll(c1);
-            //transY2.stop();
-            actionEvent.consume();
-        });
-
-        transY.setOnFinished(actionEvent -> {
-            back.play();
-            root.getChildren().removeAll(set2);
-            root.getChildren().removeAll(set3);
-            root.getChildren().removeAll(set4);
-            root.getChildren().removeAll(set5);
-            root.getChildren().removeAll(set6);
-            root.getChildren().removeAll(c1);
-            //transY.stop();
-            actionEvent.consume();
-        });
 
         portal.setOnFinished(actionEvent -> {portal.stop(); actionEvent.consume();});
 
@@ -688,7 +705,7 @@ public class Test extends Application{
     private ImageView makeFigure(Image img){
         ImageView iw = new ImageView(img);
         iw.setFitWidth(50);
-        iw.setFitHeight(90);
+        iw.setFitHeight(100);
         return iw;
     }
 
@@ -713,5 +730,62 @@ public class Test extends Application{
                 "Bow", "FREE", "Iron Pickaxe", "TAX", "Gold Bar", "Redstone", "Iron Sword", "Shield", "CHANCE",
                 "Iron Armor", "PORTAL", "Enchanting Table", "Brew Stand", "Shulker Box", "CHANCE", "Diamond", "Emerald"};
         return new ArrayList<>(Arrays.asList(tiles));
+    }
+
+    private void musicStop(){
+        wood.stop();
+        villager.stop();
+        chestOpen.stop();
+        nether.stop();
+        ironHoe.stop();
+        eat.stop();
+        bow.stop();
+        arrow.stop();
+        water.stop();
+        ironPick.stop();
+        ironSword.stop();
+        shield.stop();
+        ironArmor.stop();
+        portalEffect.stop();
+        enchant.stop();
+        brewing.stop();
+        start.stop();
+    }
+    private void makeSounds(){
+        Media woodSound = new Media(new File("resources/wood1.mp3").toURI().toString());
+        wood = new MediaPlayer(woodSound);
+        Media villagerSound = new Media(new File("resources/idle2.mp3").toURI().toString());
+        villager = new MediaPlayer(villagerSound);
+        Media chanceSound = new Media(new File("resources/open.mp3").toURI().toString());
+        chestOpen = new MediaPlayer(chanceSound);
+        Media netherSound = new Media(new File("resources/moan2.mp3").toURI().toString());
+        nether = new MediaPlayer(netherSound);
+        Media ironHoeSound = new Media(new File("resources/till3.mp3").toURI().toString());
+        ironHoe = new MediaPlayer(ironHoeSound);
+        Media eatSound = new Media(new File("resources/eat1.mp3").toURI().toString());
+        eat = new MediaPlayer(eatSound);
+        Media arrowSound = new Media(new File("resources/bowhit4.mp3").toURI().toString());
+        arrow = new MediaPlayer(arrowSound);
+        Media bowSound = new Media(new File("resources/bow.mp3").toURI().toString());
+        bow = new MediaPlayer(bowSound);
+        Media waterSound = new Media(new File("resources/splash2.mp3").toURI().toString());
+        water = new MediaPlayer(waterSound);
+        Media equipmentSound = new Media(new File("resources/anvil_use.mp3").toURI().toString());
+        ironPick = new MediaPlayer(equipmentSound);
+        ironSword = new MediaPlayer(equipmentSound);
+        Media shieldSound = new Media(new File("resources/block5.mp3").toURI().toString());
+        shield = new MediaPlayer(shieldSound);
+        Media armorSound = new Media(new File("resources/equip_iron2.mp3").toURI().toString());
+        ironArmor = new MediaPlayer(armorSound);
+        Media portalSound = new Media(new File("resources/travel.mp3").toURI().toString());
+        portalEffect = new MediaPlayer(portalSound);
+        Media enchanting = new Media(new File("resources/levelup.mp3").toURI().toString());
+        enchant = new MediaPlayer(enchanting);
+        Media brewingSound = new Media(new File("resources/drink.mp3").toURI().toString());
+        brewing = new MediaPlayer(brewingSound);
+        Media shulkerOpen = new Media(new File("resources/open_shulker.mp3").toURI().toString());
+        shulker = new MediaPlayer(shulkerOpen);
+        Media startSound = new Media(new File("resources/grass6.mp3").toURI().toString());
+        start = new MediaPlayer(startSound);
     }
 }
