@@ -16,6 +16,7 @@ import javafx.scene.text.Text;
 public class Board {
     private static ImageView background;
     private int color = 0;
+    private int bgrndNum = 1;
 
     public BorderPane makeBoard(){
         BorderPane board = new BorderPane();
@@ -75,7 +76,7 @@ public class Board {
         board.setRight(right);
         board.setCenter(background);
         board.setBottom(bottom);
-        board.setOnMouseClicked(e -> {changeBackground(); board.setCenter(background);});
+        board.setOnMouseClicked(e -> {bgrndNum++; changeBackground(); board.setCenter(background);});
         return board;
     }
 
@@ -163,8 +164,24 @@ public class Board {
         tile.getChildren().addAll(img);
         return tile;
     }
-    private static void changeBackground(){
-        background = new ImageView("background2.jpg");
+
+    private void changeBackground(){
+        if (bgrndNum > 11)
+            bgrndNum = 1;
+
+        switch (bgrndNum) {
+            case 1 -> background.setImage(new Image("background.jpg"));
+            case 2 -> background.setImage(new Image("background2.jpg"));
+            case 3 -> background.setImage(new Image("background3.jpg"));
+            case 4 -> background.setImage(new Image("background4.png"));
+            case 5 -> background.setImage(new Image("background4.jpg"));
+            case 6 -> background.setImage(new Image("background6.png"));
+            case 7 -> background.setImage(new Image("background7.jpg"));
+            case 8 -> background.setImage(new Image("background8.jpg"));
+            case 9 -> background.setImage(new Image("background9.jpg"));
+            case 10 -> background.setImage(new Image("background10.jpg"));
+            case 11 -> background.setImage(new Image("background11.jpg"));
+        }
         background.setFitWidth(800); background.setFitHeight(600);
     }
 }
