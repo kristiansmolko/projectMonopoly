@@ -92,4 +92,9 @@ public class Player {
     public int getPrisonCount(){
         return prisonCount;
     }
+
+    public void isDefeated(){
+        owned = new ArrayList<>();
+        owned.add("You lost");
+    }
 }
