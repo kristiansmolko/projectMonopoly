@@ -1,16 +1,21 @@
 package graphics;
 
 import extra.Player;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 
 public class PlayerWindow {
     private Label money;
     private TextArea owns;
+    private Timeline timer;
 
     public BorderPane makeWindow(Player player){
         BorderPane window = new BorderPane();
@@ -35,12 +40,31 @@ public class PlayerWindow {
     }
 
     public void update(Player player){
-        money.setText("Account: " + player.getAccount());
         owns.setText("");
         if (!player.getOwned().isEmpty()){
             for (String own : player.getOwned()){
                 owns.appendText(own + "\n");
             }
         }
+    }
+
+    public void addAccount(Player player){
+        money.setText("Account: " + player.getAccount());
+        timer = new Timeline(
+                new KeyFrame(Duration.millis(1), e -> money.setTextFill(Color.GREEN)),
+                new KeyFrame(Duration.millis(2), e -> money.setTextFill(Color.BLACK))
+        );
+        timer.setCycleCount(200);
+        timer.play();
+    }
+
+    public void removeAccount(Player player){
+        money.setText("Account: " + player.getAccount());
+        timer = new Timeline(
+                new KeyFrame(Duration.millis(2), e -> money.setTextFill(Color.RED)),
+                new KeyFrame(Duration.millis(3), e -> money.setTextFill(Color.BLACK))
+        );
+        timer.setCycleCount(200);
+        timer.play();
     }
 }
