@@ -118,7 +118,7 @@ public class Board {
 
     private static StackPane makeChance(){
         StackPane tile = new StackPane();
-        ImageView img = new ImageView("chest.png");
+        ImageView img = new ImageView("chest.jpg");
         img.setFitWidth(100); img.setFitHeight(100);
         Text text = new Text("Chance");
         text.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 30));
