@@ -226,7 +226,7 @@ public class Game {
         Chance getOutofJail = new Chance("Get out of jail free","prison",0);
         chances[1] = getloseMoney150;
         chances[2] = getOutofJail;
-        chances[0] = loseMoney50;
+        chances[10] = loseMoney50;
         chances[11] = getMoveToJail;
         chances[6] = getMoveToExtra;
         chances[3] = start;
@@ -235,7 +235,7 @@ public class Game {
         chances[9] = getwinMoney150;
         chances[4] = getMovetonearestSquare;
         chances[5] = getMoveToPortal;
-        chances[10] = getwinMoney350;
+        chances[0] = getwinMoney350;
         return chances;
     }
 
@@ -452,6 +452,7 @@ public class Game {
             if (player4.isPlaying())
                 playerList[3] = player4;
 
+            //case when player is in prison
             if (player1.isInPrison() && turn == 1){
                 player1.addPrison();
                 nextTurn();
@@ -466,6 +467,24 @@ public class Game {
             }
             if (player4.isInPrison() && turn == 4){
                 player4.addPrison();
+                nextTurn();
+            }
+
+            //case when player has no money
+            if (player1.getAccount() < 0 && turn == 1){
+                player1.isDefeated();
+                nextTurn();
+            }
+            else if (player2.getAccount() < 0 && turn == 2){
+                player2.isDefeated();
+                nextTurn();
+            }
+            else if (player3.getAccount() < 0 && turn == 3){
+                player3.isDefeated();
+                nextTurn();
+            }
+            else if (player4.getAccount() < 0 && turn == 4){
+                player4.isDefeated();
                 nextTurn();
             }
 
@@ -517,7 +536,6 @@ public class Game {
                             case 7, 23 -> chestOpen.play();
                             case 9 -> nether.play();
                             case 17 -> ironPick.play();
-                            case 21 -> ironPick.play();
                             case 22 -> shield.play();
                             case 24 -> ironArmor.play();
                         }
@@ -535,42 +553,46 @@ public class Game {
                                     chanceMove.setOnFinished(e -> {
                                         if (player1.getOwned().contains(tiles.get(player.getTile()))) {
                                             player1.addToAccount(values[player.getTile()] / 2);
+                                            w1.addAccount(player1);
                                             player.takeFromAccount(values[player.getTile()] / 2);
                                             w1.update(player1);
                                             switch (player.getPos()) {
-                                                case 1 -> w2.update(player);
-                                                case 3 -> w3.update(player);
-                                                case 4 -> w4.update(player);
+                                                case 2 -> w2.removeAccount(player);
+                                                case 3 -> w3.removeAccount(player);
+                                                case 4 -> w4.removeAccount(player);
                                             }
                                             console.appendText("Player " + player.getPos() + " paid Player " + player1.getPos() + ": " + (values[player.getTile()] / 2) + "\n");
                                         } else if (player2.getOwned().contains(tiles.get(player.getTile()))) {
                                             player2.addToAccount(values[player.getTile()] / 2);
+                                            w2.addAccount(player2);
                                             player.takeFromAccount(values[player.getTile()] / 2);
                                             w2.update(player2);
                                             switch (player.getPos()) {
-                                                case 1 -> w1.update(player);
-                                                case 3 -> w3.update(player);
-                                                case 4 -> w4.update(player);
+                                                case 1 -> w1.removeAccount(player);
+                                                case 3 -> w3.removeAccount(player);
+                                                case 4 -> w4.removeAccount(player);
                                             }
                                             console.appendText("Player " + player.getPos() + " paid Player " + player2.getPos() + ": " + (values[player.getTile()] / 2) + "\n");
                                         } else if (player3.getOwned().contains(tiles.get(player.getTile()))) {
                                             player3.addToAccount(values[player.getTile()] / 2);
+                                            w3.addAccount(player3);
                                             player.takeFromAccount(values[player.getTile()] / 2);
                                             w3.update(player3);
                                             switch (player.getPos()) {
-                                                case 1 -> w1.update(player);
-                                                case 2 -> w2.update(player);
-                                                case 4 -> w4.update(player);
+                                                case 1 -> w1.removeAccount(player);
+                                                case 2 -> w2.removeAccount(player);
+                                                case 4 -> w4.removeAccount(player);
                                             }
                                             console.appendText("Player " + player.getPos() + " paid Player " + player3.getPos() + ": " + (values[player.getTile()] / 2) + "\n");
                                         } else if (player4.getOwned().contains(tiles.get(player.getTile()))) {
                                             player4.addToAccount(values[player.getTile()] / 2);
+                                            w4.addAccount(player4);
                                             player1.takeFromAccount(values[player.getTile()] / 2);
                                             w4.update(player4);
                                             switch (player.getPos()) {
-                                                case 1 -> w1.update(player);
-                                                case 2 -> w2.update(player);
-                                                case 3 -> w3.update(player);
+                                                case 1 -> w1.removeAccount(player);
+                                                case 2 -> w2.removeAccount(player);
+                                                case 3 -> w3.removeAccount(player);
                                             }
                                             console.appendText("Player " + player.getPos() + " paid Player " + player4.getPos() + ": " + (values[player.getTile()] / 2) + "\n");
                                         } else {
@@ -584,10 +606,10 @@ public class Game {
                                                 player.takeFromAccount(values[player.getTile()]);
                                                 console.appendText("\nPlayer " + player.getPos() + " bought:\n" + tiles.get(player.getTile()));
                                                 switch (player.getPos()) {
-                                                    case 1 -> w1.update(player);
-                                                    case 2 -> w2.update(player);
-                                                    case 3 -> w3.update(player);
-                                                    case 4 -> w4.update(player);
+                                                    case 1 -> {w1.update(player); w1.removeAccount(player);}
+                                                    case 2 -> {w2.update(player); w2.removeAccount(player);}
+                                                    case 3 -> {w3.update(player); w3.removeAccount(player);}
+                                                    case 4 -> {w4.update(player); w4.removeAccount(player);}
                                                 }
                                                 buy.setTop(null);
                                                 buy.setCenter(null);
@@ -607,17 +629,14 @@ public class Game {
                                         else {
                                             player.addTile(-player.getTile());
                                             player.addToAccount(200);
+                                            switch (player.getPos()) {
+                                                case 1 -> w1.addAccount(player);
+                                                case 2 -> w2.addAccount(player);
+                                                case 3 -> w3.addAccount(player);
+                                                case 4 -> w4.addAccount(player);
+                                            }
                                         }
                                         chanceMove.play();
-                                        chanceMove.setOnFinished(e -> {
-                                            switch (player.getPos()) {
-                                                case 1 -> w1.update(player);
-                                                case 2 -> w2.update(player);
-                                                case 3 -> w3.update(player);
-                                                case 4 -> w4.update(player);
-                                            }
-                                        });
-
                                     } else if (chances[chanceNum].getValue() == 9) {
                                         chanceMove.setToX(20);
                                         chanceMove.setToY(705);
@@ -663,12 +682,20 @@ public class Game {
                                 case "money" -> {
                                     console.appendText(chances[chanceNum].getText());
                                     player.addToAccount(chances[chanceNum].getValue());
-                                    switch (player.getPos()) {
-                                        case 1 -> w1.update(player);
-                                        case 2 -> w2.update(player);
-                                        case 3 -> w3.update(player);
-                                        case 4 -> w4.update(player);
-                                    }
+                                    if (chances[chanceNum].getValue() > 0)
+                                        switch (player.getPos()) {
+                                            case 1 -> w1.addAccount(player);
+                                            case 2 -> w2.addAccount(player);
+                                            case 3 -> w3.addAccount(player);
+                                            case 4 -> w4.addAccount(player);
+                                        }
+                                    else if (chances[chanceNum].getValue() < 0)
+                                        switch (player.getPos()) {
+                                            case 1 -> w1.removeAccount(player);
+                                            case 2 -> w2.removeAccount(player);
+                                            case 3 -> w3.removeAccount(player);
+                                            case 4 -> w4.removeAccount(player);
+                                        }
                                 }
                             }
                             chanceNum++;
@@ -704,158 +731,161 @@ public class Game {
                         }
                         if (tiles.get(player.getTile()).equals("CHANCE")) {
                             console.setText("Player " + player.getPos() + " turn.\n");
-                            if (chances[chanceNum].getAction().equals("move")) {
-                                console.appendText(chances[chanceNum].getText());
-                                if (player.getTile() < 16 && player.getTile() > 9)
-                                    chanceMove.setToY(705 - (player.getTile() + chances[chanceNum].getValue() - 9) * 100);
-                                else if (player.getTile() < 32 && player.getTile() > 25)
-                                    chanceMove.setToY(100 * (player.getTile() + chances[chanceNum].getValue() - 25));
-                                player.addTile(chances[chanceNum].getValue());
-                                chanceMove.play();
-                                chanceMove.setOnFinished(e -> {
-                                    if (player1.getOwned().contains(tiles.get(player.getTile()))) {
-                                        player1.addToAccount(values[player.getTile()] / 2);
-                                        player.takeFromAccount(values[player.getTile()] / 2);
-                                        w1.update(player1);
-                                        switch (player.getPos()) {
-                                            case 1 -> w2.update(player);
-                                            case 3 -> w3.update(player);
-                                            case 4 -> w4.update(player);
-                                        }
-                                        console.appendText("Player " + player.getPos() + " paid Player " + player1.getPos() + ": " + (values[player.getTile()] / 2) + "\n");
-                                    } else if (player2.getOwned().contains(tiles.get(player.getTile()))) {
-                                        player2.addToAccount(values[player.getTile()] / 2);
-                                        player.takeFromAccount(values[player.getTile()] / 2);
-                                        w2.update(player2);
-                                        switch (player.getPos()) {
-                                            case 1 -> w1.update(player);
-                                            case 3 -> w3.update(player);
-                                            case 4 -> w4.update(player);
-                                        }
-                                        console.appendText("Player " + player.getPos() + " paid Player " + player2.getPos() + ": " + (values[player.getTile()] / 2) + "\n");
-                                    } else if (player3.getOwned().contains(tiles.get(player.getTile()))) {
-                                        player3.addToAccount(values[player.getTile()] / 2);
-                                        player.takeFromAccount(values[player.getTile()] / 2);
-                                        w3.update(player3);
-                                        switch (player.getPos()) {
-                                            case 1 -> w1.update(player);
-                                            case 2 -> w2.update(player);
-                                            case 4 -> w4.update(player);
-                                        }
-                                        console.appendText("Player " + player.getPos() + " paid Player " + player3.getPos() + ": " + (values[player.getTile()] / 2) + "\n");
-                                    } else if (player4.getOwned().contains(tiles.get(player.getTile()))) {
-                                        player4.addToAccount(values[player.getTile()] / 2);
-                                        player1.takeFromAccount(values[player.getTile()] / 2);
-                                        w4.update(player4);
-                                        switch (player.getPos()) {
-                                            case 1 -> w1.update(player);
-                                            case 2 -> w2.update(player);
-                                            case 3 -> w3.update(player);
-                                        }
-                                        console.appendText("Player " + player.getPos() + " paid Player " + player4.getPos() + ": " + (values[player.getTile()] / 2) + "\n");
-                                    } else {
-                                        Label text1 = new Label("Do you want to buy \n" + tiles.get(player.getTile()) + " for " + values[player.getTile()] + "?");
-                                        text1.setTranslateX(20);
-                                        Button yes1 = new Button("Buy");
-                                        yes1.setTranslateY(30);
-                                        yes1.setPrefSize(60, 40);
-                                        yes1.setOnAction(actionEvent12 -> {
-                                            player.addOwned(tiles.get(player.getTile()));
-                                            player.takeFromAccount(values[player.getTile()]);
-                                            console.appendText("\nPlayer " + player.getPos() + " bought:\n" + tiles.get(player.getTile()));
+                            switch (chances[chanceNum].getAction()) {
+                                case "move" -> {
+                                    console.appendText(chances[chanceNum].getText());
+                                    if (player.getTile() < 16 && player.getTile() > 9)
+                                        chanceMove.setToY(705 - (player.getTile() + chances[chanceNum].getValue() - 9) * 100);
+                                    else if (player.getTile() < 32 && player.getTile() > 25)
+                                        chanceMove.setToY(100 * (player.getTile() + chances[chanceNum].getValue() - 25));
+                                    player.addTile(chances[chanceNum].getValue());
+                                    chanceMove.play();
+                                    chanceMove.setOnFinished(e -> {
+                                        if (player1.getOwned().contains(tiles.get(player.getTile()))) {
+                                            player1.addToAccount(values[player.getTile()] / 2);
+                                            w1.addAccount(player1);
+                                            player.takeFromAccount(values[player.getTile()] / 2);
+                                            w1.update(player1);
                                             switch (player.getPos()) {
-                                                case 1:
-                                                    w1.update(player);
-                                                    break;
-                                                case 2:
-                                                    w2.update(player);
-                                                    break;
-                                                case 3:
-                                                    w3.update(player);
-                                                    break;
-                                                case 4:
-                                                    w4.update(player);
-                                                    break;
+                                                case 2 -> w2.removeAccount(player);
+                                                case 3 -> w3.removeAccount(player);
+                                                case 4 -> w4.removeAccount(player);
                                             }
-                                            buy.setTop(null);
-                                            buy.setCenter(null);
-                                        });
-                                        buy.setTop(text1);
-                                        buy.setCenter(yes1);
-                                    }
-                                }); //end of chM.sOF
-                            }//endif move
-                            else if (chances[chanceNum].getAction().equals("moveTo")) {
-                                console.appendText(chances[chanceNum].getText());
-                                if (chances[chanceNum].getValue() == 0) {
-                                    chanceMove.setToX(920);
-                                    chanceMove.setToY(705);
-                                    if (player.getTile() < 16)
-                                        player.addTile(-player.getTile());
-                                    else {
-                                        player.addTile(-player.getTile());
-                                        player.addToAccount(200);
-                                    }
-                                    chanceMove.play();
-                                    chanceMove.setOnFinished(e -> {
-                                        switch (player.getPos()) {
-                                            case 1 -> w1.update(player);
-                                            case 2 -> w2.update(player);
-                                            case 3 -> w3.update(player);
-                                            case 4 -> w4.update(player);
+                                            console.appendText("Player " + player.getPos() + " paid Player " + player1.getPos() + ": " + (values[player.getTile()] / 2) + "\n");
+                                        } else if (player2.getOwned().contains(tiles.get(player.getTile()))) {
+                                            player2.addToAccount(values[player.getTile()] / 2);
+                                            w2.addAccount(player2);
+                                            player.takeFromAccount(values[player.getTile()] / 2);
+                                            w2.update(player2);
+                                            switch (player.getPos()) {
+                                                case 1 -> w1.removeAccount(player);
+                                                case 3 -> w3.removeAccount(player);
+                                                case 4 -> w4.removeAccount(player);
+                                            }
+                                            console.appendText("Player " + player.getPos() + " paid Player " + player2.getPos() + ": " + (values[player.getTile()] / 2) + "\n");
+                                        } else if (player3.getOwned().contains(tiles.get(player.getTile()))) {
+                                            player3.addToAccount(values[player.getTile()] / 2);
+                                            w3.addAccount(player3);
+                                            player.takeFromAccount(values[player.getTile()] / 2);
+                                            w3.update(player3);
+                                            switch (player.getPos()) {
+                                                case 1 -> w1.removeAccount(player);
+                                                case 2 -> w2.removeAccount(player);
+                                                case 4 -> w4.removeAccount(player);
+                                            }
+                                            console.appendText("Player " + player.getPos() + " paid Player " + player3.getPos() + ": " + (values[player.getTile()] / 2) + "\n");
+                                        } else if (player4.getOwned().contains(tiles.get(player.getTile()))) {
+                                            player4.addToAccount(values[player.getTile()] / 2);
+                                            w4.addAccount(player4);
+                                            player1.takeFromAccount(values[player.getTile()] / 2);
+                                            w4.update(player4);
+                                            switch (player.getPos()) {
+                                                case 1 -> w1.removeAccount(player);
+                                                case 2 -> w2.removeAccount(player);
+                                                case 3 -> w3.removeAccount(player);
+                                            }
+                                            console.appendText("Player " + player.getPos() + " paid Player " + player4.getPos() + ": " + (values[player.getTile()] / 2) + "\n");
+                                        } else {
+                                            Label text1 = new Label("Do you want to buy \n" + tiles.get(player.getTile()) + " for " + values[player.getTile()] + "?");
+                                            text1.setTranslateX(20);
+                                            Button yes1 = new Button("Buy");
+                                            yes1.setTranslateY(30);
+                                            yes1.setPrefSize(60, 40);
+                                            yes1.setOnAction(actionEvent12 -> {
+                                                player.addOwned(tiles.get(player.getTile()));
+                                                player.takeFromAccount(values[player.getTile()]);
+                                                console.appendText("\nPlayer " + player.getPos() + " bought:\n" + tiles.get(player.getTile()));
+                                                switch (player.getPos()) {
+                                                    case 1 -> {w1.update(player); w1.removeAccount(player);}
+                                                    case 2 -> {w2.update(player); w2.removeAccount(player);}
+                                                    case 3 -> {w3.update(player); w3.removeAccount(player);}
+                                                    case 4 -> {w4.update(player); w4.removeAccount(player);}
+                                                }
+                                                buy.setTop(null);
+                                                buy.setCenter(null);
+                                            });
+                                            buy.setTop(text1);
+                                            buy.setCenter(yes1);
                                         }
-                                    });
-
-                                } else if (chances[chanceNum].getValue() == 9) {
-                                    chanceMove.setToX(20);
-                                    chanceMove.setToY(705);
-                                    if (player.getTile() < 9)
-                                        player.addTile(9 - player.getTile());
-                                    else
-                                        player.addTile(-(player.getTile() - 9));
-                                    chanceMove.play();
-                                    chanceMove.setOnFinished(e -> {
-                                        player.toPrison();
-                                        nether.play();
-                                    });
-                                } else if (chances[chanceNum].getValue() == 16) {
-                                    chanceMove.setToX(20);
-                                    chanceMove.setToY(5);
-                                    if (player.getTile() < 16)
-                                        player.addTile(16 - player.getTile());
-                                    else
-                                        player.addTile(-(player.getTile() - 16));
-                                    chanceMove.play();
-                                    chanceMove.setOnFinished(e -> {
-                                        water.play();
-                                    });
-
-                                } else if (chances[chanceNum].getValue() == 25) {
-                                    chanceMove.setToX(920);
-                                    chanceMove.setToY(5);
-                                    if (player.getTile() < 9)
-                                        player.addTile(9 - player.getTile());
-                                    else
-                                        player.addTile(-(player.getTile() - 9));
-                                    chanceMove.play();
-                                    chanceMove.setOnFinished(e -> {
-                                        portal.setToX(20);
-                                        portal.setToY(705);
-                                        pauseMove.play();
-                                        portalEffect.play();
-                                    });
-                                    pauseMove.setOnFinished(e -> portal.play());
-                                    portal.setOnFinished(e -> player.toPrison());
+                                    }); //end of chM.sOF
                                 }
-                            }//endelif moveTo
-                            else if (chances[chanceNum].getAction().equals("money")) {
-                                console.appendText(chances[chanceNum].getText());
-                                player.addToAccount(chances[chanceNum].getValue());
-                                switch (player.getPos()) {
-                                    case 1 -> w1.update(player);
-                                    case 2 -> w2.update(player);
-                                    case 3 -> w3.update(player);
-                                    case 4 -> w4.update(player);
+                                case "moveTo" -> {
+                                    console.appendText(chances[chanceNum].getText());
+                                    if (chances[chanceNum].getValue() == 0) {
+                                        chanceMove.setToX(920);
+                                        chanceMove.setToY(705);
+                                        if (player.getTile() < 16)
+                                            player.addTile(-player.getTile());
+                                        else {
+                                            player.addTile(-player.getTile());
+                                            player.addToAccount(200);
+                                            switch (player.getPos()) {
+                                                case 1 -> w1.addAccount(player);
+                                                case 2 -> w2.addAccount(player);
+                                                case 3 -> w3.addAccount(player);
+                                                case 4 -> w4.addAccount(player);
+                                            }
+                                        }
+                                        chanceMove.play();
+                                    } else if (chances[chanceNum].getValue() == 9) {
+                                        chanceMove.setToX(20);
+                                        chanceMove.setToY(705);
+                                        if (player.getTile() < 9)
+                                            player.addTile(9 - player.getTile());
+                                        else
+                                            player.addTile(-(player.getTile() - 9));
+                                        chanceMove.play();
+                                        chanceMove.setOnFinished(e -> {
+                                            player.toPrison();
+                                            nether.play();
+                                        });
+                                    } else if (chances[chanceNum].getValue() == 16) {
+                                        chanceMove.setToX(20);
+                                        chanceMove.setToY(5);
+                                        if (player.getTile() < 16)
+                                            player.addTile(16 - player.getTile());
+                                        else
+                                            player.addTile(-(player.getTile() - 16));
+                                        chanceMove.play();
+                                        chanceMove.setOnFinished(e -> {
+                                            water.play();
+                                        });
+
+                                    } else if (chances[chanceNum].getValue() == 25) {
+                                        chanceMove.setToX(920);
+                                        chanceMove.setToY(5);
+                                        if (player.getTile() < 9)
+                                            player.addTile(9 - player.getTile());
+                                        else
+                                            player.addTile(-(player.getTile() - 9));
+                                        chanceMove.play();
+                                        chanceMove.setOnFinished(e -> {
+                                            portal.setToX(20);
+                                            portal.setToY(705);
+                                            pauseMove.play();
+                                            portalEffect.play();
+                                        });
+                                        pauseMove.setOnFinished(e -> portal.play());
+                                        portal.setOnFinished(e -> player.toPrison());
+                                    }
+                                }
+                                case "money" -> {
+                                    console.appendText(chances[chanceNum].getText());
+                                    player.addToAccount(chances[chanceNum].getValue());
+                                    if (chances[chanceNum].getValue() > 0)
+                                        switch (player.getPos()) {
+                                            case 1 -> w1.addAccount(player);
+                                            case 2 -> w2.addAccount(player);
+                                            case 3 -> w3.addAccount(player);
+                                            case 4 -> w4.addAccount(player);
+                                        }
+                                    else if (chances[chanceNum].getValue() < 0)
+                                        switch (player.getPos()) {
+                                            case 1 -> w1.removeAccount(player);
+                                            case 2 -> w2.removeAccount(player);
+                                            case 3 -> w3.removeAccount(player);
+                                            case 4 -> w4.removeAccount(player);
+                                        }
                                 }
                             }
                             chanceNum++;
@@ -933,10 +963,10 @@ public class Game {
                         console.appendText("Player " + player.getPos() + " has crossed Start\n");
                         player.addTile(-32);
                         switch (player.getPos()) {
-                            case 1 -> w1.update(player);
-                            case 2 -> w2.update(player);
-                            case 3 -> w3.update(player);
-                            case 4 -> w4.update(player);
+                            case 1 -> w1.addAccount(player);
+                            case 2 -> w2.addAccount(player);
+                            case 3 -> w3.addAccount(player);
+                            case 4 -> w4.addAccount(player);
                         }
                     }
                     actionEvent.consume();
@@ -948,10 +978,10 @@ public class Game {
                             player.takeFromAccount(values[player.getTile()]);
                             console.appendText("\nPlayer " + player.getPos() + " paid tax: " + values[player.getTile()] + "\n");
                             switch (player.getPos()) {
-                                case 1 -> w1.update(player);
-                                case 2 -> w2.update(player);
-                                case 3 -> w3.update(player);
-                                case 4 -> w4.update(player);
+                                case 1 -> w1.removeAccount(player);
+                                case 2 -> w2.removeAccount(player);
+                                case 3 -> w3.removeAccount(player);
+                                case 4 -> w4.removeAccount(player);
                             }
                             break;
                         case "JAIL":
@@ -963,42 +993,47 @@ public class Game {
                         default:
                             if (player1.getOwned().contains(tiles.get(player.getTile()))) {
                                 player1.addToAccount(values[player.getTile()] / 2);
+                                w1.addAccount(player1);
                                 player.takeFromAccount(values[player.getTile()] / 2);
                                 w1.update(player1);
                                 switch (player.getPos()) {
-                                    case 1 -> w2.update(player);
-                                    case 3 -> w3.update(player);
-                                    case 4 -> w4.update(player);
+                                    case 2 -> w2.removeAccount(player);
+                                    case 3 -> w3.removeAccount(player);
+                                    case 4 -> w4.removeAccount(player);
                                 }
                                 console.appendText("Player " + player.getPos() + " paid Player " + player1.getPos() + ": " + (values[player.getTile()] / 2) + "\n");
                             } else if (player2.getOwned().contains(tiles.get(player.getTile()))) {
                                 player2.addToAccount(values[player.getTile()] / 2);
+                                w2.addAccount(player2);
                                 player.takeFromAccount(values[player.getTile()] / 2);
                                 w2.update(player2);
                                 switch (player.getPos()) {
-                                    case 1 -> w1.update(player);
-                                    case 3 -> w3.update(player);
-                                    case 4 -> w4.update(player);
+                                    case 1 -> w1.removeAccount(player);
+                                    case 2 -> w2.removeAccount(player);
+                                    case 3 -> w3.removeAccount(player);
+                                    case 4 -> w4.removeAccount(player);
                                 }
                                 console.appendText("Player " + player.getPos() + " paid Player " + player2.getPos() + ": " + (values[player.getTile()] / 2) + "\n");
                             } else if (player3.getOwned().contains(tiles.get(player.getTile()))) {
                                 player3.addToAccount(values[player.getTile()] / 2);
+                                w3.addAccount(player3);
                                 player.takeFromAccount(values[player.getTile()] / 2);
                                 w3.update(player3);
                                 switch (player.getPos()) {
-                                    case 1 -> w1.update(player);
-                                    case 2 -> w2.update(player);
-                                    case 4 -> w4.update(player);
+                                    case 1 -> w1.removeAccount(player);
+                                    case 2 -> w2.removeAccount(player);
+                                    case 4 -> w4.removeAccount(player);
                                 }
                                 console.appendText("Player " + player.getPos() + " paid Player " + player3.getPos() + ": " + (values[player.getTile()] / 2) + "\n");
                             } else if (player4.getOwned().contains(tiles.get(player.getTile()))) {
                                 player4.addToAccount(values[player.getTile()] / 2);
+                                w4.addAccount(player4);
                                 player1.takeFromAccount(values[player.getTile()] / 2);
                                 w4.update(player4);
                                 switch (player.getPos()) {
-                                    case 1 -> w1.update(player);
-                                    case 2 -> w2.update(player);
-                                    case 3 -> w3.update(player);
+                                    case 1 -> w1.removeAccount(player);
+                                    case 2 -> w2.removeAccount(player);
+                                    case 3 -> w3.removeAccount(player);
                                 }
                                 console.appendText("Player " + player.getPos() + " paid Player " + player4.getPos() + ": " + (values[player.getTile()] / 2) + "\n");
                             } else {
@@ -1012,10 +1047,10 @@ public class Game {
                                     player.takeFromAccount(values[player.getTile()]);
                                     console.appendText("\nPlayer " + player.getPos() + " bought:\n" + tiles.get(player.getTile()));
                                     switch (player.getPos()) {
-                                        case 1 -> w1.update(player);
-                                        case 2 -> w2.update(player);
-                                        case 3 -> w3.update(player);
-                                        case 4 -> w4.update(player);
+                                        case 1 -> {w1.update(player); w1.removeAccount(player);}
+                                        case 2 -> {w2.update(player); w2.removeAccount(player);}
+                                        case 3 -> {w3.update(player); w3.removeAccount(player);}
+                                        case 4 -> {w4.update(player); w4.removeAccount(player);}
                                     }
                                     buy.setTop(null);
                                     buy.setCenter(null);
