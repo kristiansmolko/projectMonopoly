@@ -22,10 +22,13 @@ public class Rules {
         Image image = new Image("book.png");
         BackgroundSize bSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false);
         root.setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, bSize)));
+        Label rule = new Label("RULES");
+        rule.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 30));
+        rule.setTranslateX(350);
+        rule.setTranslateY(50);
+
         Label welcome = new Label("Welcome and before we start, we want to thank you for playing");
-        welcome.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, FontPosture.ITALIC, 20));
-        welcome.setTranslateX(130);
-        welcome.setTranslateY(50);
+        welcome.setFont(font);
         Label firstRow = new Label("First of all you have to choose how many players will play");
         firstRow.setFont(font);
         Label row2 = new Label("To familiarize with the board (there are multiple tiles): ");
@@ -40,26 +43,28 @@ public class Rules {
         last.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 20));
         last.setTextFill(Color.RED);
 
-        rules.addRow(0, firstRow);
-        rules.addRow(1, row2);
-        rules.addRow(2, makeStart());
-        rules.addRow(3, makeChance());
-        rules.addRow(4, makeVill());
-        rules.addRow(5, makeFree());
-        rules.addRow(6, makeJail());
-        rules.addRow(7, makePortal());
-        rules.addRow(8, row9);
-        rules.addRow(9, row10);
-        rules.addRow(10, makeWindow());
-        rules.addRow(11, row12);
-        rules.addRow(12, last);
-        root.setTop(welcome);
+        rules.addRow(0, welcome);
+        rules.addRow(1, firstRow);
+        rules.addRow(2, row2);
+        rules.addRow(3, makeStart());
+        rules.addRow(4, makeChance());
+        rules.addRow(5, makeVill());
+        rules.addRow(6, makeFree());
+        rules.addRow(7, makeJail());
+        rules.addRow(8, makePortal());
+        rules.addRow(9, row9);
+        rules.addRow(10, row10);
+        rules.addRow(11, makeWindow());
+        rules.addRow(12, new Label(""));
+        rules.addRow(13, row12);
+        rules.addRow(14, last);
+        root.setTop(rule);
         root.setCenter(rules);
         return root;
     }
 
-    private static BorderPane makeStart(){
-        BorderPane start = new BorderPane();
+    private static GridPane makeStart(){
+        GridPane start = new GridPane();
         Label startLabel = new Label("You 'spawn' on this tile and every time you cross it, you gain money");
         startLabel.setFont(font);
         StackPane tile = new StackPane();
@@ -69,13 +74,12 @@ public class Rules {
         text.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 15));
         text.setRotate(45);
         tile.getChildren().addAll(img, text);
-        start.setLeft(tile);
-        start.setCenter(startLabel);
+        start.addRow(0, tile, startLabel);
         return start;
     }
 
-    private static BorderPane makeChance(){
-        BorderPane chance = new BorderPane();
+    private static GridPane makeChance(){
+        GridPane chance = new GridPane();
         Label chanceText = new Label("You will find here mysteries, that can help you advance or fall");
         chanceText.setFont(font);
         StackPane tile = new StackPane();
@@ -85,13 +89,12 @@ public class Rules {
         text.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 15));
         text.setRotate(45);
         tile.getChildren().addAll(img, text);
-        chance.setLeft(tile);
-        chance.setCenter(chanceText);
+        chance.addRow(0, tile, chanceText);
         return chance;
     }
 
-    private static BorderPane makeVill(){
-        BorderPane villager = new BorderPane();
+    private static GridPane makeVill(){
+        GridPane villager = new GridPane();
         Label villText = new Label("This greedy creature wants your money. Beware!");
         villText.setFont(font);
         StackPane tile = new StackPane();
@@ -101,13 +104,12 @@ public class Rules {
         text.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 15));
         text.setTranslateY(-10);
         tile.getChildren().addAll(img, text);
-        villager.setLeft(tile);
-        villager.setCenter(villText);
+        villager.addRow(0, tile, villText);
         return villager;
     }
 
-    private static BorderPane makeFree(){
-        BorderPane free = new BorderPane();
+    private static GridPane makeFree(){
+        GridPane free = new GridPane();
         Label freeText = new Label("You can rest here, just enjoy this warm water");
         freeText.setFont(font);
         StackPane tile = new StackPane();
@@ -117,34 +119,31 @@ public class Rules {
         text.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 15));
         text.setRotate(45);
         tile.getChildren().addAll(img, text);
-        free.setLeft(tile);
-        free.setCenter(freeText);
+        free.addRow(0, tile, freeText);
         return free;
     }
 
-    private static BorderPane makeJail(){
-        BorderPane jail = new BorderPane();
+    private static GridPane makeJail(){
+        GridPane jail = new GridPane();
         Label jailText = new Label("You will be trapped here for 3 rounds!");
         jailText.setFont(font);
         StackPane tile = new StackPane();
         ImageView img = new ImageView("nether.png");
         img.setFitHeight(50); img.setFitWidth(50);
         tile.getChildren().addAll(img);
-        jail.setLeft(tile);
-        jail.setCenter(jailText);
+        jail.addRow(0, tile, jailText);
         return jail;
     }
 
-    private static BorderPane makePortal(){
-        BorderPane portal = new BorderPane();
+    private static GridPane makePortal(){
+        GridPane portal = new GridPane();
         Label portalText = new Label("Using some weird magic, this will take you to another tile");
         portalText.setFont(font);
         StackPane tile = new StackPane();
         ImageView img = new ImageView("portal.png");
         img.setFitHeight(50); img.setFitWidth(50);
         tile.getChildren().addAll(img);
-        portal.setLeft(tile);
-        portal.setCenter(portalText);
+        portal.addRow(0, tile, portalText);
         return portal;
     }
 
