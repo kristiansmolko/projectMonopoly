@@ -16,6 +16,7 @@ public class PlayerWindow {
     private Label money;
     private TextArea owns;
     private Timeline timer;
+    private Timeline timer1;
 
     public BorderPane makeWindow(Player player){
         BorderPane window = new BorderPane();
@@ -50,12 +51,12 @@ public class PlayerWindow {
 
     public void addAccount(Player player){
         money.setText("Account: " + player.getAccount());
-        timer = new Timeline(
-                new KeyFrame(Duration.millis(1), e -> money.setTextFill(Color.GREEN)),
-                new KeyFrame(Duration.millis(2), e -> money.setTextFill(Color.BLACK))
+        timer1 = new Timeline(
+                new KeyFrame(Duration.millis(2), e -> money.setTextFill(Color.LIMEGREEN)),
+                new KeyFrame(Duration.millis(3), e -> money.setTextFill(Color.BLACK))
         );
-        timer.setCycleCount(200);
-        timer.play();
+        timer1.setCycleCount(400);
+        timer1.play();
     }
 
     public void removeAccount(Player player){
@@ -64,7 +65,7 @@ public class PlayerWindow {
                 new KeyFrame(Duration.millis(2), e -> money.setTextFill(Color.RED)),
                 new KeyFrame(Duration.millis(3), e -> money.setTextFill(Color.BLACK))
         );
-        timer.setCycleCount(200);
+        timer.setCycleCount(400);
         timer.play();
     }
 }
