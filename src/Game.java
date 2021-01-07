@@ -471,20 +471,24 @@ public class Game {
             }
 
             //case when player has no money
-            if (player1.getAccount() < 0 && turn == 1){
+            if (player1.getAccount() <= 0 && turn == 1){
                 player1.isDefeated();
+                w1.update(player1);
                 nextTurn();
             }
-            else if (player2.getAccount() < 0 && turn == 2){
+            if (player2.getAccount() <= 0 && turn == 2){
                 player2.isDefeated();
+                w2.update(player2);
                 nextTurn();
             }
-            else if (player3.getAccount() < 0 && turn == 3){
+            if (player3.getAccount() <= 0 && turn == 3){
                 player3.isDefeated();
+                w3.update(player3);
                 nextTurn();
             }
-            else if (player4.getAccount() < 0 && turn == 4){
+            if (player4.getAccount() <= 0 && turn == 4){
                 player4.isDefeated();
+                w4.update(player4);
                 nextTurn();
             }
 
@@ -972,7 +976,6 @@ public class Game {
                     actionEvent.consume();
                     switch (tiles.get(player.getTile())) {
                         case "CHANCE":
-                            console.setText("Player " + player.getPos() + " turn.\n");
                             break;
                         case "TAX":
                             player.takeFromAccount(values[player.getTile()]);
@@ -985,11 +988,10 @@ public class Game {
                             }
                             break;
                         case "JAIL":
-                            console.setText("Player " + player.getPos() + " turn.\n");
-                            if (player.isInPrison()) {
-                                console.setText("You are in prison! Remaining rounds: " + (3 - player.getPrisonCount()));
-                            }
+                            console.appendText("It's hot here. Uhh...");
                             break;
+                        case "FREE":
+                            console.appendText("Enjoy your stay!");
                         default:
                             if (player1.getOwned().contains(tiles.get(player.getTile()))) {
                                 player1.addToAccount(values[player.getTile()] / 2);
@@ -1009,7 +1011,6 @@ public class Game {
                                 w2.update(player2);
                                 switch (player.getPos()) {
                                     case 1 -> w1.removeAccount(player);
-                                    case 2 -> w2.removeAccount(player);
                                     case 3 -> w3.removeAccount(player);
                                     case 4 -> w4.removeAccount(player);
                                 }
