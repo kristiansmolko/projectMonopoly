@@ -11,10 +11,12 @@ public class Player {
     private Image figure;
     private boolean inPrison;
     private int prisonCount = 1;
+    private ArrayList<String> extra;
 
     public Player(int num){
         account = 500;
         owned = new ArrayList<>();
+        extra = new ArrayList<>();
         pos = num;
         inPrison = false;
     }
@@ -96,5 +98,13 @@ public class Player {
     public void isDefeated(){
         owned = new ArrayList<>();
         owned.add("You lost");
+    }
+
+    public ArrayList<String> getExtra(){
+        return extra;
+    }
+
+    public void addExtra(String string){
+        extra.add(string);
     }
 }
