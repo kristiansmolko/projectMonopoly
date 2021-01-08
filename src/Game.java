@@ -33,7 +33,7 @@ import java.util.Optional;
 import java.util.Random;
 
 public class Game {
-    private static Chance[] chances = createChances();
+    private static final Chance[] chances = createChances();
     private static int turn = 1;
     private static int chanceNum = 0;
     private static int numOfPlayers;
@@ -264,7 +264,7 @@ public class Game {
         Media equipmentSound = new Media(new File("resources/anvil_use.mp3").toURI().toString());
         ironPick = new MediaPlayer(equipmentSound);
         Media swordSound = new Media(new File("resources/anvil_use.mp3").toURI().toString());
-        ironSword = new MediaPlayer(equipmentSound);
+        ironSword = new MediaPlayer(swordSound);
         Media shieldSound = new Media(new File("resources/block5.mp3").toURI().toString());
         shield = new MediaPlayer(shieldSound);
         Media armorSound = new Media(new File("resources/equip_iron2.mp3").toURI().toString());
@@ -765,9 +765,7 @@ public class Game {
                                             else
                                                 player.addTile(-(player.getTile() - 16));
                                             chanceMove.play();
-                                            chanceMove.setOnFinished(e -> {
-                                                water.play();
-                                            });
+                                            chanceMove.setOnFinished(e -> water.play());
 
                                         } else if (chances[chanceNum].getValue() == 25) {
                                             chanceMove.setToX(920);
