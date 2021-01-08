@@ -9,7 +9,7 @@ public class Player {
     private int pos, tile = 0;
     private ArrayList<String> owned;
     private Image figure;
-    private boolean inPrison;
+    private boolean inPrison, defeated;
     private int prisonCount = 1;
     private ArrayList<String> extra;
 
@@ -19,6 +19,7 @@ public class Player {
         extra = new ArrayList<>();
         pos = num;
         inPrison = false;
+        defeated = false;
     }
 
     public int getAccount() {
@@ -95,9 +96,14 @@ public class Player {
         return prisonCount;
     }
 
-    public void isDefeated(){
+    public void lost(){
+        defeated = true;
         owned = new ArrayList<>();
         owned.add("You lost");
+    }
+
+    public boolean isDefeated(){
+        return defeated;
     }
 
     public ArrayList<String> getExtra(){
