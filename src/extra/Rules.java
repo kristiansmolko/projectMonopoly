@@ -83,9 +83,12 @@ public class Rules {
         row2.setFont(font);
         Label row3 = new Label("You won't get or lose money when in prison");
         row3.setFont(font);
-        Label row4 = new Label("Free: you don't have to do anything here, just relax!");
-        row4.setFont(font);
-        Label row5 = new Label("");
+        Label row5 = new Label("Free: you don't have to do anything here, just relax!");
+        row5.setFont(font);
+        Label row6 = new Label("Portal: teleports you to the prison!");
+        row6.setFont(font);
+        Label row7 = new Label("Other tiles: if someone owns it, you pay half the price");
+        row7.setFont(font);
 
         Label rule = new Label("RULES");
         rule.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 30));
@@ -95,7 +98,13 @@ public class Rules {
         rules.addRow(0, firstRow);
         rules.addRow(1, row2);
         rules.addRow(2, row3);
-        rules.addRow(3, row4);
+        rules.addRow(3, makeWindowJail());
+        rules.addRow(4, new Label(""));
+        rules.addRow(5, row5);
+        rules.addRow(6, new Label(""));
+        rules.addRow(7, row6);
+        rules.addRow(8, new Label(""));
+        rules.addRow(9, row7);
         root.setTop(rule);
         root.setCenter(rules);
         return root;
@@ -209,6 +218,37 @@ public class Rules {
         windowLabel.setFont(font);
         root.setLeft(window);
         root.setCenter(windowLabel);
+        return root;
+    }
+
+    private static BorderPane makeWindowJail(){
+        BorderPane root = new BorderPane();
+        BorderPane window = new BorderPane();
+        GridPane center = new GridPane();
+        ImageView img = new ImageView("diamond steve.png");
+        img.setFitWidth(40); img.setFitHeight(60);
+        img.setTranslateX(-10); img.setTranslateY(10);
+        window.setLeft(img);
+        Label name = new Label("Player 1");
+        name.setMaxSize(120,20);
+        Label money = new Label("Account: 500");
+        money.setMaxSize(120,20);
+        ImageView prison = new ImageView(new Image("jaildoor.png"));
+        prison.setFitWidth(30); prison.setFitHeight(30);
+        prison.setTranslateX(-30);
+        prison.setVisible(true);
+        TextArea owns = new TextArea();
+        owns.setEditable(false);
+        owns.setMaxSize(120,40);
+        center.addRow(0, name);
+        center.addRow(1, money, prison);
+        center.addRow(2, owns);
+        window.setCenter(center);
+        window.setTranslateX(20);
+        Label prisonLabel = new Label("You will see jail icon, if you are in prison");
+        prisonLabel.setFont(font);
+        root.setLeft(window);
+        root.setCenter(prisonLabel);
         return root;
     }
 }
