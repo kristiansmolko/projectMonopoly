@@ -5,6 +5,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -18,13 +19,14 @@ import java.io.File;
 
 public class PlayerWindow {
     private Label money;
+    ImageView prison = new ImageView(new Image("jaildoor.png"));
     private TextArea owns;
+    private GridPane center = new GridPane();
     public static Media coinSound = new Media(new File("resources/coins.mp3").toURI().toString());
     public static MediaPlayer coins = new MediaPlayer(coinSound);
 
     public BorderPane makeWindow(Player player){
         BorderPane window = new BorderPane();
-        GridPane center = new GridPane();
         ImageView img = new ImageView(player.getFigure());
         img.setFitWidth(40); img.setFitHeight(60);
         img.setTranslateX(-10); img.setTranslateY(10);
@@ -33,11 +35,14 @@ public class PlayerWindow {
         name.setMaxSize(120,20);
         money = new Label("Account: " + player.getAccount());
         money.setMaxSize(120,20);
+        prison.setFitWidth(30); prison.setFitHeight(30);
+        prison.setTranslateX(-30);
+        prison.setVisible(false);
         owns = new TextArea();
         owns.setEditable(false);
         owns.setMaxSize(120,40);
         center.addRow(0, name);
-        center.addRow(1, money);
+        center.addRow(1, money, prison);
         center.addRow(2, owns);
         window.setCenter(center);
         window.setTranslateX(20);
@@ -51,6 +56,7 @@ public class PlayerWindow {
                 owns.appendText(own + "\n");
             }
         }
+        prison.setVisible(player.isInPrison());
     }
 
     public void addAccount(Player player){
