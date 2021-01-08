@@ -528,6 +528,12 @@ public class Game {
                 //case when player is in prison
                 if (player.isInPrison() && turn == player.getPos()){
                     player.addPrison();
+                    switch(player.getPos()){
+                        case 1 -> w1.update(player1);
+                        case 2 -> w2.update(player2);
+                        case 3 -> w3.update(player3);
+                        case 4 -> w4.update(player4);
+                    }
                     nextTurn();
                 }
                 if (turn == player.getPos()) {
