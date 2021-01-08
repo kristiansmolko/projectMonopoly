@@ -1,5 +1,9 @@
 package extra;
 
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
@@ -12,7 +16,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 public class Rules {
-    private static Font font = Font.font("Times New Roman", FontWeight.BOLD, FontPosture.ITALIC, 16);
+    private static final Font font = Font.font("Times New Roman", FontWeight.BOLD, FontPosture.ITALIC, 16);
+
     public static BorderPane showRules(){
         BorderPane root = new BorderPane();
         GridPane rules = new GridPane();
@@ -58,6 +63,39 @@ public class Rules {
         rules.addRow(12, new Label(""));
         rules.addRow(13, row12);
         rules.addRow(14, last);
+        root.setTop(rule);
+        root.setCenter(rules);
+        return root;
+    }
+
+    public static BorderPane showRules2(){
+        BorderPane root = new BorderPane();
+        GridPane rules = new GridPane();
+        rules.setVgap(5);
+        rules.setTranslateX(160);
+        rules.setTranslateY(80);
+        Image image = new Image("book.png");
+        BackgroundSize bSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false);
+        root.setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, bSize)));
+        Label firstRow = new Label("Prison: you can get there only through portal or chance");
+        firstRow.setFont(font);
+        Label row2 = new Label("Only one can be in prison");
+        row2.setFont(font);
+        Label row3 = new Label("You won't get or lose money when in prison");
+        row3.setFont(font);
+        Label row4 = new Label("Free: you don't have to do anything here, just relax!");
+        row4.setFont(font);
+        Label row5 = new Label("");
+
+        Label rule = new Label("RULES");
+        rule.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 30));
+        rule.setTranslateX(350);
+        rule.setTranslateY(50);
+
+        rules.addRow(0, firstRow);
+        rules.addRow(1, row2);
+        rules.addRow(2, row3);
+        rules.addRow(3, row4);
         root.setTop(rule);
         root.setCenter(rules);
         return root;
@@ -147,7 +185,7 @@ public class Rules {
         return portal;
     }
 
-    public static BorderPane makeWindow(){
+    private static BorderPane makeWindow(){
         BorderPane root = new BorderPane();
         BorderPane window = new BorderPane();
         GridPane center = new GridPane();
