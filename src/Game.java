@@ -40,7 +40,7 @@ public class Game {
     private static ArrayList<String> tiles = new ArrayList<>();
     private static final int[] values = new int[] {200, 60, 60, 100, 80, 100, 100, 0, 120, 0, 140, 140, 160, 0, 180, 200,
             0, 220, 100, 220, 240, 260, 260, 0, 280, 0, 300, 300, 320, 0, 350, 400};
-    private static MediaPlayer wood, villager, chestOpen, nether, ironHoe, eat, arrow, bow, water, ironPick, shield, ironArmor,
+    private static MediaPlayer wood, villager, chestOpen, nether, ironHoe, eat, arrow, bow, water, ironPick, ironSword, shield, ironArmor,
             portalEffect, enchant, brewing, shulker, start;
 
     public static Circle get1(Rectangle rect, int x){
@@ -215,7 +215,7 @@ public class Game {
 
     private static Chance[] createChances(){
         Chance[] chances = new Chance[12];
-        Chance getMoveToExtra = new Chance("Move to the nearest EXTRA square. When you pass through START pick up $2000", "moveTo", 16);
+        Chance getMoveToExtra = new Chance("Move to the nearest EXTRA square. \nWhen you pass through START pick up $2000", "moveTo", 16);
         Chance getloseMoney150 = new Chance("You lost $150", "money", -150);
         Chance getMove3Squares = new Chance("Move 3 squares back!", "move", -3);
         Chance getwinMoney150 = new Chance("You won $150", "money", 150);
@@ -223,7 +223,7 @@ public class Game {
         Chance getwinMoney350 = new Chance("You won $350", "money", 350);
         Chance start = new Chance("Move to start and pick up $2000", "moveTo", 0);
         Chance getMoveToPortal = new Chance("Move to the portal", "moveTo", 25);
-        Chance getMoveToJail = new Chance("You got yourself to jail. Move to jail, you won't get through start and you won't get $2000", "moveTo", 9);
+        Chance getMoveToJail = new Chance("You got yourself to jail.", "moveTo", 9);
         Chance getMovetonearestSquare = new Chance("Move to the nearest square", "move", 1);
         Chance taxFree = new Chance("Next time you come to tax, you don't have to pay it!", "tax", 0);
         Chance getOutofJail = new Chance("Get out of jail free","prison",0);
@@ -263,6 +263,8 @@ public class Game {
         water = new MediaPlayer(waterSound);
         Media equipmentSound = new Media(new File("resources/anvil_use.mp3").toURI().toString());
         ironPick = new MediaPlayer(equipmentSound);
+        Media swordSound = new Media(new File("resources/anvil_use.mp3").toURI().toString());
+        ironSword = new MediaPlayer(equipmentSound);
         Media shieldSound = new Media(new File("resources/block5.mp3").toURI().toString());
         shield = new MediaPlayer(shieldSound);
         Media armorSound = new Media(new File("resources/equip_iron2.mp3").toURI().toString());
@@ -291,6 +293,7 @@ public class Game {
         arrow.stop();
         water.stop();
         ironPick.stop();
+        ironSword.stop();
         shield.stop();
         ironArmor.stop();
         portalEffect.stop();
@@ -515,14 +518,16 @@ public class Game {
 
             for (Player player : playerList){
                 //case when player has no money
-                if (player.getAccount() <= 0 && turn == player.getPos()){
-                    player.isDefeated();
+                if (player.getAccount() <= 0){
+                    player.lost();
                     switch(player.getPos()){
                         case 1 -> w1.update(player1);
                         case 2 -> w2.update(player2);
                         case 3 -> w3.update(player3);
                         case 4 -> w4.update(player4);
                     }
+                }
+                if (player.isDefeated() && turn == player.getPos()){
                     nextTurn();
                 }
                 //case when player is in prison
@@ -583,6 +588,7 @@ public class Game {
                             case 7, 23, 13, 29 -> chestOpen.play();
                             case 9 -> nether.play();
                             case 17 -> ironPick.play();
+                            case 21 -> ironSword.play();
                             case 22 -> shield.play();
                             case 24 -> ironArmor.play();
                             case 10 -> ironHoe.play();
@@ -600,9 +606,11 @@ public class Game {
                         }
                         switch (tiles.get(player.getTile())) {
                             case "CHANCE":
+                                Label text = new Label();
+                                text.setText(chances[chanceNum].getText());
+                                buy.setTop(text);
                                 switch (chances[chanceNum].getAction()) {
                                     case "move" -> {
-                                        console.appendText(chances[chanceNum].getText());
                                         if (player.getTile() < 9 && player.getTile() > 0)
                                             chanceMove.setToX(920 - (player.getTile() + chances[chanceNum].getValue()) * 100);
                                         else if (player.getTile() < 25 && player.getTile() > 16)
@@ -683,7 +691,6 @@ public class Game {
                                         }); //end of chM.sOF
                                     }
                                     case "moveTo" -> {
-                                        console.appendText(chances[chanceNum].getText());
                                         if (chances[chanceNum].getValue() == 0) {
                                             chanceMove.setToX(920);
                                             chanceMove.setToY(705);
@@ -819,7 +826,6 @@ public class Game {
                                         }
                                     }
                                     case "money" -> {
-                                        console.appendText(chances[chanceNum].getText());
                                         player.addToAccount(chances[chanceNum].getValue());
                                         if (chances[chanceNum].getValue() > 0)
                                             switch (player.getPos()) {
@@ -907,7 +913,7 @@ public class Game {
                                     }
                                     console.appendText("Player " + player.getPos() + " paid Player " + player4.getPos() + ": " + (values[player.getTile()] / 2) + "\n");
                                 } else {
-                                    Label text = new Label("Do you want to buy \n" + tiles.get(player.getTile()) + " for " + values[player.getTile()] + "?");
+                                    text = new Label("Do you want to buy \n" + tiles.get(player.getTile()) + " for " + values[player.getTile()] + "?");
                                     text.setTranslateX(20);
                                     Button yes = new Button("Buy");
                                     yes.setTranslateY(30);
@@ -1011,10 +1017,17 @@ public class Game {
                                                 case 2 -> player4.addPrison();
                                             }
                                         }
+                                        back.play();
+                                        root.getChildren().removeAll(set2);
+                                        root.getChildren().removeAll(set3);
+                                        root.getChildren().removeAll(set4);
+                                        root.getChildren().removeAll(set5);
+                                        root.getChildren().removeAll(set6);
+                                        root.getChildren().removeAll(c1);
                                         pauseMove.play();
                                         portal.setToX(20);
                                         portal.setToY(705);
-                                        portal.play();
+                                        pauseMove.setOnFinished(e -> portal.play());
                                         player.addTile(-16);
                                         player.toPrison();
                                         portalEffect.play();
