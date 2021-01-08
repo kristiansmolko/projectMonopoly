@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 
 import java.util.Optional;
 
-import static extra.Rules.showRules;
+import static extra.Rules.*;
 
 public class Main extends Application{
     @Override
@@ -33,14 +33,33 @@ public class Main extends Application{
         else if (result.get() == rules){
             BorderPane root = new BorderPane();
             root.setCenter(showRules());
+            BorderPane buttons = new BorderPane();
             Button gameStart = new Button("Start game");
-            root.setBottom(gameStart);
+            buttons.setLeft(gameStart);
             gameStart.setOnAction(e -> {
                 BorderPane monopoly = Game.createGame();
                 Scene scene = new Scene(monopoly, 1200, 800);
                 stage.setScene(scene);
                 stage.show();
             });
+            Button nextPage = new Button("Next page");
+            Button lastPage = new Button("Previous page");
+            nextPage.setOnAction(e -> {
+                BorderPane root1 = new BorderPane();
+                root1.setCenter(showRules2());
+                buttons.setRight(lastPage);
+                root1.setBottom(buttons);
+                stage.setScene(new Scene(root1, 800, 800));
+            });
+            lastPage.setOnAction(e -> {
+                BorderPane root2 = new BorderPane();
+                root2.setCenter(showRules());
+                buttons.setRight(nextPage);
+                root2.setBottom(buttons);
+                stage.setScene(new Scene(root2, 800, 800));
+            });
+            buttons.setRight(nextPage);
+            root.setBottom(buttons);
             Scene scene = new Scene(root, 800, 800);
             stage.setScene(scene);
             stage.show();
