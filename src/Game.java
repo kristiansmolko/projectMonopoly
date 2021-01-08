@@ -703,6 +703,42 @@ public class Game {
                                                 player.addTile(-(player.getTile() - 9));
                                             chanceMove.play();
                                             chanceMove.setOnFinished(e -> {
+                                                if (player1.isInPrison()){
+                                                    switch (player1.getPrisonCount()){
+                                                        case 1 -> {
+                                                            player1.addPrison();
+                                                            player1.addPrison();
+                                                        }
+                                                        case 2 -> player1.addPrison();
+                                                    }
+                                                }
+                                                if (player2.isInPrison()){
+                                                    switch (player2.getPrisonCount()){
+                                                        case 1 -> {
+                                                            player2.addPrison();
+                                                            player2.addPrison();
+                                                        }
+                                                        case 2 -> player2.addPrison();
+                                                    }
+                                                }
+                                                if (player3.isInPrison()){
+                                                    switch (player3.getPrisonCount()){
+                                                        case 1 -> {
+                                                            player3.addPrison();
+                                                            player3.addPrison();
+                                                        }
+                                                        case 2 -> player3.addPrison();
+                                                    }
+                                                }
+                                                if (player4.isInPrison()){
+                                                    switch (player4.getPrisonCount()){
+                                                        case 1 -> {
+                                                            player4.addPrison();
+                                                            player4.addPrison();
+                                                        }
+                                                        case 2 -> player4.addPrison();
+                                                    }
+                                                }
                                                 player.toPrison();
                                                 nether.play();
                                             });
@@ -733,7 +769,45 @@ public class Game {
                                                 portalEffect.play();
                                             });
                                             pauseMove.setOnFinished(e -> portal.play());
-                                            portal.setOnFinished(e -> player.toPrison());
+                                            portal.setOnFinished(e -> {
+                                                player.toPrison();
+                                                if (player1.isInPrison()){
+                                                    switch (player1.getPrisonCount()){
+                                                        case 1 -> {
+                                                            player1.addPrison();
+                                                            player1.addPrison();
+                                                        }
+                                                        case 2 -> player1.addPrison();
+                                                    }
+                                                }
+                                                if (player2.isInPrison()){
+                                                    switch (player2.getPrisonCount()){
+                                                        case 1 -> {
+                                                            player2.addPrison();
+                                                            player2.addPrison();
+                                                        }
+                                                        case 2 -> player2.addPrison();
+                                                    }
+                                                }
+                                                if (player3.isInPrison()){
+                                                    switch (player3.getPrisonCount()){
+                                                        case 1 -> {
+                                                            player3.addPrison();
+                                                            player3.addPrison();
+                                                        }
+                                                        case 2 -> player3.addPrison();
+                                                    }
+                                                }
+                                                if (player4.isInPrison()){
+                                                    switch (player4.getPrisonCount()){
+                                                        case 1 -> {
+                                                            player4.addPrison();
+                                                            player4.addPrison();
+                                                        }
+                                                        case 2 -> player4.addPrison();
+                                                    }
+                                                }
+                                            });
                                         }
                                     }
                                     case "money" -> {
@@ -888,6 +962,42 @@ public class Game {
                             translateFigure.play();
                             if (nextTile == 25) {
                                 translateFigure.setOnFinished(actionEvent14 -> {
+                                    if (player1.isInPrison()){
+                                        switch (player1.getPrisonCount()){
+                                            case 1 -> {
+                                                player1.addPrison();
+                                                player1.addPrison();
+                                            }
+                                            case 2 -> player1.addPrison();
+                                        }
+                                    }
+                                    if (player2.isInPrison()){
+                                        switch (player2.getPrisonCount()){
+                                            case 1 -> {
+                                                player2.addPrison();
+                                                player2.addPrison();
+                                            }
+                                            case 2 -> player2.addPrison();
+                                        }
+                                    }
+                                    if (player3.isInPrison()){
+                                        switch (player3.getPrisonCount()){
+                                            case 1 -> {
+                                                player3.addPrison();
+                                                player3.addPrison();
+                                            }
+                                            case 2 -> player3.addPrison();
+                                        }
+                                    }
+                                    if (player4.isInPrison()){
+                                        switch (player4.getPrisonCount()){
+                                            case 1 -> {
+                                                player4.addPrison();
+                                                player4.addPrison();
+                                            }
+                                            case 2 -> player4.addPrison();
+                                        }
+                                    }
                                     pauseMove.play();
                                     portal.setToX(20);
                                     portal.setToY(705);
