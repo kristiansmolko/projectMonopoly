@@ -173,9 +173,9 @@ public class Board {
             case 1 -> background.setImage(new Image("background.jpg"));
             case 2 -> background.setImage(new Image("background2.jpg"));
             case 3 -> background.setImage(new Image("background3.jpg"));
-            case 4 -> background.setImage(new Image("background4.png"));
-            case 5 -> background.setImage(new Image("background4.jpg"));
-            case 6 -> background.setImage(new Image("background6.png"));
+            case 4 -> background.setImage(new Image("background4.jpg"));
+            case 5 -> background.setImage(new Image("background5.jpg"));
+            case 6 -> background.setImage(new Image("background6.jpg"));
             case 7 -> background.setImage(new Image("background7.jpg"));
             case 8 -> background.setImage(new Image("background8.jpg"));
             case 9 -> background.setImage(new Image("background9.jpg"));
