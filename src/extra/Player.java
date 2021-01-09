@@ -99,7 +99,7 @@ public class Player {
     public void lost(){
         defeated = true;
         owned = new ArrayList<>();
-        owned.add("You lost");
+        owned.add("You lost!");
     }
 
     public boolean isDefeated(){
