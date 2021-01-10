@@ -42,23 +42,36 @@ public class Main extends Application{
                 stage.setScene(scene);
                 stage.show();
             });
-            Button nextPage = new Button("Next page");
-            Button lastPage = new Button("Previous page");
-            nextPage.setOnAction(e -> {
+            Button firstPage = new Button("Next page");
+            Button secondPage = new Button("Previous page");
+            firstPage.setOnAction(e -> {
                 BorderPane root1 = new BorderPane();
                 root1.setCenter(showRules2());
-                buttons.setRight(lastPage);
+                BorderPane moreButtons = new BorderPane();
+                moreButtons.setLeft(secondPage);
+                Button thirdPage = new Button("Next page");
+                moreButtons.setRight(thirdPage);
+                thirdPage.setOnAction(e1 -> {
+                    BorderPane root2 = new BorderPane();
+                    root2.setCenter(showRules3());
+                    buttons.setRight(firstPage);
+                    firstPage.setText("Previous page");
+                    root2.setBottom(buttons);
+                    stage.setScene(new Scene(root2, 800, 800));
+                });
+                buttons.setRight(moreButtons);
                 root1.setBottom(buttons);
                 stage.setScene(new Scene(root1, 800, 800));
             });
-            lastPage.setOnAction(e -> {
+            secondPage.setOnAction(e -> {
                 BorderPane root2 = new BorderPane();
                 root2.setCenter(showRules());
-                buttons.setRight(nextPage);
+                buttons.setRight(firstPage);
+                firstPage.setText("Next page");
                 root2.setBottom(buttons);
                 stage.setScene(new Scene(root2, 800, 800));
             });
-            buttons.setRight(nextPage);
+            buttons.setRight(firstPage);
             root.setBottom(buttons);
             Scene scene = new Scene(root, 800, 800);
             stage.setScene(scene);

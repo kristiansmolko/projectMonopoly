@@ -134,6 +134,23 @@ public class Rules {
         return root;
     }
 
+    public static BorderPane showRules3(){
+        BorderPane root = new BorderPane();
+        GridPane rules = new GridPane();
+        rules.setVgap(5);
+        rules.setTranslateX(160);
+        rules.setTranslateY(60);
+        Image image = new Image("book.png");
+        BackgroundSize bSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false);
+        root.setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, bSize)));
+        Label rule = new Label("RULES");
+        rule.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 30));
+        rule.setTranslateX(350);
+        rule.setTranslateY(50);
+
+        return root;
+    }
+
     private static GridPane makeStart(){
         GridPane start = new GridPane();
         Label startLabel = new Label("You 'spawn' on this tile and every time you cross it, you gain money.");
@@ -262,8 +279,8 @@ public class Rules {
         TextArea owns = new TextArea();
         owns.setEditable(false);
         owns.setMaxSize(120,40);
-        center.addRow(0, name);
-        center.addRow(1, money, prison);
+        center.addRow(0, name, prison);
+        center.addRow(1, money);
         center.addRow(2, owns);
         window.setCenter(center);
         window.setTranslateX(20);
