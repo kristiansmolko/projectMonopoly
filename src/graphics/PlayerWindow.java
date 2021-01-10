@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -20,6 +21,8 @@ import java.io.File;
 public class PlayerWindow {
     private Label money;
     ImageView prison = new ImageView(new Image("jaildoor.png"));
+    StackPane notax = noTax();
+    StackPane noprison = noPrison();
     private TextArea owns;
     private GridPane center = new GridPane();
     public static Media coinSound = new Media(new File("resources/coins.mp3").toURI().toString());
@@ -35,14 +38,18 @@ public class PlayerWindow {
         name.setMaxSize(120,20);
         money = new Label("Account: " + player.getAccount());
         money.setMaxSize(120,20);
-        prison.setFitWidth(30); prison.setFitHeight(30);
-        prison.setTranslateX(-30);
+        prison.setFitWidth(25); prison.setFitHeight(25);
+        prison.setTranslateX(-70);
         prison.setVisible(false);
+        notax.setTranslateX(-70);
+        notax.setVisible(false);
+        noprison.setTranslateX(-70);
+        noprison.setVisible(false);
         owns = new TextArea();
         owns.setEditable(false);
         owns.setMaxSize(120,40);
-        center.addRow(0, name);
-        center.addRow(1, money, prison);
+        center.addRow(0, name, notax, noprison, prison);
+        center.addRow(1, money);
         center.addRow(2, owns);
         window.setCenter(center);
         window.setTranslateX(20);
@@ -57,6 +64,8 @@ public class PlayerWindow {
             }
         }
         prison.setVisible(player.isInPrison());
+        noprison.setVisible(player.getExtra().contains("prison"));
+        notax.setVisible(player.getExtra().contains("tax"));
     }
 
     public void addAccount(Player player){
@@ -91,5 +100,25 @@ public class PlayerWindow {
                 money.setTextFill(Color.RED);
             }
         });
+    }
+
+    private StackPane noPrison(){
+        StackPane stack = new StackPane();
+        ImageView noprison = new ImageView(new Image("jaildoor.png"));
+        ImageView remove = new ImageView(new Image("remove.png"));
+        noprison.setFitWidth(25); noprison.setFitHeight(25);
+        remove.setFitWidth(25); remove.setFitHeight(25);
+        stack.getChildren().addAll(noprison, remove);
+        return stack;
+    }
+
+    private StackPane noTax(){
+        StackPane stack = new StackPane();
+        ImageView noprison = new ImageView(new Image("villager.png"));
+        ImageView remove = new ImageView(new Image("remove.png"));
+        noprison.setFitWidth(25); noprison.setFitHeight(25);
+        remove.setFitWidth(25); remove.setFitHeight(25);
+        stack.getChildren().addAll(noprison, remove);
+        return stack;
     }
 }
