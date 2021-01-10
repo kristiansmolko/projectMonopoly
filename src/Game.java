@@ -356,6 +356,60 @@ public class Game {
             numOfPlayers = 4;
         else if (result.get() == can)
             System.exit(0);
+
+        ArrayList<String> available = new ArrayList<>();
+        available.add("diamond steve.png");
+        available.add("creeper.png");
+        available.add("steve.png");
+        available.add("zombified piglin.png");
+
+        ChoiceDialog<String> player1Choose = new ChoiceDialog<>("Choose figure", available);
+        player1Choose.setTitle("Player 1 figure");
+        player1Choose.setHeaderText("Player 1, choose your figure");
+        Optional<String> resultForP1 = player1Choose.showAndWait();
+        if (!resultForP1.isPresent())
+            System.exit(0);
+        else
+            available.remove(resultForP1.get());
+
+        ChoiceDialog<String> player2Choose = new ChoiceDialog<>("Choose figure", available);
+        player2Choose.setTitle("Player 2 figure");
+        player2Choose.setHeaderText("Player 2, choose your figure");
+        Optional<String> resultForP2 = player2Choose.showAndWait();
+        if (!resultForP2.isPresent())
+            System.exit(0);
+        else
+            available.remove(resultForP2.get());
+        ChoiceDialog<String> player3Choose = new ChoiceDialog<>("Choose figure", available);
+        player3Choose.setTitle("Player 3 figure");
+        player3Choose.setHeaderText("Player 3, choose your figure");
+        Optional<String> resultForP3 = Optional.empty();
+        ChoiceDialog<String> player4Choose = new ChoiceDialog<>("Choose figure", available);
+        player4Choose.setTitle("Player 4 figure");
+        player4Choose.setHeaderText("Player 4, choose your figure");
+        Optional<String> resultForP4 = Optional.empty();
+
+        if (numOfPlayers == 3){
+            resultForP3 = player3Choose.showAndWait();
+            if (!resultForP3.isPresent())
+                System.exit(0);
+            else
+                available.remove(resultForP3.get());
+        }
+        if (numOfPlayers == 4){
+            resultForP3 = player3Choose.showAndWait();
+            if (!resultForP3.isPresent())
+                System.exit(0);
+            else
+                available.remove(resultForP3.get());
+
+            resultForP4 = player4Choose.showAndWait();
+            if (!resultForP4.isPresent())
+                System.exit(0);
+            else
+                available.remove(resultForP4.get());
+        }
+
         //set new players
         Player player1 = new Player(1);
         Player player2 = new Player(2);
@@ -364,19 +418,19 @@ public class Game {
         //add figures to players
         switch (numOfPlayers) {
             case 3 -> {
-                player1.setFigure("diamond steve.png");
-                player2.setFigure("creeper.png");
-                player3.setFigure("steve.png");
+                player1.setFigure(resultForP1.get());
+                player2.setFigure(resultForP2.get());
+                player3.setFigure(resultForP3.get());
             }
             case 4 -> {
-                player1.setFigure("diamond steve.png");
-                player2.setFigure("creeper.png");
-                player3.setFigure("steve.png");
-                player4.setFigure("zombified piglin.png");
+                player1.setFigure(resultForP1.get());
+                player2.setFigure(resultForP2.get());
+                player3.setFigure(resultForP3.get());
+                player4.setFigure(resultForP4.get());
             }
             default -> {
-                player1.setFigure("diamond steve.png");
-                player2.setFigure("creeper.png");
+                player1.setFigure(resultForP1.get());
+                player2.setFigure(resultForP2.get());
             }
         }
 
