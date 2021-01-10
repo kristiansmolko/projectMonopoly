@@ -446,8 +446,7 @@ public class Game {
             console.setEditable(false);
             console.setMaxHeight(100);
             console.setMaxWidth(200);
-            //Label text = new Label();
-            //Button yes = new Button();
+            console.setTranslateY(-10);
             buy.setTop(null);
             buy.setCenter(null);
             buy.setMaxSize(200,200);
@@ -819,8 +818,15 @@ public class Game {
                                                         case 4 -> w4.update(player);
                                                     }
                                                 });
-                                            } else
+                                            } else {
                                                 player.getExtra().remove("prison");
+                                                switch (player.getPos()) {
+                                                    case 1 -> w1.update(player);
+                                                    case 2 -> w2.update(player);
+                                                    case 3 -> w3.update(player);
+                                                    case 4 -> w4.update(player);
+                                                }
+                                            }
                                         } else if (chances[chanceNum].getValue() == 16) {
                                             chanceMove.setToX(20);
                                             chanceMove.setToY(5);
@@ -946,7 +952,15 @@ public class Game {
                                             case 4 -> w4.update(player4);
                                         }
                                     }
-                                } else player.getExtra().remove("tax");
+                                } else {
+                                    player.getExtra().remove("tax");
+                                    switch (player.getPos()) {
+                                        case 1 -> w1.update(player);
+                                        case 2 -> w2.update(player);
+                                        case 3 -> w3.update(player);
+                                        case 4 -> w4.update(player);
+                                    }
+                                }
                                 break;
                             case "JAIL":
                                 console.appendText("It's hot here. Uhh...");
