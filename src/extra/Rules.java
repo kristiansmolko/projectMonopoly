@@ -1,5 +1,8 @@
 package extra;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -14,6 +17,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 public class Rules {
     private static final Font font = Font.font("Times New Roman", FontWeight.BOLD, FontPosture.ITALIC, 16);
@@ -36,7 +40,7 @@ public class Rules {
         welcome.setFont(font);
         Label firstRow = new Label("First of all you have to choose how many players will play.");
         firstRow.setFont(font);
-        Label secondRow = new Label("You can't choose figures or who will go first.");
+        Label secondRow = new Label("Then you can choose figure you want to play with.");
         secondRow.setFont(font);
         Label row2 = new Label("To familiarize with the board (there are multiple tiles): ");
         row2.setFont(font);
@@ -82,34 +86,38 @@ public class Rules {
         BackgroundSize bSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false);
         root.setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, bSize)));
 
-        Label firstRow = new Label("Prison: you can get there only through portal or chance.");
-        firstRow.setFont(font);
-        Label row2 = new Label("Only one can be in prison. If someone else goes to prison, you're free!");
-        row2.setFont(font);
-        Label row3 = new Label("You won't get or lose money when in prison.");
-        row3.setFont(font);
-        Label prisonLabel = new Label("You will see jail icon, if you are in prison.");
-        prisonLabel.setFont(font);
         Label windowLabel = new Label("Here you can see your figure, money and what do you own.");
         windowLabel.setFont(font);
-        Label row4 = new Label("Out of prison: prisonFree chance or you will wait 3 rounds.");
-        row4.setFont(font);
         Label lowMoney = new Label("In case of low budget, game will notify you with red color.");
         lowMoney.setFont(font);
         Label row1 = new Label("On the right side there is panel with info about players.");
         row1.setFont(font);
-        Label row12 = new Label("What happens if you have to pay, but don't have the required money?");
-        row12.setFont(font);
-        Label last = new Label("YOU LOST!");
-        last.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 20));
-        last.setTextFill(Color.RED);
-        Label lastRow = new Label("But it was sure fun, so why not play again.");
-        lastRow.setFont(font);
-
+        Label row2 = new Label("Chance: - get or lose money");
+        row2.setFont(font);
+        Label blink = new Label("If you get money, your account will blink green.");
+        blink.setFont(font);
+        Label blink2 = new Label("If you lose money, your account will blink red.");
+        blink2.setFont(font);
+        Label row3 = new Label("               - move forward or backwards");
+        row3.setFont(font);
+        Label row4 = new Label("               - move to portal");
+        row4.setFont(font);
+        Label row5 = new Label("               - move to prison");
+        row5.setFont(font);
+        Label row6 = new Label("               - move to start");
+        row6.setFont(font);
+        Label row7 = new Label("               - move to free tile");
+        row7.setFont(font);
+        Label row8 = new Label("               - get special relief from tax or prison");
+        row8.setFont(font);
         Label rule = new Label("RULES");
         rule.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 30));
         rule.setTranslateX(350);
         rule.setTranslateY(50);
+        BorderPane blinkingPane = new BorderPane();
+        blinkingPane.setLeft(makeWindowBlink(Color.LIMEGREEN));
+        blinkingPane.setRight(makeWindowBlink(Color.RED));
+
 
         rules.addRow(0, row1);
         rules.addRow(1, new Label(""));
@@ -117,18 +125,20 @@ public class Rules {
         rules.addRow(3, windowLabel);
         rules.addRow(4, lowMoney);
         rules.addRow(5, new Label(""));
-        rules.addRow(6, firstRow);
-        rules.addRow(7, makeWindowJail());
-        rules.addRow(8, prisonLabel);
-        rules.addRow(9, row2);
-        rules.addRow(10, row3);
-        rules.addRow(11, row4);
-        rules.addRow(12, new Label(""));
-        rules.addRow(13, row12);
-        rules.addRow(14, last);
-        rules.addRow(15, makeWindowLost());
-        rules.addRow(16, new Label(""));
-        rules.addRow(17, lastRow);
+        rules.addRow(6, blinkingPane);
+        rules.addRow(7, blink);
+        rules.addRow(8, blink2);
+        rules.addRow(9, new Label(""));
+        rules.addRow(10, row2);
+        rules.addRow(11, row3);
+        rules.addRow(12, row4);
+        rules.addRow(13, row5);
+        rules.addRow(14, row6);
+        rules.addRow(15, row7);
+        rules.addRow(16, row8);
+        rules.addRow(17, new Label(""));
+        rules.addRow(18, makeWindowNoTax());
+
         root.setTop(rule);
         root.setCenter(rules);
         return root;
@@ -148,6 +158,45 @@ public class Rules {
         rule.setTranslateX(350);
         rule.setTranslateY(50);
 
+        Label firstRow = new Label("Prison: you can get there only through portal or chance.");
+        firstRow.setFont(font);
+        Label row2 = new Label("Only one can be in prison. If someone else goes to prison, you're free!");
+        row2.setFont(font);
+        Label row3 = new Label("You won't get or lose money when in prison.");
+        row3.setFont(font);
+        Label prisonLabel = new Label("You will see jail icon, if you are in prison.");
+        prisonLabel.setFont(font);
+        Label row4 = new Label("Out of prison: prisonFree chance or you will wait 3 rounds.");
+        row4.setFont(font);
+        Label row5 = new Label("This is how prisonFree chance looks on panel.");
+        row5.setFont(font);
+
+        Label row12 = new Label("What happens if you have to pay, but don't have the required money?");
+        row12.setFont(font);
+        Label last = new Label("YOU LOST!");
+        last.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 20));
+        last.setTextFill(Color.RED);
+        Label lastRow = new Label("But it was sure fun, so why not play again.");
+        lastRow.setFont(font);
+
+        rules.addRow(0, firstRow);
+        rules.addRow(1, makeWindowJail());
+        rules.addRow(2, prisonLabel);
+        rules.addRow(3, row2);
+        rules.addRow(4, row3);
+        rules.addRow(5, new Label(""));
+        rules.addRow(6, row4);
+        rules.addRow(7, makeWindowNoPrison());
+        rules.addRow(8, row5);
+        rules.addRow(9, new Label(""));
+        rules.addRow(10, row12);
+        rules.addRow(11, last);
+        rules.addRow(12, makeWindowLost());
+        rules.addRow(13, new Label(""));
+        rules.addRow(14, lastRow);
+
+        root.setTop(rule);
+        root.setCenter(rules);
         return root;
     }
 
@@ -312,6 +361,108 @@ public class Rules {
         window.setCenter(center);
         window.setTranslateX(20);
         root.setLeft(window);
+        return root;
+    }
+
+    private static BorderPane makeWindowNoPrison(){
+        BorderPane root = new BorderPane();
+        BorderPane window = new BorderPane();
+        GridPane center = new GridPane();
+        ImageView img = new ImageView(new Image("diamond steve.png"));
+        img.setFitWidth(40); img.setFitHeight(60);
+        img.setTranslateX(-10); img.setTranslateY(10);
+
+        StackPane stack = new StackPane();
+        ImageView noprison = new ImageView(new Image("jaildoor.png"));
+        ImageView remove = new ImageView(new Image("remove.png"));
+        noprison.setFitWidth(25); noprison.setFitHeight(25);
+        remove.setFitWidth(25); remove.setFitHeight(25);
+        stack.getChildren().addAll(noprison, remove);
+        stack.setTranslateX(-30);
+        window.setLeft(img);
+        Label name = new Label("Player 1");
+        name.setMaxSize(120,20);
+        Label money = new Label("Account: 500");
+        money.setMaxSize(120,20);
+        TextArea owns = new TextArea();
+        owns.setEditable(false);
+        owns.setMaxSize(120,40);
+        owns.setMinHeight(0);
+        owns.appendText("You lost!");
+        center.addRow(0, name, stack);
+        center.addRow(1, money);
+        center.addRow(2, owns);
+        window.setCenter(center);
+        window.setTranslateX(20);
+        root.setLeft(window);
+        return root;
+    }
+
+    private static BorderPane makeWindowNoTax(){
+        BorderPane root = new BorderPane();
+        BorderPane window = new BorderPane();
+        GridPane center = new GridPane();
+        ImageView img = new ImageView(new Image("diamond steve.png"));
+        img.setFitWidth(40); img.setFitHeight(60);
+        img.setTranslateX(-10); img.setTranslateY(10);
+
+        StackPane stack = new StackPane();
+        ImageView noprison = new ImageView(new Image("villager.png"));
+        ImageView remove = new ImageView(new Image("remove.png"));
+        noprison.setFitWidth(25); noprison.setFitHeight(25);
+        remove.setFitWidth(25); remove.setFitHeight(25);
+        stack.getChildren().addAll(noprison, remove);
+        stack.setTranslateX(-30);
+        window.setLeft(img);
+        Label name = new Label("Player 1");
+        name.setMaxSize(120,20);
+        Label money = new Label("Account: 500");
+        money.setMaxSize(120,20);
+        TextArea owns = new TextArea();
+        owns.setEditable(false);
+        owns.setMaxSize(120,40);
+        owns.setMinHeight(0);
+        owns.appendText("You lost!");
+        center.addRow(0, name, stack);
+        center.addRow(1, money);
+        center.addRow(2, owns);
+        window.setCenter(center);
+        window.setTranslateX(20);
+        root.setLeft(window);
+        return root;
+    }
+
+    private static BorderPane makeWindowBlink(Color color){
+        BorderPane root = new BorderPane();
+        BorderPane window = new BorderPane();
+        GridPane center = new GridPane();
+        ImageView img = new ImageView(new Image("diamond steve.png"));
+        img.setFitWidth(40); img.setFitHeight(60);
+        img.setTranslateX(-10); img.setTranslateY(10);
+        window.setLeft(img);
+        Label name = new Label("Player 1");
+        name.setMaxSize(120,20);
+        Label money = new Label("Account: 500");
+        money.setMaxSize(120,20);
+        TextArea owns = new TextArea();
+        owns.setEditable(false);
+        owns.setMaxSize(120,40);
+        owns.setMinHeight(0);
+        center.addRow(0, name);
+        center.addRow(1, money);
+        center.addRow(2, owns);
+        window.setCenter(center);
+        window.setTranslateX(20);
+        root.setLeft(window);
+
+        money.setText("Account: 500");
+        Timeline timer1 = new Timeline(
+                new KeyFrame(Duration.millis(2), e -> money.setTextFill(color)),
+                new KeyFrame(Duration.millis(3), e -> money.setTextFill(Color.BLACK))
+        );
+        timer1.setCycleCount(Animation.INDEFINITE);
+        timer1.play();
+
         return root;
     }
 }
