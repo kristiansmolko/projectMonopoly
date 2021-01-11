@@ -160,7 +160,7 @@ public class Game {
         String[] tiles = new String[] {"START", "Wood", "Stick", "TAX", "Crafting Table", "Stone Pickaxe",
                 "Cobblestone", "CHANCE", "Iron Ore", "JAIL", "Iron Hoe", "Wheat", "Carrot", "CHANCE", "Arrow",
                 "Bow", "FREE", "Iron Pickaxe", "TAX", "Gold Bar", "Redstone", "Iron Sword", "Shield", "CHANCE",
-                "Iron Armor", "PORTAL", "Enchanting Table", "Brew Stand", "Shulker Box", "CHANCE", "Diamond", "Emerald"};
+                "Iron Armor", "PORTAL", "Enchanting", "Brew Stand", "Shulker Box", "CHANCE", "Diamond", "Emerald"};
         return new ArrayList<>(Arrays.asList(tiles));
     }
 
@@ -299,6 +299,7 @@ public class Game {
         portalEffect.stop();
         enchant.stop();
         brewing.stop();
+        shulker.stop();
         start.stop();
     }
 
@@ -518,7 +519,7 @@ public class Game {
             Label win = new Label();
             win.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 50));
             win.setTextFill(Color.RED);
-            win.setTranslateX(50); win.setTranslateY(200);
+            win.setTranslateX(120); win.setTranslateY(200);
             //find winner
             if (numOfPlayers == 2){
                 if (player1.getAccount() <= 0){
@@ -835,10 +836,10 @@ public class Game {
                                                 player.addTile(-player.getTile());
                                                 player.addToAccount(200);
                                                 switch (player.getPos()) {
-                                                    case 1 -> w1.addAccount(player);
-                                                    case 2 -> w2.addAccount(player);
-                                                    case 3 -> w3.addAccount(player);
-                                                    case 4 -> w4.addAccount(player);
+                                                    case 1 -> w1.update(player);
+                                                    case 2 -> w2.update(player);
+                                                    case 3 -> w3.update(player);
+                                                    case 4 -> w4.update(player);
                                                 }
                                                 chanceMove.play();
                                             } else if (chances[chanceNum].getValue() == 9) {
@@ -971,12 +972,14 @@ public class Game {
                                                 } else {
                                                     player.getExtra().remove("prison");
                                                 }
-                                                switch (player.getPos()) {
-                                                    case 1 -> w1.update(player1);
-                                                    case 2 -> w2.update(player2);
-                                                    case 3 -> w3.update(player3);
-                                                    case 4 -> w4.update(player4);
-                                                }
+                                                portal.setOnFinished(e -> {
+                                                    switch (player.getPos()) {
+                                                        case 1 -> w1.update(player1);
+                                                        case 2 -> w2.update(player2);
+                                                        case 3 -> w3.update(player3);
+                                                        case 4 -> w4.update(player4);
+                                                    }
+                                                });
                                             }
                                         }
                                         case "money" -> {
@@ -1249,6 +1252,12 @@ public class Game {
                                 translateFigure.play();
                                 if (nextTile == 25) {
                                     translateFigure.setOnFinished(actionEvent14 -> {
+                                        portal.setToX(20);
+                                        portal.setToY(705);
+                                        pauseMove.play();
+                                        pauseMove.setOnFinished(e -> portal.play());
+                                        player.addTile(-16);
+                                        portalEffect.play();
                                         if (!player.getExtra().contains("prison")) {
                                             if (player1.isInPrison()) {
                                                 switch (player1.getPrisonCount()) {
@@ -1293,14 +1302,7 @@ public class Game {
                                             root.getChildren().removeAll(set5);
                                             root.getChildren().removeAll(set6);
                                             root.getChildren().removeAll(c1);
-                                            pauseMove.play();
-                                            portal.setToX(20);
-                                            portal.setToY(705);
-                                            pauseMove.setOnFinished(e -> portal.play());
-                                            player.addTile(-16);
                                             player.toPrison();
-                                            System.out.println(player.isInPrison());
-                                            portalEffect.play();
                                         } else {
                                             player.getExtra().remove("prison");
                                             back.play();
@@ -1311,12 +1313,14 @@ public class Game {
                                             root.getChildren().removeAll(set6);
                                             root.getChildren().removeAll(c1);
                                         }
-                                        switch (player.getPos()) {
-                                            case 1 -> w1.update(player);
-                                            case 2 -> w2.update(player);
-                                            case 3 -> w3.update(player);
-                                            case 4 -> w4.update(player);
-                                        }
+                                        portal.setOnFinished(e1 -> {
+                                            switch (player.getPos()) {
+                                                case 1 -> w1.update(player);
+                                                case 2 -> w2.update(player);
+                                                case 3 -> w3.update(player);
+                                                case 4 -> w4.update(player);
+                                            }
+                                        });
                                     });
                                 }
                             }
@@ -1395,9 +1399,5 @@ public class Game {
         border.setCenter(center);
         border.setRight(right);
         return border;
-    }
-
-    private static void resetLoop(Player player, Player player1){
-        player = player1;
     }
 }
