@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
@@ -44,14 +45,14 @@ public class Rules {
         secondRow.setFont(font);
         Label row2 = new Label("To familiarize with the board (there are multiple tiles): ");
         row2.setFont(font);
-        Label startLabel = new Label("Start: you start here with 500 money.");
+        Label startLabel = new Label("Start: you start here with 500 blocks.");
         startLabel.setFont(font);
-        Label row8 = new Label("You move with your figure as you roll the dice.");
-        row8.setFont(font);
-        Label row7 = new Label("Other tiles: if noone owns it, you can buy it.");
-        row7.setFont(font);
-        Label row9 = new Label("If you stand on tile someone owns, you pay half the price.");
-        row9.setFont(font);
+        Label row4 = new Label("You move with your figure as you roll the dice.");
+        row4.setFont(font);
+        Label row3 = new Label("Other tiles: if noone owns it, you can buy it.");
+        row3.setFont(font);
+        Label row5 = new Label("If you stand on tile someone owns, you pay half the price.");
+        row5.setFont(font);
 
         rules.addRow(0, welcome);
         rules.addRow(1, firstRow);
@@ -66,11 +67,11 @@ public class Rules {
         rules.addRow(10, makeJail());
         rules.addRow(11, makePortal());
         rules.addRow(12, new Label(""));
-        rules.addRow(13, row7);
+        rules.addRow(13, row3);
         rules.addRow(14, new Label(""));
         rules.addRow(15, startLabel);
-        rules.addRow(16, row8);
-        rules.addRow(17, row9);
+        rules.addRow(16, row4);
+        rules.addRow(17, row5);
         root.setTop(rule);
         root.setCenter(rules);
         return root;
@@ -86,17 +87,17 @@ public class Rules {
         BackgroundSize bSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false);
         root.setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, bSize)));
 
-        Label windowLabel = new Label("Here you can see your figure, money and what do you own.");
+        Label windowLabel = new Label("Here you can see your figure, blocks and what do you own.");
         windowLabel.setFont(font);
         Label lowMoney = new Label("In case of low budget, game will notify you with red color.");
         lowMoney.setFont(font);
         Label row1 = new Label("On the right side there is panel with info about players.");
         row1.setFont(font);
-        Label row2 = new Label("Chance: - get or lose money");
+        Label row2 = new Label("Chance: - get or lose blocks");
         row2.setFont(font);
-        Label blink = new Label("If you get money, your account will blink green.");
+        Label blink = new Label("If you get blocks, your account will blink green.");
         blink.setFont(font);
-        Label blink2 = new Label("If you lose money, your account will blink red.");
+        Label blink2 = new Label("If you lose blocks, your account will blink red.");
         blink2.setFont(font);
         Label row3 = new Label("               - move forward or backwards");
         row3.setFont(font);
@@ -162,7 +163,7 @@ public class Rules {
         firstRow.setFont(font);
         Label row2 = new Label("Only one can be in prison. If someone else goes to prison, you're free!");
         row2.setFont(font);
-        Label row3 = new Label("You won't get or lose money when in prison.");
+        Label row3 = new Label("You won't get or lose blocks when in prison.");
         row3.setFont(font);
         Label prisonLabel = new Label("You will see jail icon, if you are in prison.");
         prisonLabel.setFont(font);
@@ -171,13 +172,15 @@ public class Rules {
         Label row5 = new Label("This is how prisonFree chance looks on panel.");
         row5.setFont(font);
 
-        Label row12 = new Label("What happens if you have to pay, but don't have the required money?");
-        row12.setFont(font);
-        Label last = new Label("YOU LOST!");
-        last.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 20));
-        last.setTextFill(Color.RED);
-        Label lastRow = new Label("But it was sure fun, so why not play again.");
-        lastRow.setFont(font);
+        Label row6 = new Label("What happens if you have to pay, but don't have enough blocks?");
+        row6.setFont(font);
+        Label row7 = new Label("YOU LOST!");
+        row7.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 20));
+        row7.setTextFill(Color.RED);
+        Label row8 = new Label("But it was sure fun, so why not play again.");
+        row8.setFont(font);
+        Label row9 = new Label("Remember, that the length of game differs from money managing skills.");
+        row9.setFont(font);
 
         rules.addRow(0, firstRow);
         rules.addRow(1, makeWindowJail());
@@ -189,11 +192,12 @@ public class Rules {
         rules.addRow(7, makeWindowNoPrison());
         rules.addRow(8, row5);
         rules.addRow(9, new Label(""));
-        rules.addRow(10, row12);
-        rules.addRow(11, last);
+        rules.addRow(10, row6);
+        rules.addRow(11, row7);
         rules.addRow(12, makeWindowLost());
         rules.addRow(13, new Label(""));
-        rules.addRow(14, lastRow);
+        rules.addRow(14, row8);
+        rules.addRow(15, row9);
 
         root.setTop(rule);
         root.setCenter(rules);
@@ -202,7 +206,7 @@ public class Rules {
 
     private static GridPane makeStart(){
         GridPane start = new GridPane();
-        Label startLabel = new Label("You 'spawn' on this tile and every time you cross it, you gain money.");
+        Label startLabel = new Label("You 'spawn' on this tile and every time you cross it, you gain blocks.");
         startLabel.setFont(font);
         StackPane tile = new StackPane();
         ImageView img = new ImageView("start.png");
@@ -232,7 +236,7 @@ public class Rules {
 
     private static GridPane makeVill(){
         GridPane villager = new GridPane();
-        Label villText = new Label("This greedy creature wants your money. Beware!");
+        Label villText = new Label("This greedy creature wants your blocks. Beware!");
         villText.setFont(font);
         StackPane tile = new StackPane();
         ImageView img = new ImageView("villager.png");
@@ -294,14 +298,17 @@ public class Rules {
         window.setLeft(img);
         Label name = new Label("Player 1");
         name.setMaxSize(120,20);
-        Label money = new Label("Account: 500");
+        Label money = new Label("Account: 00");
         money.setMaxSize(120,20);
         TextArea owns = new TextArea();
         owns.setEditable(false);
         owns.setMaxSize(120,40);
         owns.setMinHeight(0);
+        ImageView moneyImg = new ImageView(new Image("dirt.png"));
+        moneyImg.setFitHeight(20); moneyImg.setFitWidth(20);
+        moneyImg.setTranslateX(-57);
         center.addRow(0, name);
-        center.addRow(1, money);
+        center.addRow(1, money, moneyImg);
         center.addRow(2, owns);
         window.setCenter(center);
         window.setTranslateX(20);
@@ -327,9 +334,12 @@ public class Rules {
         prison.setVisible(true);
         TextArea owns = new TextArea();
         owns.setEditable(false);
+        ImageView moneyImg = new ImageView(new Image("dirt.png"));
+        moneyImg.setFitHeight(20); moneyImg.setFitWidth(20);
+        moneyImg.setTranslateX(-50);
         owns.setMaxSize(120,40);
         center.addRow(0, name, prison);
-        center.addRow(1, money);
+        center.addRow(1, money, moneyImg);
         center.addRow(2, owns);
         window.setCenter(center);
         window.setTranslateX(20);
@@ -354,9 +364,12 @@ public class Rules {
         owns.setEditable(false);
         owns.setMaxSize(120,40);
         owns.setMinHeight(0);
+        ImageView moneyImg = new ImageView(new Image("dirt.png"));
+        moneyImg.setFitHeight(20); moneyImg.setFitWidth(20);
+        moneyImg.setTranslateX(-63);
         owns.appendText("You lost!");
         center.addRow(0, name);
-        center.addRow(1, money);
+        center.addRow(1, money, moneyImg);
         center.addRow(2, owns);
         window.setCenter(center);
         window.setTranslateX(20);
@@ -388,9 +401,11 @@ public class Rules {
         owns.setEditable(false);
         owns.setMaxSize(120,40);
         owns.setMinHeight(0);
-        owns.appendText("You lost!");
+        ImageView moneyImg = new ImageView(new Image("dirt.png"));
+        moneyImg.setFitHeight(20); moneyImg.setFitWidth(20);
+        moneyImg.setTranslateX(-50);
         center.addRow(0, name, stack);
-        center.addRow(1, money);
+        center.addRow(1, money, moneyImg);
         center.addRow(2, owns);
         window.setCenter(center);
         window.setTranslateX(20);
@@ -408,10 +423,14 @@ public class Rules {
 
         StackPane stack = new StackPane();
         ImageView noprison = new ImageView(new Image("villager.png"));
-        ImageView remove = new ImageView(new Image("remove.png"));
         noprison.setFitWidth(25); noprison.setFitHeight(25);
-        remove.setFitWidth(25); remove.setFitHeight(25);
-        stack.getChildren().addAll(noprison, remove);
+        Line line = new Line(-10,10,10,-10);
+        line.setStroke(Color.RED);
+        line.setStrokeWidth(2);
+        Label tax = new Label("TAX");
+        tax.setFont(Font.font(10));
+        tax.setTranslateY(-5);
+        stack.getChildren().addAll(noprison, tax, line);
         stack.setTranslateX(-30);
         window.setLeft(img);
         Label name = new Label("Player 1");
@@ -422,9 +441,11 @@ public class Rules {
         owns.setEditable(false);
         owns.setMaxSize(120,40);
         owns.setMinHeight(0);
-        owns.appendText("You lost!");
+        ImageView moneyImg = new ImageView(new Image("dirt.png"));
+        moneyImg.setFitHeight(20); moneyImg.setFitWidth(20);
+        moneyImg.setTranslateX(-50);
         center.addRow(0, name, stack);
-        center.addRow(1, money);
+        center.addRow(1, money, moneyImg);
         center.addRow(2, owns);
         window.setCenter(center);
         window.setTranslateX(20);
@@ -448,8 +469,11 @@ public class Rules {
         owns.setEditable(false);
         owns.setMaxSize(120,40);
         owns.setMinHeight(0);
+        ImageView moneyImg = new ImageView(new Image("dirt.png"));
+        moneyImg.setFitHeight(20); moneyImg.setFitWidth(20);
+        moneyImg.setTranslateX(-50);
         center.addRow(0, name);
-        center.addRow(1, money);
+        center.addRow(1, money, moneyImg);
         center.addRow(2, owns);
         window.setCenter(center);
         window.setTranslateX(20);
