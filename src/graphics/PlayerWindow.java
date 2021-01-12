@@ -13,6 +13,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 import java.io.File;
@@ -42,7 +44,7 @@ public class PlayerWindow {
         prison.setTranslateX(-70);
         prison.setVisible(false);
         notax.setTranslateX(-70);
-        notax.setVisible(false);
+        notax.setVisible(true);
         noprison.setTranslateX(-70);
         noprison.setVisible(false);
         owns = new TextArea();
@@ -115,10 +117,14 @@ public class PlayerWindow {
     private StackPane noTax(){
         StackPane stack = new StackPane();
         ImageView noprison = new ImageView(new Image("villager.png"));
-        ImageView remove = new ImageView(new Image("remove.png"));
         noprison.setFitWidth(25); noprison.setFitHeight(25);
-        remove.setFitWidth(25); remove.setFitHeight(25);
-        stack.getChildren().addAll(noprison, remove);
+        Label tax = new Label("TAX");
+        tax.setFont(Font.font(10));
+        tax.setTranslateY(-5);
+        Line line = new Line(-10,10,10,-10);
+        line.setStroke(Color.RED);
+        line.setStrokeWidth(2);
+        stack.getChildren().addAll(noprison, tax, line);
         return stack;
     }
 }
