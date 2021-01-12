@@ -44,7 +44,7 @@ public class PlayerWindow {
         prison.setTranslateX(-70);
         prison.setVisible(false);
         notax.setTranslateX(-70);
-        notax.setVisible(true);
+        notax.setVisible(false);
         noprison.setTranslateX(-70);
         noprison.setVisible(false);
         owns = new TextArea();
