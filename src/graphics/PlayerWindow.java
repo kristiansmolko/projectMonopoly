@@ -28,6 +28,7 @@ public class PlayerWindow {
     private TextArea owns;
     private GridPane center = new GridPane();
     public static Media coinSound = new Media(new File("resources/coins.mp3").toURI().toString());
+    ImageView moneyImg = new ImageView(new Image("dirt.png"));
     public static MediaPlayer coins = new MediaPlayer(coinSound);
 
     public BorderPane makeWindow(Player player){
@@ -50,8 +51,10 @@ public class PlayerWindow {
         owns = new TextArea();
         owns.setEditable(false);
         owns.setMaxSize(120,40);
+        moneyImg.setFitHeight(20); moneyImg.setFitWidth(20);
+        moneyImg.setTranslateX(-50);
         center.addRow(0, name, notax, noprison, prison);
-        center.addRow(1, money);
+        center.addRow(1, money, moneyImg);
         center.addRow(2, owns);
         window.setCenter(center);
         window.setTranslateX(20);
@@ -72,6 +75,15 @@ public class PlayerWindow {
 
     public void addAccount(Player player){
         money.setText("Account: " + player.getAccount());
+        if (player.getAccount() >= 1000)
+            moneyImg.setTranslateX(-46);
+        else if (player.getAccount() < 100 && player.getAccount() > 0)
+            moneyImg.setTranslateX(-57);
+        else if (player.getAccount() == 0)
+            moneyImg.setTranslateX(-63);
+        else
+            moneyImg.setTranslateX(-50);
+
         Timeline timer1 = new Timeline(
                 new KeyFrame(Duration.millis(2), e -> money.setTextFill(Color.LIMEGREEN)),
                 new KeyFrame(Duration.millis(3), e -> money.setTextFill(Color.BLACK))
@@ -89,6 +101,19 @@ public class PlayerWindow {
 
     public void removeAccount(Player player){
         money.setText("Account: " + player.getAccount());
+        if (player.getAccount() >= 1000)
+            moneyImg.setTranslateX(-46);
+        else if (player.getAccount() < 100 && player.getAccount() > 0)
+            moneyImg.setTranslateX(-57);
+        else if (player.getAccount() == 0)
+            moneyImg.setTranslateX(-63);
+        else if (player.getAccount() < 0 && (player.getAccount() > -100))
+            moneyImg.setTranslateX(-52);
+        else if (player.getAccount() <= -100)
+            moneyImg.setTranslateX(-45);
+        else
+            moneyImg.setTranslateX(-50);
+
         Timeline timer = new Timeline(
                 new KeyFrame(Duration.millis(2), e -> money.setTextFill(Color.RED)),
                 new KeyFrame(Duration.millis(3), e -> money.setTextFill(Color.BLACK))
