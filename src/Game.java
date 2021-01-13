@@ -1,10 +1,8 @@
+import com.sun.javafx.font.freetype.FTFactory;
 import extra.Player;
 import graphics.Board;
 import graphics.PlayerWindow;
-import javafx.animation.ParallelTransition;
-import javafx.animation.PauseTransition;
-import javafx.animation.RotateTransition;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.*;
@@ -37,6 +35,9 @@ public class Game {
     private static int turn = 1;
     private static int chanceNum = 0;
     private static int numOfPlayers;
+    private static Rectangle rect = makeDice();
+    private static Label win = new Label();
+    private static Group center;
     private static ArrayList<String> tiles = new ArrayList<>();
     private static final int[] values = new int[] {200, 60, 60, 100, 80, 100, 100, 0, 120, 0, 140, 140, 160, 0, 180, 200,
             0, 220, 100, 220, 240, 260, 260, 0, 280, 0, 300, 300, 320, 0, 350, 400};
@@ -282,7 +283,7 @@ public class Game {
         start = new MediaPlayer(startSound);
         Media fanfareSound = new Media(new File("resources/fanfare.mp3").toURI().toString());
         fanfare = new MediaPlayer(fanfareSound);
-        fanfare.setStartTime(Duration.millis(36000));
+        fanfare.setStartTime(Duration.millis(37000));
         fanfare.setStopTime(Duration.millis(55000));
         Media loseSound = new Media(new File("resources/lose.mp3").toURI().toString());
         loser = new MediaPlayer(loseSound);
@@ -321,12 +322,10 @@ public class Game {
     public static BorderPane createGame(){
         BorderPane root = new BorderPane();
         BorderPane border = new BorderPane();
-        Group center = new Group();
+        center = new Group();
         BorderPane buy = new BorderPane();
         BorderPane right = new BorderPane();
         GridPane playerWindows = new GridPane();
-        //dice creating
-        Rectangle rect = makeDice();
         int x = 250; //move
         //moves
         TranslateTransition back = moveBack(rect, x);
@@ -338,6 +337,7 @@ public class Game {
         TranslateTransition portal = new TranslateTransition();
         TranslateTransition chanceMove = new TranslateTransition();
         PauseTransition pauseMove = new PauseTransition();
+        FadeTransition fade = new FadeTransition();
         //creating sounds
         makeSounds();
         //dots in dice
@@ -474,6 +474,17 @@ public class Game {
         BorderPane P2W = w2.makeWindow(player2);
         BorderPane P3W = w3.makeWindow(player3);
         BorderPane P4W = w4.makeWindow(player4);
+        //winner label
+        win.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 50));
+        win.setTextFill(Color.RED);
+        win.setText(win.getText().toUpperCase());
+        win.setTranslateX(140); win.setTranslateY(200);
+
+        //game over
+        ImageView firework = new ImageView(new Image("fireworks.png"));
+        firework.setTranslateX(150); firework.setTranslateY(100);
+        firework.setFitHeight(700); firework.setFitWidth(700);
+
         //mouse click action
         EventHandler<MouseEvent> mouse = mouseEvent -> {
             if (mouseEvent.getSource() == rect){
@@ -514,6 +525,9 @@ public class Game {
             transY2.setDuration(Duration.millis(2000));
             portal.setDuration(Duration.millis(10));
             pauseMove.setDuration(Duration.millis(5000));
+            fade.setToValue(0);
+            fade.setDuration(Duration.millis(5000));
+            fade.stop();
             //console displaying player turn and action
             TextArea console = new TextArea();
             console.setEditable(false);
@@ -529,6 +543,12 @@ public class Game {
                     repeat = 0;
                     if (player.isDefeated() && turn == player.getPos()) {
                         nextTurn();
+                        if (player.getPos() == 2 && numOfPlayers == 2)
+                            break;
+                        else if (player.getPos() == 3 && numOfPlayers == 3)
+                            break;
+                        else if (player.getPos() == 4 && numOfPlayers == 4)
+                            break;
                     }
                     //case when player is in prison
                     if (player.isInPrison() && turn == player.getPos()) {
@@ -553,21 +573,25 @@ public class Game {
                             transY.setNode(figure1);
                             portal.setNode(figure1);
                             chanceMove.setNode(figure1);
+                            fade.setNode(figure1);
                         } else if (turn == 2) {
                             translateFigure.setNode(figure2);
                             transY.setNode(figure2);
                             portal.setNode(figure2);
                             chanceMove.setNode(figure2);
+                            fade.setNode(figure2);
                         } else if (turn == 3) {
                             translateFigure.setNode(figure3);
                             transY.setNode(figure3);
                             portal.setNode(figure3);
                             chanceMove.setNode(figure3);
+                            fade.setNode(figure3);
                         } else if (turn == 4) {
                             translateFigure.setNode(figure4);
                             transY.setNode(figure4);
                             portal.setNode(figure4);
                             chanceMove.setNode(figure4);
+                            fade.setNode(figure4);
                         }
                         translateFigure.setByX(0);
                         translateFigure.setByY(0);
@@ -614,6 +638,7 @@ public class Game {
                                 case "CHANCE":
                                     Label text = new Label();
                                     text.setText(chances[chanceNum].getText());
+                                    text.setTranslateX(20);
                                     buy.setTop(text);
                                     switch (chances[chanceNum].getAction()) {
                                         case "move" -> {
@@ -649,15 +674,26 @@ public class Game {
                                                         }
                                                         if (player.getAccount() <= 0) {
                                                             player.lost();
+                                                            console.setText("Player " + player.getPos() + " has lost!");
                                                             switch (player.getPos()) {
                                                                 case 2 -> w2.update(player2);
                                                                 case 3 -> w3.update(player3);
                                                                 case 4 -> w4.update(player4);
                                                             }
+                                                            fade.play();
                                                             loser.play();
+                                                            //find winner
+                                                            fade.setOnFinished(e2 -> {
+                                                                //find winner
+                                                                switch(numOfPlayers){
+                                                                    case 2 -> playerWinner(player1, player2);
+                                                                    case 3 -> playerWinner(player1, player2, player3);
+                                                                    case 4 -> playerWinner(player1, player2, player3, player4);
+                                                                }
+                                                            });
                                                         }
                                                         console.appendText("Player " + player.getPos() + " paid Player " + player1.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
-                                                    } if (player1.isInPrison()) console.appendText("Psst! Player 1 is in prison");
+                                                    } if (player1.isInPrison()) console.appendText("Psst! Player 1 is in prison.");
                                                 } else if ((player2.getOwned().contains(tiles.get(player.getTile())))) {
                                                     if (player.getPos() == 2)
                                                         console.appendText("You own this tile.");
@@ -673,15 +709,26 @@ public class Game {
                                                         }
                                                         if (player.getAccount() <= 0) {
                                                             player.lost();
+                                                            console.setText("Player " + player.getPos() + " has lost!");
                                                             switch (player.getPos()) {
                                                                 case 1 -> w1.update(player1);
                                                                 case 3 -> w3.update(player3);
                                                                 case 4 -> w4.update(player4);
                                                             }
+                                                            fade.play();
                                                             loser.play();
+                                                            //find winner
+                                                            fade.setOnFinished(e2 -> {
+                                                                //find winner
+                                                                switch(numOfPlayers){
+                                                                    case 2 -> playerWinner(player1, player2);
+                                                                    case 3 -> playerWinner(player1, player2, player3);
+                                                                    case 4 -> playerWinner(player1, player2, player3, player4);
+                                                                }
+                                                            });
                                                         }
                                                         console.appendText("Player " + player.getPos() + " paid Player " + player2.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
-                                                    } if (player2.isInPrison()) console.appendText("Psst! Player 2 is in prison");
+                                                    } if (player2.isInPrison()) console.appendText("Psst! Player 2 is in prison.");
                                                 } else if ((player3.getOwned().contains(tiles.get(player.getTile())))) {
                                                     if (player.getPos() == 3)
                                                         console.appendText("You own this tile.");
@@ -697,15 +744,26 @@ public class Game {
                                                         }
                                                         if (player.getAccount() <= 0) {
                                                             player.lost();
+                                                            console.setText("Player " + player.getPos() + " has lost!");
                                                             switch (player.getPos()) {
                                                                 case 1 -> w1.update(player1);
                                                                 case 2 -> w2.update(player2);
                                                                 case 4 -> w4.update(player4);
                                                             }
+                                                            fade.play();
                                                             loser.play();
+                                                            //find winner
+                                                            fade.setOnFinished(e2 -> {
+                                                                //find winner
+                                                                switch(numOfPlayers){
+                                                                    case 2 -> playerWinner(player1, player2);
+                                                                    case 3 -> playerWinner(player1, player2, player3);
+                                                                    case 4 -> playerWinner(player1, player2, player3, player4);
+                                                                }
+                                                            });
                                                         }
                                                         console.appendText("Player " + player.getPos() + " paid Player " + player3.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
-                                                    } if (player3.isInPrison()) console.appendText("Psst! Player 3 is in prison");
+                                                    } if (player3.isInPrison()) console.appendText("Psst! Player 3 is in prison.");
                                                 } else if ((player4.getOwned().contains(tiles.get(player.getTile())))) {
                                                     if (player.getPos() == 4)
                                                         console.appendText("You own this tile.");
@@ -721,20 +779,32 @@ public class Game {
                                                         }
                                                         if (player.getAccount() <= 0) {
                                                             player.lost();
+                                                            console.setText("Player " + player.getPos() + " has lost!");
                                                             switch (player.getPos()) {
                                                                 case 1 -> w1.update(player1);
                                                                 case 2 -> w2.update(player2);
                                                                 case 3 -> w3.update(player3);
                                                             }
+                                                            fade.play();
                                                             loser.play();
+                                                            //find winner
+                                                            fade.setOnFinished(e2 -> {
+                                                                //find winner
+                                                                switch(numOfPlayers){
+                                                                    case 2 -> playerWinner(player1, player2);
+                                                                    case 3 -> playerWinner(player1, player2, player3);
+                                                                    case 4 -> playerWinner(player1, player2, player3, player4);
+                                                                }
+                                                            });
                                                         }
                                                         console.appendText("Player " + player.getPos() + " paid Player " + player4.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
-                                                    } if (player4.isInPrison()) console.appendText("Psst! Player 4 is in prison");
+                                                    } if (player4.isInPrison()) console.appendText("Psst! Player 4 is in prison.");
                                                 } else {
                                                     Label text1 = new Label("Do you want to buy \n" + tiles.get(player.getTile()) + " for " + values[player.getTile()] + "?");
                                                     text1.setTranslateX(20);
                                                     Button yes1 = new Button("Buy");
                                                     yes1.setTranslateY(30);
+                                                    yes1.setTranslateX(70);
                                                     yes1.setPrefSize(60, 40);
                                                     yes1.setOnAction(actionEvent12 -> {
                                                         player.addOwned(tiles.get(player.getTile()));
@@ -760,13 +830,24 @@ public class Game {
                                                         }
                                                         if (player.getAccount() <= 0) {
                                                             player.lost();
+                                                            console.setText("Player " + player.getPos() + " has lost!");
                                                             switch (player.getPos()) {
                                                                 case 1 -> w1.update(player1);
                                                                 case 2 -> w2.update(player2);
                                                                 case 3 -> w3.update(player3);
                                                                 case 4 -> w4.update(player4);
                                                             }
+                                                            fade.play();
                                                             loser.play();
+                                                            //find winner
+                                                            fade.setOnFinished(e2 -> {
+                                                                //find winner
+                                                                switch(numOfPlayers){
+                                                                    case 2 -> playerWinner(player1, player2);
+                                                                    case 3 -> playerWinner(player1, player2, player3);
+                                                                    case 4 -> playerWinner(player1, player2, player3, player4);
+                                                                }
+                                                            });
                                                         }
                                                         buy.setTop(null);
                                                     });
@@ -950,13 +1031,24 @@ public class Game {
                                                 }
                                                 if (player.getAccount() <= 0) {
                                                     player.lost();
+                                                    console.setText("Player " + player.getPos() + " has lost!");
                                                     switch (player.getPos()) {
                                                         case 1 -> w1.update(player1);
                                                         case 2 -> w2.update(player2);
                                                         case 3 -> w3.update(player3);
                                                         case 4 -> w4.update(player4);
                                                     }
+                                                    fade.play();
                                                     loser.play();
+                                                    //find winner
+                                                    fade.setOnFinished(e -> {
+                                                        //find winner
+                                                        switch(numOfPlayers){
+                                                            case 2 -> playerWinner(player1, player2);
+                                                            case 3 -> playerWinner(player1, player2, player3);
+                                                            case 4 -> playerWinner(player1, player2, player3, player4);
+                                                        }
+                                                    });
                                                 }
                                             }
                                         }
@@ -995,13 +1087,24 @@ public class Game {
                                         }
                                         if (player.getAccount() <= 0) {
                                             player.lost();
+                                            console.setText("Player " + player.getPos() + " has lost!");
                                             switch (player.getPos()) {
                                                 case 1 -> w1.update(player1);
                                                 case 2 -> w2.update(player2);
                                                 case 3 -> w3.update(player3);
                                                 case 4 -> w4.update(player4);
                                             }
+                                            fade.play();
                                             loser.play();
+                                            //find winner
+                                            fade.setOnFinished(e -> {
+                                                //find winner
+                                                switch(numOfPlayers){
+                                                    case 2 -> playerWinner(player1, player2);
+                                                    case 3 -> playerWinner(player1, player2, player3);
+                                                    case 4 -> playerWinner(player1, player2, player3, player4);
+                                                }
+                                            });
                                         }
                                     } else {
                                         player.getExtra().remove("tax");
@@ -1039,12 +1142,23 @@ public class Game {
                                             }
                                             if (player.getAccount() <= 0) {
                                                 player.lost();
+                                                console.setText("Player " + player.getPos() + " has lost!");
                                                 switch (player.getPos()) {
                                                     case 2 -> w2.update(player2);
                                                     case 3 -> w3.update(player3);
                                                     case 4 -> w4.update(player4);
                                                 }
+                                                fade.play();
                                                 loser.play();
+                                                //find winner
+                                                fade.setOnFinished(e -> {
+                                                    //find winner
+                                                    switch(numOfPlayers){
+                                                        case 2 -> playerWinner(player1, player2);
+                                                        case 3 -> playerWinner(player1, player2, player3);
+                                                        case 4 -> playerWinner(player1, player2, player3, player4);
+                                                    }
+                                                });
                                             }
                                             console.appendText("Player " + player.getPos() + " paid Player " + player1.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
                                         } if (player1.isInPrison()) console.appendText("Psst! Player 1 is in prison");
@@ -1063,12 +1177,23 @@ public class Game {
                                             }
                                             if (player.getAccount() <= 0) {
                                                 player.lost();
+                                                console.setText("Player " + player.getPos() + " has lost!");
                                                 switch (player.getPos()) {
                                                     case 1 -> w1.update(player1);
                                                     case 3 -> w3.update(player3);
                                                     case 4 -> w4.update(player4);
                                                 }
+                                                fade.play();
                                                 loser.play();
+                                                //find winner
+                                                fade.setOnFinished(e -> {
+                                                    //find winner
+                                                    switch(numOfPlayers){
+                                                        case 2 -> playerWinner(player1, player2);
+                                                        case 3 -> playerWinner(player1, player2, player3);
+                                                        case 4 -> playerWinner(player1, player2, player3, player4);
+                                                    }
+                                                });
                                             }
                                             console.appendText("Player " + player.getPos() + " paid Player " + player2.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
                                         } if (player2.isInPrison()) console.appendText("Psst! Player 2 is in prison");
@@ -1087,12 +1212,23 @@ public class Game {
                                             }
                                             if (player.getAccount() <= 0) {
                                                 player.lost();
+                                                console.setText("Player " + player.getPos() + " has lost!");
                                                 switch (player.getPos()) {
                                                     case 1 -> w1.update(player1);
                                                     case 2 -> w2.update(player2);
                                                     case 4 -> w4.update(player4);
                                                 }
+                                                fade.play();
                                                 loser.play();
+                                                //find winner
+                                                fade.setOnFinished(e -> {
+                                                    //find winner
+                                                    switch(numOfPlayers){
+                                                        case 2 -> playerWinner(player1, player2);
+                                                        case 3 -> playerWinner(player1, player2, player3);
+                                                        case 4 -> playerWinner(player1, player2, player3, player4);
+                                                    }
+                                                });
                                             }
                                             console.appendText("Player " + player.getPos() + " paid Player " + player3.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
                                         } if (player3.isInPrison()) console.appendText("Psst! Player 3 is in prison");
@@ -1111,12 +1247,23 @@ public class Game {
                                             }
                                             if (player.getAccount() <= 0) {
                                                 player.lost();
+                                                console.setText("Player " + player.getPos() + " has lost!");
                                                 switch (player.getPos()) {
                                                     case 1 -> w1.update(player1);
                                                     case 2 -> w2.update(player2);
                                                     case 3 -> w3.update(player3);
                                                 }
+                                                fade.play();
                                                 loser.play();
+                                                //find winner
+                                                fade.setOnFinished(e -> {
+                                                    //find winner
+                                                    switch(numOfPlayers){
+                                                        case 2 -> playerWinner(player1, player2);
+                                                        case 3 -> playerWinner(player1, player2, player3);
+                                                        case 4 -> playerWinner(player1, player2, player3, player4);
+                                                    }
+                                                });
                                             }
                                             console.appendText("Player " + player.getPos() + " paid Player " + player4.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
                                         } if (player4.isInPrison()) console.appendText("Psst! Player 4 is in prison");
@@ -1151,15 +1298,24 @@ public class Game {
                                             }
                                             if (player.getAccount() <= 0) {
                                                 player.lost();
+                                                console.setText("Player " + player.getPos() + " has lost!");
                                                 switch (player.getPos()) {
                                                     case 1 -> w1.update(player1);
                                                     case 2 -> w2.update(player2);
                                                     case 3 -> w3.update(player3);
                                                     case 4 -> w4.update(player4);
                                                 }
+                                                fade.play();
                                                 loser.play();
+                                                fade.setOnFinished(e -> {
+                                                    //find winner
+                                                    switch(numOfPlayers){
+                                                        case 2 -> playerWinner(player1, player2);
+                                                        case 3 -> playerWinner(player1, player2, player3);
+                                                        case 4 -> playerWinner(player1, player2, player3, player4);
+                                                    }
+                                                });
                                             }
-
                                             buy.setTop(null);
                                         });
                                         GridPane buySetup = new GridPane();
@@ -1312,72 +1468,6 @@ public class Game {
                         }
                         actionEvent.consume();
                         buy.setCenter(console);
-
-                        Label win = new Label();
-                        win.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 50));
-                        win.setTextFill(Color.RED);
-                        win.setTranslateX(120); win.setTranslateY(200);
-                        //find winner
-                        if (numOfPlayers == 2){
-                            if (player1.getAccount() <= 0){
-                                win.setText("Player 2 has WON this game!");
-                                center.getChildren().add(win);
-                                turn = 0;
-                                fanfare.play();
-                            }
-                            else if (player2.getAccount() <= 0){
-                                win.setText("Player 1 has WON this game!");
-                                center.getChildren().add(win);
-                                turn = 0;
-                                fanfare.play();
-                            }
-                        }
-                        else if (numOfPlayers == 3){
-                            if (player1.getAccount() <= 0 && player2.getAccount() <= 0){
-                                win.setText("Player 3 has WON this game!");
-                                center.getChildren().add(win);
-                                turn = 0;
-                                fanfare.play();
-                            }
-                            else if (player1.getAccount() <= 0 && player3.getAccount() <= 0){
-                                win.setText("Player 2 has WON this game!");
-                                center.getChildren().add(win);
-                                turn = 0;
-                                fanfare.play();
-                            }
-                            else if (player2.getAccount() <= 0 && player3.getAccount() <= 0){
-                                win.setText("Player 1 has WON this game!");
-                                center.getChildren().add(win);
-                                turn = 0;
-                                fanfare.play();
-                            }
-                        }
-                        else if (numOfPlayers == 4){
-                            if (player1.getAccount() <= 0 && player2.getAccount() <= 0 && player3.getAccount() <= 0){
-                                win.setText("Player 4 has WON this game!");
-                                center.getChildren().add(win);
-                                turn = 0;
-                                fanfare.play();
-                            }
-                            else if (player1.getAccount() <= 0 && player2.getAccount() <= 0 && player4.getAccount() <= 0){
-                                win.setText("Player 3 has WON this game!");
-                                center.getChildren().add(win);
-                                turn = 0;
-                                fanfare.play();
-                            }
-                            else if (player1.getAccount() <= 0 && player3.getAccount() <= 0 && player4.getAccount() <= 0){
-                                win.setText("Player 2 has WON this game!");
-                                center.getChildren().add(win);
-                                turn = 0;
-                                fanfare.play();
-                            }
-                            else if (player2.getAccount() <= 0 && player3.getAccount() <= 0 && player4.getAccount() <= 0){
-                                win.setText("Player 1 has WON this game!");
-                                center.getChildren().add(win);
-                                turn = 0;
-                                fanfare.play();
-                            }
-                        }
                     }//end if turn
                     repeat = 2;
                 }//end for player
@@ -1427,4 +1517,132 @@ public class Game {
         border.setRight(right);
         return border;
     }
+
+    private static FadeTransition blink(ImageView firework, Group center){
+        FadeTransition blink = new FadeTransition();
+        blink.setNode(firework);
+        blink.setDuration(Duration.millis(2000));
+        blink.setToValue(0);
+        blink.setCycleCount(9);
+        blink.setAutoReverse(true);
+        blink.play();
+        rect.setVisible(false);
+        ImageView endOfGame = new ImageView(new Image("end.png"));
+        endOfGame.setTranslateX(100); endOfGame.setTranslateY(250);
+        endOfGame.setFitWidth(800); endOfGame.setFitHeight(300);
+        endOfGame.setVisible(false);
+        center.getChildren().add(endOfGame);
+        blink.setOnFinished(e3 -> {
+            endOfGame.setVisible(true);
+            FadeTransition appear = new FadeTransition(Duration.millis(4000));
+            appear.setToValue(0);
+            appear.setCycleCount(Animation.INDEFINITE);
+            appear.setAutoReverse(true);
+            appear.setNode(endOfGame);
+            appear.play();
+            firework.setVisible(false);
+            win.setVisible(false);
+        });
+        return blink;
+    }
+
+    private static void playerWinner(Player player1, Player player2){
+        ImageView firework = new ImageView(new Image("fireworks.png"));
+        firework.setTranslateX(150); firework.setTranslateY(100);
+        firework.setFitHeight(700); firework.setFitWidth(700);
+        if (player1.getAccount() <= 0){
+            win.setText("Player 2 has WON this game!");
+            center.getChildren().add(win);
+            turn = 0;
+            fanfare.play();
+            center.getChildren().add(firework);
+            FadeTransition blink = blink(firework, center);
+            blink.play();
+        }
+        else if (player2.getAccount() <= 0){
+            win.setText("Player 1 has WON this game!");
+            center.getChildren().add(win);
+            turn = 0;
+            fanfare.play();
+            center.getChildren().add(firework);
+            FadeTransition blink = blink(firework, center);
+            blink.play();
+        }
+    }
+
+    private static void playerWinner(Player player1, Player player2, Player player3){
+        ImageView firework = new ImageView(new Image("fireworks.png"));
+        firework.setTranslateX(150); firework.setTranslateY(100);
+        firework.setFitHeight(700); firework.setFitWidth(700);
+        if (player1.getAccount() <= 0 && player2.getAccount() <= 0){
+            win.setText("Player 3 has WON this game!");
+            center.getChildren().add(win);
+            turn = 0;
+            fanfare.play();
+            center.getChildren().add(firework);
+            FadeTransition blink = blink(firework, center);
+            blink.play();
+        }
+        else if (player1.getAccount() <= 0 && player3.getAccount() <= 0){
+            win.setText("Player 2 has WON this game!");
+            center.getChildren().add(win);
+            turn = 0;
+            fanfare.play();
+            center.getChildren().add(firework);
+            FadeTransition blink = blink(firework, center);
+            blink.play();
+        }
+        else if (player2.getAccount() <= 0 && player3.getAccount() <= 0){
+            win.setText("Player 1 has WON this game!");
+            center.getChildren().add(win);
+            turn = 0;
+            fanfare.play();
+            center.getChildren().add(firework);
+            FadeTransition blink = blink(firework, center);
+            blink.play();
+        }
+    }
+
+    private static void playerWinner(Player player1, Player player2, Player player3, Player player4){
+        ImageView firework = new ImageView(new Image("fireworks.png"));
+        firework.setTranslateX(150); firework.setTranslateY(100);
+        firework.setFitHeight(700); firework.setFitWidth(700);
+        if (player1.getAccount() <= 0 && player2.getAccount() <= 0 && player3.getAccount() <= 0){
+            win.setText("Player 4 has WON this game!");
+            center.getChildren().add(win);
+            turn = 0;
+            fanfare.play();
+            center.getChildren().add(firework);
+            FadeTransition blink = blink(firework, center);
+            blink.play();
+        }
+        else if (player1.getAccount() <= 0 && player2.getAccount() <= 0 && player4.getAccount() <= 0){
+            win.setText("Player 3 has WON this game!");
+            center.getChildren().add(win);
+            turn = 0;
+            fanfare.play();
+            center.getChildren().add(firework);
+            FadeTransition blink = blink(firework, center);
+            blink.play();
+        }
+        else if (player1.getAccount() <= 0 && player3.getAccount() <= 0 && player4.getAccount() <= 0){
+            win.setText("Player 2 has WON this game!");
+            center.getChildren().add(win);
+            turn = 0;
+            fanfare.play();
+            center.getChildren().add(firework);
+            FadeTransition blink = blink(firework, center);
+            blink.play();
+        }
+        else if (player2.getAccount() <= 0 && player3.getAccount() <= 0 && player4.getAccount() <= 0){
+            win.setText("Player 1 has WON this game!");
+            center.getChildren().add(win);
+            turn = 0;
+            fanfare.play();
+            center.getChildren().add(firework);
+            FadeTransition blink = blink(firework, center);
+            blink.play();
+        }
+    }
+
 }
