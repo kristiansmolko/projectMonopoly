@@ -41,7 +41,7 @@ public class Game {
     private static final int[] values = new int[] {200, 60, 60, 100, 80, 100, 100, 0, 120, 0, 140, 140, 160, 0, 180, 200,
             0, 220, 100, 220, 240, 260, 260, 0, 280, 0, 300, 300, 320, 0, 350, 400};
     private static MediaPlayer wood, villager, chestOpen, nether, ironHoe, eat, arrow, bow, water, ironPick, ironSword, shield, ironArmor,
-            portalEffect, enchant, brewing, shulker, start;
+            portalEffect, enchant, brewing, shulker, start, fanfare, loser;
 
     public static Circle get1(Rectangle rect, int x){
         Circle c = new Circle();
@@ -280,6 +280,12 @@ public class Game {
         shulker = new MediaPlayer(shulkerOpen);
         Media startSound = new Media(new File("resources/grass6.mp3").toURI().toString());
         start = new MediaPlayer(startSound);
+        Media fanfareSound = new Media(new File("resources/fanfare.mp3").toURI().toString());
+        fanfare = new MediaPlayer(fanfareSound);
+        fanfare.setStartTime(Duration.millis(36000));
+        fanfare.setStopTime(Duration.millis(55000));
+        Media loseSound = new Media(new File("resources/lose.mp3").toURI().toString());
+        loser = new MediaPlayer(loseSound);
     }
 
     private static void musicStop(){
@@ -302,6 +308,7 @@ public class Game {
         brewing.stop();
         shulker.stop();
         start.stop();
+        loser.stop();
     }
 
     private static void nextTurn(){
@@ -512,27 +519,14 @@ public class Game {
             console.setEditable(false);
             console.setMaxHeight(100);
             console.setMaxWidth(200);
-            console.setTranslateY(-10);
             buy.setTop(null);
-            buy.setCenter(null);
             buy.setMaxSize(200,200);
-
             int repeat;
             //this in case, that last player is in prison
             //so it can repeat the loop
             for (repeat = 0; repeat < 2; repeat++) {
                 for (Player player : playerList) {
                     repeat = 0;
-                    //case when player has no money
-                    if (player.getAccount() <= 0) {
-                        player.lost();
-                        switch (player.getPos()) {
-                            case 1 -> w1.update(player1);
-                            case 2 -> w2.update(player2);
-                            case 3 -> w3.update(player3);
-                            case 4 -> w4.update(player4);
-                        }
-                    }
                     if (player.isDefeated() && turn == player.getPos()) {
                         nextTurn();
                     }
@@ -660,9 +654,10 @@ public class Game {
                                                                 case 3 -> w3.update(player3);
                                                                 case 4 -> w4.update(player4);
                                                             }
+                                                            loser.play();
                                                         }
                                                         console.appendText("Player " + player.getPos() + " paid Player " + player1.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
-                                                    }
+                                                    } if (player1.isInPrison()) console.appendText("Psst! Player 1 is in prison");
                                                 } else if ((player2.getOwned().contains(tiles.get(player.getTile())))) {
                                                     if (player.getPos() == 2)
                                                         console.appendText("You own this tile.");
@@ -683,9 +678,10 @@ public class Game {
                                                                 case 3 -> w3.update(player3);
                                                                 case 4 -> w4.update(player4);
                                                             }
+                                                            loser.play();
                                                         }
                                                         console.appendText("Player " + player.getPos() + " paid Player " + player2.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
-                                                    }
+                                                    } if (player2.isInPrison()) console.appendText("Psst! Player 2 is in prison");
                                                 } else if ((player3.getOwned().contains(tiles.get(player.getTile())))) {
                                                     if (player.getPos() == 3)
                                                         console.appendText("You own this tile.");
@@ -706,9 +702,10 @@ public class Game {
                                                                 case 2 -> w2.update(player2);
                                                                 case 4 -> w4.update(player4);
                                                             }
+                                                            loser.play();
                                                         }
                                                         console.appendText("Player " + player.getPos() + " paid Player " + player3.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
-                                                    }
+                                                    } if (player3.isInPrison()) console.appendText("Psst! Player 3 is in prison");
                                                 } else if ((player4.getOwned().contains(tiles.get(player.getTile())))) {
                                                     if (player.getPos() == 4)
                                                         console.appendText("You own this tile.");
@@ -729,9 +726,10 @@ public class Game {
                                                                 case 2 -> w2.update(player2);
                                                                 case 3 -> w3.update(player3);
                                                             }
+                                                            loser.play();
                                                         }
                                                         console.appendText("Player " + player.getPos() + " paid Player " + player4.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
-                                                    }
+                                                    } if (player4.isInPrison()) console.appendText("Psst! Player 4 is in prison");
                                                 } else {
                                                     Label text1 = new Label("Do you want to buy \n" + tiles.get(player.getTile()) + " for " + values[player.getTile()] + "?");
                                                     text1.setTranslateX(20);
@@ -768,12 +766,15 @@ public class Game {
                                                                 case 3 -> w3.update(player3);
                                                                 case 4 -> w4.update(player4);
                                                             }
+                                                            loser.play();
                                                         }
                                                         buy.setTop(null);
-                                                        buy.setCenter(null);
                                                     });
-                                                    buy.setTop(text1);
-                                                    buy.setCenter(yes1);
+                                                    GridPane buySetup = new GridPane();
+                                                    buySetup.setMaxSize(200, 70);
+                                                    buySetup.addRow(0, text1);
+                                                    buySetup.addRow(1, yes1);
+                                                    buy.setTop(buySetup);
                                                 }
                                             }); //end of chM.sOF
                                         }
@@ -955,6 +956,7 @@ public class Game {
                                                         case 3 -> w3.update(player3);
                                                         case 4 -> w4.update(player4);
                                                     }
+                                                    loser.play();
                                                 }
                                             }
                                         }
@@ -999,6 +1001,7 @@ public class Game {
                                                 case 3 -> w3.update(player3);
                                                 case 4 -> w4.update(player4);
                                             }
+                                            loser.play();
                                         }
                                     } else {
                                         player.getExtra().remove("tax");
@@ -1041,9 +1044,10 @@ public class Game {
                                                     case 3 -> w3.update(player3);
                                                     case 4 -> w4.update(player4);
                                                 }
+                                                loser.play();
                                             }
                                             console.appendText("Player " + player.getPos() + " paid Player " + player1.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
-                                        }
+                                        } if (player1.isInPrison()) console.appendText("Psst! Player 1 is in prison");
                                     } else if ((player2.getOwned().contains(tiles.get(player.getTile())))) {
                                         if (player.getPos() == 2)
                                             console.appendText("You own this tile.");
@@ -1064,9 +1068,10 @@ public class Game {
                                                     case 3 -> w3.update(player3);
                                                     case 4 -> w4.update(player4);
                                                 }
+                                                loser.play();
                                             }
                                             console.appendText("Player " + player.getPos() + " paid Player " + player2.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
-                                        }
+                                        } if (player2.isInPrison()) console.appendText("Psst! Player 2 is in prison");
                                     } else if ((player3.getOwned().contains(tiles.get(player.getTile())))) {
                                         if (player.getPos() == 3)
                                             console.appendText("You own this tile.");
@@ -1087,9 +1092,10 @@ public class Game {
                                                     case 2 -> w2.update(player2);
                                                     case 4 -> w4.update(player4);
                                                 }
+                                                loser.play();
                                             }
                                             console.appendText("Player " + player.getPos() + " paid Player " + player3.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
-                                        }
+                                        } if (player3.isInPrison()) console.appendText("Psst! Player 3 is in prison");
                                     } else if ((player4.getOwned().contains(tiles.get(player.getTile())))) {
                                         if (player.getPos() == 4)
                                             console.appendText("You own this tile.");
@@ -1110,14 +1116,16 @@ public class Game {
                                                     case 2 -> w2.update(player2);
                                                     case 3 -> w3.update(player3);
                                                 }
+                                                loser.play();
                                             }
                                             console.appendText("Player " + player.getPos() + " paid Player " + player4.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
-                                        }
+                                        } if (player4.isInPrison()) console.appendText("Psst! Player 4 is in prison");
                                     } else {
                                         text = new Label("Do you want to buy \n" + tiles.get(player.getTile()) + " for " + values[player.getTile()] + "?");
                                         text.setTranslateX(20);
                                         Button yes = new Button("Buy");
                                         yes.setTranslateY(30);
+                                        yes.setTranslateX(70);
                                         yes.setPrefSize(60, 40);
                                         yes.setOnAction(actionEvent12 -> {
                                             player.addOwned(tiles.get(player.getTile()));
@@ -1149,12 +1157,15 @@ public class Game {
                                                     case 3 -> w3.update(player3);
                                                     case 4 -> w4.update(player4);
                                                 }
+                                                loser.play();
                                             }
+
                                             buy.setTop(null);
-                                            buy.setCenter(null);
                                         });
-                                        buy.setTop(text);
-                                        buy.setCenter(yes);
+                                        GridPane buySetup = new GridPane();
+                                        buySetup.addRow(0, text);
+                                        buySetup.addRow(1, yes);
+                                        buy.setTop(buySetup);
                                     }
                                     break;
                             }
@@ -1300,7 +1311,7 @@ public class Game {
                             }
                         }
                         actionEvent.consume();
-                        buy.setBottom(console);
+                        buy.setCenter(console);
 
                         Label win = new Label();
                         win.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 50));
@@ -1312,11 +1323,13 @@ public class Game {
                                 win.setText("Player 2 has WON this game!");
                                 center.getChildren().add(win);
                                 turn = 0;
+                                fanfare.play();
                             }
                             else if (player2.getAccount() <= 0){
                                 win.setText("Player 1 has WON this game!");
                                 center.getChildren().add(win);
                                 turn = 0;
+                                fanfare.play();
                             }
                         }
                         else if (numOfPlayers == 3){
@@ -1324,16 +1337,19 @@ public class Game {
                                 win.setText("Player 3 has WON this game!");
                                 center.getChildren().add(win);
                                 turn = 0;
+                                fanfare.play();
                             }
                             else if (player1.getAccount() <= 0 && player3.getAccount() <= 0){
                                 win.setText("Player 2 has WON this game!");
                                 center.getChildren().add(win);
                                 turn = 0;
+                                fanfare.play();
                             }
                             else if (player2.getAccount() <= 0 && player3.getAccount() <= 0){
                                 win.setText("Player 1 has WON this game!");
                                 center.getChildren().add(win);
                                 turn = 0;
+                                fanfare.play();
                             }
                         }
                         else if (numOfPlayers == 4){
@@ -1341,21 +1357,25 @@ public class Game {
                                 win.setText("Player 4 has WON this game!");
                                 center.getChildren().add(win);
                                 turn = 0;
+                                fanfare.play();
                             }
                             else if (player1.getAccount() <= 0 && player2.getAccount() <= 0 && player4.getAccount() <= 0){
                                 win.setText("Player 3 has WON this game!");
                                 center.getChildren().add(win);
                                 turn = 0;
+                                fanfare.play();
                             }
                             else if (player1.getAccount() <= 0 && player3.getAccount() <= 0 && player4.getAccount() <= 0){
                                 win.setText("Player 2 has WON this game!");
                                 center.getChildren().add(win);
                                 turn = 0;
+                                fanfare.play();
                             }
                             else if (player2.getAccount() <= 0 && player3.getAccount() <= 0 && player4.getAccount() <= 0){
                                 win.setText("Player 1 has WON this game!");
                                 center.getChildren().add(win);
                                 turn = 0;
+                                fanfare.play();
                             }
                         }
                     }//end if turn
