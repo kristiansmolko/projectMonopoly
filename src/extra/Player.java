@@ -59,9 +59,7 @@ public class Player {
     }
 
     public boolean isPlaying(){
-        if (figure != null)
-            return true;
-        return false;
+        return figure != null;
     }
 
     public int getPos() {
