@@ -1,4 +1,3 @@
-import com.sun.javafx.font.freetype.FTFactory;
 import extra.Player;
 import graphics.Board;
 import graphics.PlayerWindow;
