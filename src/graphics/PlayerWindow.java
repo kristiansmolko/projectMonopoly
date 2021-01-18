@@ -76,7 +76,7 @@ public class PlayerWindow {
     public void addAccount(Player player){
         money.setText("Account: " + player.getAccount());
         if (player.getAccount() >= 1000)
-            moneyImg.setTranslateX(-46);
+            moneyImg.setTranslateX(-45);
         else if (player.getAccount() < 100 && player.getAccount() > 0)
             moneyImg.setTranslateX(-57);
         else if (player.getAccount() == 0)
