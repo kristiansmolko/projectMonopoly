@@ -666,6 +666,7 @@ public class Game {
                                                         w1.addAccount(player1);
                                                         player.takeFromAccount(values[player.getTile()] / 2);
                                                         w1.update(player1);
+                                                        console.appendText("Player " + player.getPos() + " paid Player " + player1.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
                                                         switch (player.getPos()) {
                                                             case 2 -> w2.removeAccount(player);
                                                             case 3 -> w3.removeAccount(player);
@@ -691,8 +692,7 @@ public class Game {
                                                                 }
                                                             });
                                                         }
-                                                        console.appendText("Player " + player.getPos() + " paid Player " + player1.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
-                                                    } if (player1.isInPrison()) console.appendText("Psst! Player 1 is in prison.");
+                                                   } if (player1.isInPrison()) console.appendText("Psst! Player 1 is in prison.");
                                                 } else if ((player2.getOwned().contains(tiles.get(player.getTile())))) {
                                                     if (player.getPos() == 2)
                                                         console.appendText("You own this tile.");
@@ -701,6 +701,7 @@ public class Game {
                                                         w2.addAccount(player2);
                                                         player.takeFromAccount(values[player.getTile()] / 2);
                                                         w2.update(player2);
+                                                        console.appendText("Player " + player.getPos() + " paid Player " + player2.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
                                                         switch (player.getPos()) {
                                                             case 1 -> w1.removeAccount(player);
                                                             case 3 -> w3.removeAccount(player);
@@ -726,7 +727,6 @@ public class Game {
                                                                 }
                                                             });
                                                         }
-                                                        console.appendText("Player " + player.getPos() + " paid Player " + player2.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
                                                     } if (player2.isInPrison()) console.appendText("Psst! Player 2 is in prison.");
                                                 } else if ((player3.getOwned().contains(tiles.get(player.getTile())))) {
                                                     if (player.getPos() == 3)
@@ -736,6 +736,7 @@ public class Game {
                                                         w3.addAccount(player3);
                                                         player.takeFromAccount(values[player.getTile()] / 2);
                                                         w3.update(player3);
+                                                        console.appendText("Player " + player.getPos() + " paid Player " + player3.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
                                                         switch (player.getPos()) {
                                                             case 1 -> w1.removeAccount(player);
                                                             case 2 -> w2.removeAccount(player);
@@ -761,8 +762,7 @@ public class Game {
                                                                 }
                                                             });
                                                         }
-                                                        console.appendText("Player " + player.getPos() + " paid Player " + player3.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
-                                                    } if (player3.isInPrison()) console.appendText("Psst! Player 3 is in prison.");
+                                                      } if (player3.isInPrison()) console.appendText("Psst! Player 3 is in prison.");
                                                 } else if ((player4.getOwned().contains(tiles.get(player.getTile())))) {
                                                     if (player.getPos() == 4)
                                                         console.appendText("You own this tile.");
@@ -771,6 +771,7 @@ public class Game {
                                                         w4.addAccount(player4);
                                                         player.takeFromAccount(values[player.getTile()] / 2);
                                                         w4.update(player4);
+                                                        console.appendText("Player " + player.getPos() + " paid Player " + player4.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
                                                         switch (player.getPos()) {
                                                             case 1 -> w1.removeAccount(player);
                                                             case 2 -> w2.removeAccount(player);
@@ -796,8 +797,7 @@ public class Game {
                                                                 }
                                                             });
                                                         }
-                                                        console.appendText("Player " + player.getPos() + " paid Player " + player4.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
-                                                    } if (player4.isInPrison()) console.appendText("Psst! Player 4 is in prison.");
+                                                      } if (player4.isInPrison()) console.appendText("Psst! Player 4 is in prison.");
                                                 } else {
                                                     Label text1 = new Label("Do you want to buy \n" + tiles.get(player.getTile()) + " for " + values[player.getTile()] + "?");
                                                     text1.setTranslateX(20);
@@ -1134,6 +1134,7 @@ public class Game {
                                             w1.addAccount(player1);
                                             player.takeFromAccount(values[player.getTile()] / 2);
                                             w1.update(player1);
+                                            console.appendText("Player " + player.getPos() + " paid Player " + player1.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
                                             switch (player.getPos()) {
                                                 case 2 -> w2.removeAccount(player);
                                                 case 3 -> w3.removeAccount(player);
@@ -1159,8 +1160,7 @@ public class Game {
                                                     }
                                                 });
                                             }
-                                            console.appendText("Player " + player.getPos() + " paid Player " + player1.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
-                                        } if (player1.isInPrison()) console.appendText("Psst! Player 1 is in prison");
+                                        } if (player1.isInPrison()) console.appendText("Psst! Player 1 is in prison.");
                                     } else if ((player2.getOwned().contains(tiles.get(player.getTile())))) {
                                         if (player.getPos() == 2)
                                             console.appendText("You own this tile.");
@@ -1169,6 +1169,7 @@ public class Game {
                                             w2.addAccount(player2);
                                             player.takeFromAccount(values[player.getTile()] / 2);
                                             w2.update(player2);
+                                            console.appendText("Player " + player.getPos() + " paid Player " + player2.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
                                             switch (player.getPos()) {
                                                 case 1 -> w1.removeAccount(player);
                                                 case 3 -> w3.removeAccount(player);
@@ -1194,8 +1195,7 @@ public class Game {
                                                     }
                                                 });
                                             }
-                                            console.appendText("Player " + player.getPos() + " paid Player " + player2.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
-                                        } if (player2.isInPrison()) console.appendText("Psst! Player 2 is in prison");
+                                         } if (player2.isInPrison()) console.appendText("Psst! Player 2 is in prison.");
                                     } else if ((player3.getOwned().contains(tiles.get(player.getTile())))) {
                                         if (player.getPos() == 3)
                                             console.appendText("You own this tile.");
@@ -1204,6 +1204,7 @@ public class Game {
                                             w3.addAccount(player3);
                                             player.takeFromAccount(values[player.getTile()] / 2);
                                             w3.update(player3);
+                                            console.appendText("Player " + player.getPos() + " paid Player " + player3.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
                                             switch (player.getPos()) {
                                                 case 1 -> w1.removeAccount(player);
                                                 case 2 -> w2.removeAccount(player);
@@ -1229,8 +1230,7 @@ public class Game {
                                                     }
                                                 });
                                             }
-                                            console.appendText("Player " + player.getPos() + " paid Player " + player3.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
-                                        } if (player3.isInPrison()) console.appendText("Psst! Player 3 is in prison");
+                                        } if (player3.isInPrison()) console.appendText("Psst! Player 3 is in prison.");
                                     } else if ((player4.getOwned().contains(tiles.get(player.getTile())))) {
                                         if (player.getPos() == 4)
                                             console.appendText("You own this tile.");
@@ -1239,6 +1239,7 @@ public class Game {
                                             w4.addAccount(player4);
                                             player.takeFromAccount(values[player.getTile()] / 2);
                                             w4.update(player4);
+                                            console.appendText("Player " + player.getPos() + " paid Player " + player4.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
                                             switch (player.getPos()) {
                                                 case 1 -> w1.removeAccount(player);
                                                 case 2 -> w2.removeAccount(player);
@@ -1264,8 +1265,7 @@ public class Game {
                                                     }
                                                 });
                                             }
-                                            console.appendText("Player " + player.getPos() + " paid Player " + player4.getPos() + ": " + (values[player.getTile()] / 2) + ".\n");
-                                        } if (player4.isInPrison()) console.appendText("Psst! Player 4 is in prison");
+                                         } if (player4.isInPrison()) console.appendText("Psst! Player 4 is in prison.");
                                     } else {
                                         text = new Label("Do you want to buy \n" + tiles.get(player.getTile()) + " for " + values[player.getTile()] + "?");
                                         text.setTranslateX(20);
