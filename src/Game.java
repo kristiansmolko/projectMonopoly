@@ -44,7 +44,7 @@ public class Game {
             portalEffect, enchant, brewing, shulker, start, fanfare, loser;
 
     public static Circle get1(Rectangle rect, int x){
-        Circle c = new Circle();
+        var c = new Circle();
         c.setCenterX(rect.getX() + x + (rect.getWidth()/2));
         c.setCenterY(rect.getY() + (rect.getHeight()/2));
         c.setRadius(8);
@@ -53,8 +53,8 @@ public class Game {
     }
 
     public static Circle[] get2(Rectangle rect, int x){
-        Circle c1 = new Circle();
-        Circle c2 = new Circle();
+        var c1 = new Circle();
+        var c2 = new Circle();
         c1.setCenterX(rect.getX() + x + (rect.getWidth()/2) + 10);
         c1.setCenterY(rect.getY() + (rect.getHeight()/2) - 10);
         c1.setRadius(8);
@@ -67,10 +67,10 @@ public class Game {
     }
 
     public static Circle[] get3(Rectangle rect, int x) {
-        Circle c1 = new Circle();
-        Circle c2 = new Circle();
-        Circle c3 = new Circle();
-        Circle[] set = new Circle[] {c1,c2,c3};
+        var c1 = new Circle();
+        var c2 = new Circle();
+        var c3 = new Circle();
+        var set = new Circle[] {c1,c2,c3};
         c1.setCenterX(rect.getX() + x + (rect.getWidth()/2) + 15);
         c1.setCenterY(rect.getY() + (rect.getHeight()/2) - 15);
         c2.setCenterX(rect.getX() + x + (rect.getWidth()/2));
@@ -85,11 +85,11 @@ public class Game {
     }
 
     public static Circle[] get4(Rectangle rect, int x) {
-        Circle c1 = new Circle();
-        Circle c2 = new Circle();
-        Circle c3 = new Circle();
-        Circle c4 = new Circle();
-        Circle[] set = new Circle[] {c1,c2,c3,c4};
+        var c1 = new Circle();
+        var c2 = new Circle();
+        var c3 = new Circle();
+        var c4 = new Circle();
+        var set = new Circle[] {c1,c2,c3,c4};
         c1.setCenterX(rect.getX() + x + (rect.getWidth()/2) + 13);
         c1.setCenterY(rect.getY() + (rect.getHeight()/2) - 13);
         c2.setCenterX(rect.getX() + x + (rect.getWidth()/2) + 13);
@@ -106,12 +106,12 @@ public class Game {
     }
 
     public static Circle[] get5(Rectangle rect, int x) {
-        Circle c1 = new Circle();
-        Circle c2 = new Circle();
-        Circle c3 = new Circle();
-        Circle c4 = new Circle();
-        Circle c5 = new Circle();
-        Circle[] set = new Circle[] {c1,c2,c3,c4,c5};
+        var c1 = new Circle();
+        var c2 = new Circle();
+        var c3 = new Circle();
+        var c4 = new Circle();
+        var c5 = new Circle();
+        var set = new Circle[] {c1,c2,c3,c4,c5};
         c1.setCenterX(rect.getX() + x + (rect.getWidth()/2) + 14);
         c1.setCenterY(rect.getY() + (rect.getHeight()/2) - 14);
         c2.setCenterX(rect.getX() + x + (rect.getWidth()/2) + 14);
@@ -130,13 +130,13 @@ public class Game {
     }
 
     public static Circle[] get6(Rectangle rect, int x){
-        Circle c1 = new Circle();
-        Circle c2 = new Circle();
-        Circle c3 = new Circle();
-        Circle c4 = new Circle();
-        Circle c5 = new Circle();
-        Circle c6 = new Circle();
-        Circle[] set = new Circle[] {c1,c2,c3,c4,c5,c6};
+        var c1 = new Circle();
+        var c2 = new Circle();
+        var c3 = new Circle();
+        var c4 = new Circle();
+        var c5 = new Circle();
+        var c6 = new Circle();
+        var set = new Circle[] {c1,c2,c3,c4,c5,c6};
         c1.setCenterX(rect.getX() + x + (rect.getWidth()/2) + 15);
         c1.setCenterY(rect.getY() + (rect.getHeight()/2) - 15);
         c2.setCenterX(rect.getX() + x + (rect.getWidth()/2) + 15);
@@ -157,15 +157,16 @@ public class Game {
     }
 
     public static ArrayList<String> makeTiles(){
-        String[] tiles = new String[] {"START", "Wood", "Stick", "TAX", "Crafting Table", "Stone Pickaxe",
-                "Cobblestone", "CHANCE", "Iron Ore", "JAIL", "Iron Hoe", "Wheat", "Carrot", "CHANCE", "Arrow",
-                "Bow", "FREE", "Iron Pickaxe", "TAX", "Gold Bar", "Redstone", "Iron Sword", "Shield", "CHANCE",
-                "Iron Armor", "PORTAL", "Enchanting", "Brew Stand", "Shulker Box", "CHANCE", "Diamond", "Emerald"};
+        var CHANCE = "CHANCE";
+        var tiles = new String[] {"START", "Wood", "Stick", "TAX", "Crafting Table", "Stone Pickaxe",
+                "Cobblestone", CHANCE, "Iron Ore", "JAIL", "Iron Hoe", "Wheat", "Carrot", CHANCE, "Arrow",
+                "Bow", "FREE", "Iron Pickaxe", "TAX", "Gold Bar", "Redstone", "Iron Sword", "Shield", CHANCE,
+                "Iron Armor", "PORTAL", "Enchanting", "Brew Stand", "Shulker Box", CHANCE, "Diamond", "Emerald"};
         return new ArrayList<>(Arrays.asList(tiles));
     }
 
     public static Alert makeDialog(){
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        var alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Players");
         alert.setHeaderText("Choose how many players");
         alert.setContentText("Choose");
@@ -173,9 +174,9 @@ public class Game {
     }
 
     public static Rectangle makeDice(){
-        Rectangle rect = new Rectangle(120,500,50,50);
-        Stop[] stops = new Stop[] {new Stop(0,Color.BLUE), new Stop(1, Color.AQUAMARINE)};
-        LinearGradient linear = new LinearGradient(0,0,1,0,true, CycleMethod.NO_CYCLE, stops);
+        var rect = new Rectangle(120,500,50,50);
+        var stops = new Stop[] {new Stop(0,Color.BLUE), new Stop(1, Color.AQUAMARINE)};
+        var linear = new LinearGradient(0,0,1,0,true, CycleMethod.NO_CYCLE, stops);
         rect.setFill(linear);
         rect.setStroke(Color.WHITE);
         rect.setArcWidth(15);
@@ -184,7 +185,7 @@ public class Game {
     }
 
     public static TranslateTransition moveBack(Rectangle rect, int x){
-        TranslateTransition back = new TranslateTransition();
+        var back = new TranslateTransition();
         back.setByX(-x);
         back.setDuration(Duration.millis(10));
         back.setNode(rect);
@@ -192,42 +193,44 @@ public class Game {
     }
 
     public static ImageView makeFigure(Image img){
-        ImageView iw = new ImageView(img);
+        var iw = new ImageView(img);
         iw.setFitWidth(50);
         iw.setFitHeight(100);
         return iw;
     }
 
+    private static final Random rnd = new Random();
+
     public static int randomNum(){
-        Random rnd = new Random();
         return (rnd.nextInt(6)+1);
     }
 
     public static ParallelTransition parallel(Rectangle rect, int x){
-        TranslateTransition translate = new TranslateTransition(Duration.millis(500));
+        var translate = new TranslateTransition(Duration.millis(500));
         translate.setByX(x);
         translate.setDuration(Duration.millis(1000));
-        RotateTransition rotate = new RotateTransition();
+        var rotate = new RotateTransition();
         rotate.setByAngle(360);
         rotate.setCycleCount(2);
         return new ParallelTransition(rect, translate, rotate);
     }
 
     private static Chance[] createChances(){
-        Random rnd = new Random();
-        Chance[] chances = new Chance[12];
-        Chance getMoveToExtra = new Chance("Move to the FREE square.", "moveTo", 16);
-        Chance getloseMoney150 = new Chance("You lost 150.", "money", -150);
-        Chance getMove3Squares = new Chance("Move 3 squares back!", "move", -3);
-        Chance getwinMoney150 = new Chance("You won 150.", "money", 150);
-        Chance loseMoney50 = new Chance("You lost 50.", "money", -50);
-        Chance getwinMoney350 = new Chance("You won 350.", "money", 350);
-        Chance start = new Chance("Move to start and pick up 200.", "moveTo", 0);
-        Chance getMoveToPortal = new Chance("Move to the portal.", "moveTo", 25);
-        Chance getMoveToJail = new Chance("You got yourself to jail.", "moveTo", 9);
-        Chance getMovetonearestSquare = new Chance("Move to the nearest square.", "move", 1);
-        Chance taxFree = new Chance("Next time you come to tax \n you don't have to pay it!", "tax", 0);
-        Chance getOutofJail = new Chance("Get out of jail card.","prison",0);
+        var moveTo = "moveTo";
+        var money = "money";
+        var chances = new Chance[12];
+        var getMoveToExtra = new Chance("Move to the FREE square.", moveTo, 16);
+        var getloseMoney150 = new Chance("You lost 150.", money, -150);
+        var getMove3Squares = new Chance("Move 3 squares back!", "move", -3);
+        var getwinMoney150 = new Chance("You won 150.", money, 150);
+        var loseMoney50 = new Chance("You lost 50.", money, -50);
+        var getwinMoney350 = new Chance("You won 350.", money, 350);
+        var start = new Chance("Move to start and pick up 200.", moveTo, 0);
+        var getMoveToPortal = new Chance("Move to the portal.", moveTo, 25);
+        var getMoveToJail = new Chance("You got yourself to jail.", moveTo, 9);
+        var getMovetonearestSquare = new Chance("Move to the nearest square.", "move", 1);
+        var taxFree = new Chance("Next time you come to tax \n you don't have to pay it!", "tax", 0);
+        var getOutofJail = new Chance("Get out of jail card.","prison",0);
         ArrayList<Chance> allChance = new ArrayList<>();
         allChance.add(getloseMoney150); allChance.add(getOutofJail);
         allChance.add(loseMoney50); allChance.add(getMovetonearestSquare);
@@ -235,8 +238,8 @@ public class Game {
         allChance.add(getMoveToExtra); allChance.add(taxFree);
         allChance.add(getwinMoney150); allChance.add(getwinMoney350);
         allChance.add(getMoveToPortal); allChance.add(getMove3Squares);
-        for (int i = 0; i < chances.length; i++){
-            int number = rnd.nextInt(allChance.size());
+        for (var i = 0; i < chances.length; i++){
+            var number = rnd.nextInt(allChance.size());
             chances[i] = allChance.get(number);
             allChance.remove(number);
         }
@@ -244,47 +247,47 @@ public class Game {
     }
 
     private static void makeSounds(){
-        Media woodSound = new Media(new File("resources/wood1.mp3").toURI().toString());
+        var woodSound = new Media(new File("resources/wood1.mp3").toURI().toString());
         wood = new MediaPlayer(woodSound);
-        Media villagerSound = new Media(new File("resources/idle2.mp3").toURI().toString());
+        var villagerSound = new Media(new File("resources/idle2.mp3").toURI().toString());
         villager = new MediaPlayer(villagerSound);
-        Media chanceSound = new Media(new File("resources/open.mp3").toURI().toString());
+        var chanceSound = new Media(new File("resources/open.mp3").toURI().toString());
         chestOpen = new MediaPlayer(chanceSound);
-        Media netherSound = new Media(new File("resources/moan2.mp3").toURI().toString());
+        var netherSound = new Media(new File("resources/moan2.mp3").toURI().toString());
         nether = new MediaPlayer(netherSound);
-        Media ironHoeSound = new Media(new File("resources/till3.mp3").toURI().toString());
+        var ironHoeSound = new Media(new File("resources/till3.mp3").toURI().toString());
         ironHoe = new MediaPlayer(ironHoeSound);
-        Media eatSound = new Media(new File("resources/eat1.mp3").toURI().toString());
+        var eatSound = new Media(new File("resources/eat1.mp3").toURI().toString());
         eat = new MediaPlayer(eatSound);
-        Media arrowSound = new Media(new File("resources/bowhit4.mp3").toURI().toString());
+        var arrowSound = new Media(new File("resources/bowhit4.mp3").toURI().toString());
         arrow = new MediaPlayer(arrowSound);
-        Media bowSound = new Media(new File("resources/bow.mp3").toURI().toString());
+        var bowSound = new Media(new File("resources/bow.mp3").toURI().toString());
         bow = new MediaPlayer(bowSound);
-        Media waterSound = new Media(new File("resources/splash2.mp3").toURI().toString());
+        var waterSound = new Media(new File("resources/splash2.mp3").toURI().toString());
         water = new MediaPlayer(waterSound);
-        Media equipmentSound = new Media(new File("resources/anvil_use.mp3").toURI().toString());
+        var equipmentSound = new Media(new File("resources/anvil_use.mp3").toURI().toString());
         ironPick = new MediaPlayer(equipmentSound);
-        Media swordSound = new Media(new File("resources/anvil_use.mp3").toURI().toString());
+        var swordSound = new Media(new File("resources/anvil_use.mp3").toURI().toString());
         ironSword = new MediaPlayer(swordSound);
-        Media shieldSound = new Media(new File("resources/block5.mp3").toURI().toString());
+        var shieldSound = new Media(new File("resources/block5.mp3").toURI().toString());
         shield = new MediaPlayer(shieldSound);
-        Media armorSound = new Media(new File("resources/equip_iron2.mp3").toURI().toString());
+        var armorSound = new Media(new File("resources/equip_iron2.mp3").toURI().toString());
         ironArmor = new MediaPlayer(armorSound);
-        Media portalSound = new Media(new File("resources/travel.mp3").toURI().toString());
+        var portalSound = new Media(new File("resources/travel.mp3").toURI().toString());
         portalEffect = new MediaPlayer(portalSound);
-        Media enchanting = new Media(new File("resources/levelup.mp3").toURI().toString());
+        var enchanting = new Media(new File("resources/levelup.mp3").toURI().toString());
         enchant = new MediaPlayer(enchanting);
-        Media brewingSound = new Media(new File("resources/drink.mp3").toURI().toString());
+        var brewingSound = new Media(new File("resources/drink.mp3").toURI().toString());
         brewing = new MediaPlayer(brewingSound);
-        Media shulkerOpen = new Media(new File("resources/open_shulker.mp3").toURI().toString());
+        var shulkerOpen = new Media(new File("resources/open_shulker.mp3").toURI().toString());
         shulker = new MediaPlayer(shulkerOpen);
-        Media startSound = new Media(new File("resources/grass6.mp3").toURI().toString());
+        var startSound = new Media(new File("resources/grass6.mp3").toURI().toString());
         start = new MediaPlayer(startSound);
-        Media fanfareSound = new Media(new File("resources/fanfare.mp3").toURI().toString());
+        var fanfareSound = new Media(new File("resources/fanfare.mp3").toURI().toString());
         fanfare = new MediaPlayer(fanfareSound);
         fanfare.setStartTime(Duration.millis(37000));
         fanfare.setStopTime(Duration.millis(55000));
-        Media loseSound = new Media(new File("resources/lose.mp3").toURI().toString());
+        var loseSound = new Media(new File("resources/lose.mp3").toURI().toString());
         loser = new MediaPlayer(loseSound);
     }
 
@@ -1524,7 +1527,6 @@ public class Game {
         blink.setToValue(0);
         blink.setCycleCount(9);
         blink.setAutoReverse(true);
-        blink.play();
         rect.setVisible(false);
         ImageView endOfGame = new ImageView(new Image("end.png"));
         endOfGame.setTranslateX(100); endOfGame.setTranslateY(250);
