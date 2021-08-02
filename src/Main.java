@@ -4,23 +4,15 @@ Kristian Smolko
  */
 
 import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-
-import java.util.Optional;
-
-import static extra.Rules.*;
 
 public class Main extends Application{
     private static final String NEXT_PAGE = "Next page";
 
     @Override
     public void start(Stage stage) throws Exception {
-        var startGame = new Alert(Alert.AlertType.CONFIRMATION);
+        new Start(stage);
+        /*var startGame = new Alert(Alert.AlertType.CONFIRMATION);
         startGame.setTitle("Monopoly Minecraft");
         startGame.setHeaderText("Welcome!");
         var game = new ButtonType("Start");
@@ -83,7 +75,7 @@ public class Main extends Application{
         }
         else if (result.get() == quit){
             System.exit(0);
-        }
+        }*/
     }
 
     public static void main(String[] args) {
