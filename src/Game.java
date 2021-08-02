@@ -199,9 +199,8 @@ public class Game {
         return iw;
     }
 
-    private static final Random rnd = new Random();
-
     public static int randomNum(){
+        Random rnd = new Random();
         return (rnd.nextInt(6)+1);
     }
 
@@ -216,6 +215,7 @@ public class Game {
     }
 
     private static Chance[] createChances(){
+        Random rnd = new Random();
         var moveTo = "moveTo";
         var money = "money";
         var chances = new Chance[12];
@@ -321,7 +321,7 @@ public class Game {
             turn -= -1;
     }
 
-    public static BorderPane createGame(){
+    public static BorderPane createGame(ArrayList<String> figures){
         BorderPane root = new BorderPane();
         BorderPane border = new BorderPane();
         center = new Group();
@@ -350,6 +350,8 @@ public class Game {
         Circle[] set5 = get5(rect, x);
         Circle[] set6 = get6(rect, x);
         //dialog window
+
+/*
         Alert alert = makeDialog();
         ButtonType b1 = new ButtonType("Two");
         ButtonType b2 = new ButtonType("Three");
@@ -422,31 +424,34 @@ public class Game {
                 System.exit(0);
             else
                 available.remove(resultForP4.get());
-        }
+        }*/
 
         //set new players
         Player player1 = new Player(1);
         Player player2 = new Player(2);
         Player player3 = new Player(3);
         Player player4 = new Player(4);
+        numOfPlayers = figures.size();
         //add figures to players
         switch (numOfPlayers) {
             case 3 -> {
-                player1.setFigure(resultForP1.get());
-                player2.setFigure(resultForP2.get());
-                player3.setFigure(resultForP3.get());
-            }
-            case 4 -> {
-                player1.setFigure(resultForP1.get());
-                player2.setFigure(resultForP2.get());
-                player3.setFigure(resultForP3.get());
-                player4.setFigure(resultForP4.get());
-            }
+                player1.setFigure(figures.get(0));
+                player2.setFigure(figures.get(1));
+                player3.setFigure(figures.get(2));
+                }
+//            case 4 -> {
+//                player1.setFigure(resultForP1.get());
+//                player2.setFigure(resultForP2.get());
+//                player3.setFigure(resultForP3.get());
+//                player4.setFigure(resultForP4.get());
+//            }
             default -> {
-                player1.setFigure(resultForP1.get());
-                player2.setFigure(resultForP2.get());
-            }
+                player1.setFigure(figures.get(0));
+                player2.setFigure(figures.get(1));
+                }
         }
+
+
 
         //figures
         ImageView figure1 = makeFigure(player1.getFigure());
@@ -464,7 +469,7 @@ public class Game {
         PlayerWindow w3 = new PlayerWindow();
         PlayerWindow w4 = new PlayerWindow();
 
-        Player[] playerList = new Player[numOfPlayers];
+       Player[] playerList = new Player[numOfPlayers];
         playerList[0] = player1;
         playerList[1] = player2;
         if (player3.isPlaying())
