@@ -1,4 +1,3 @@
-import extra.Player;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -10,6 +9,8 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+
+import static extra.Rules.*;
 
 public class Start {
     private int current = 1;
@@ -30,7 +31,7 @@ public class Start {
 
         var startGame = startGame(stage);
 
-        var rules = new Button("Rules");
+        var rules = rulesShow(stage);
 
         var quit = new Button("Quit");
 
@@ -53,6 +54,61 @@ public class Start {
             stage.show();
         });
         return start;
+    }
+
+    private Button rulesShow(Stage stage){
+        var rules = new Button("Rules");
+        rules.setOnAction(e -> rules(stage));
+        return rules;
+    }
+
+    private void rules(Stage stage){
+        String NEXT_PAGE = "Next page";
+        var root = new BorderPane();
+        root.setCenter(showRules());
+        var buttons = new BorderPane();
+        var gameStart = new Button("Start game");
+        buttons.setLeft(gameStart);
+        gameStart.setOnAction(e -> {
+            BorderPane monopoly = playerChoose(stage);
+            var scene = new Scene(monopoly, 1200, 800);
+            stage.setScene(scene);
+            stage.show();
+        });
+        var firstPage = new Button(NEXT_PAGE);
+        var secondPage = new Button("Previous page");
+        firstPage.setOnAction(e -> {
+            var root1 = new BorderPane();
+            root1.setCenter(showRules2());
+            var moreButtons = new BorderPane();
+            moreButtons.setLeft(secondPage);
+            var thirdPage = new Button(NEXT_PAGE);
+            moreButtons.setRight(thirdPage);
+            thirdPage.setOnAction(e1 -> {
+                var root2 = new BorderPane();
+                root2.setCenter(showRules3());
+                buttons.setRight(firstPage);
+                firstPage.setText("Previous page");
+                root2.setBottom(buttons);
+                stage.setScene(new Scene(root2, 800, 800));
+            });
+            buttons.setRight(moreButtons);
+            root1.setBottom(buttons);
+            stage.setScene(new Scene(root1, 800, 800));
+        });
+        secondPage.setOnAction(e -> {
+            var root2 = new BorderPane();
+            root2.setCenter(showRules());
+            buttons.setRight(firstPage);
+            firstPage.setText(NEXT_PAGE);
+            root2.setBottom(buttons);
+            stage.setScene(new Scene(root2, 800, 800));
+        });
+        buttons.setRight(firstPage);
+        root.setBottom(buttons);
+        var scene = new Scene(root, 800, 800);
+        stage.setScene(scene);
+        stage.show();
     }
 
     private BorderPane playerChoose(Stage stage){
@@ -151,7 +207,6 @@ public class Start {
                 if (current == numOfPlayers) another.setText("Play");
             } else {
                 figures.add(available.get(picture)+".png");
-                System.out.println(figures.size());
                 stage.setScene(new Scene(Game.createGame(figures), 1200, 800));
                 stage.show();
             }
