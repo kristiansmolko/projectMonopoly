@@ -1,10 +1,10 @@
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -33,21 +33,35 @@ public class Start {
 
         var rules = rulesShow(stage);
 
-        var quit = new Button("Quit");
+        var quit = quit();
 
         var buttons = new GridPane();
-        buttons.setVgap(40);
+        buttons.setAlignment(Pos.CENTER);
+        buttons.setVgap(100);
         buttons.addRow(0, startGame);
         buttons.addRow(1, rules);
         buttons.addRow(2, quit);
 
         startPane.setCenter(buttons);
 
+        startPane.setBackground(background());
+
         return startPane;
+    }
+
+    private Background background(){
+        var backgroundImage = new Image("background.jpg");
+        var bSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false);
+        return new Background(new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, bSize));
     }
 
     private Button startGame(Stage stage){
         var start = new Button("Start");
+        start.setFont(Font.font("Times New Roman", 50));
+        start.setStyle("-fx-background-radius: 1em;");
+        start.setPrefHeight(100);
+        start.setPrefWidth(200);
         start.setOnAction(e -> {
             var scene = new Scene(playerChoose(stage), 1200, 800);
             stage.setScene(scene);
@@ -58,8 +72,22 @@ public class Start {
 
     private Button rulesShow(Stage stage){
         var rules = new Button("Rules");
+        rules.setFont(Font.font("Times New Roman", 50));
+        rules.setStyle("-fx-background-radius: 1em;");
+        rules.setPrefHeight(100);
+        rules.setPrefWidth(200);
         rules.setOnAction(e -> rules(stage));
         return rules;
+    }
+
+    private Button quit(){
+        var quit = new Button("Quit");
+        quit.setFont(Font.font("Times New Roman", 50));
+        quit.setStyle("-fx-background-radius: 1em;");
+        quit.setPrefHeight(100);
+        quit.setPrefWidth(200);
+        quit.setOnAction(e -> System.exit(0));
+        return quit;
     }
 
     private void rules(Stage stage){
@@ -133,32 +161,31 @@ public class Start {
         });
 
         var buttons = new GridPane();
+        buttons.setAlignment(Pos.CENTER);
         buttons.setHgap(50);
         buttons.addRow(0, players2, players3, players4);
 
         root.setCenter(buttons);
+        root.setBackground(background());
 
         return root;
     }
 
     private Button playerImageButton(int number){
         var button = new Button();
-        var imageView = new ImageView(getClass().getResource(number + "player.png").toExternalForm());
-        imageView.setFitWidth(150);
-        imageView.setFitHeight(150);
+        var imageView = new ImageView(getClass().getResource(number + "player.jpg").toExternalForm());
+        imageView.setFitWidth(250);
+        imageView.setFitHeight(250);
         button.setGraphic(imageView);
-        button.setMaxWidth(150);
-        button.setMaxHeight(150);
+        button.setMaxWidth(250);
+        button.setMaxHeight(250);
         return button;
     }
 
     private void figureChoose(Stage stage){
         var root = new BorderPane();
 
-        available.add("diamond steve");
-        available.add("creeper");
-        available.add("steve");
-        available.add("zombified piglin");
+        initFigureList();
 
         var figure = new BorderPane();
 
@@ -187,21 +214,19 @@ public class Start {
         buttons.setTranslateX(500);
         buttons.setHgap(50);
 
-        figure.setTop(playerFigure());
-        figure.setCenter(img);
-        figure.setBottom(buttons);
-
         var another = new Button("Next");
-        another.setTranslateX(1100);
-        another.setMaxWidth(50);
-        another.setMaxHeight(50);
+        another.setTranslateX(700);
+        another.setPrefWidth(100);
+        another.setPrefHeight(100);
+        another.setStyle("-fx-background-radius: 1em;");
+        another.setFont(Font.font("Times New Roman", 25));
         another.setOnAction(e -> {
             if (current != numOfPlayers) {
                 figures.add(available.get(picture)+".png");
                 available.remove(picture);
                 picture = 0;
                 next();
-                figure.setTop(playerFigure());
+                figure.setTop(figureTop(another));
                 img.setImage(new Image(available.get(picture) + ".png"));
                 root.setCenter(figure);
                 if (current == numOfPlayers) another.setText("Play");
@@ -212,17 +237,35 @@ public class Start {
             }
         });
 
+        figure.setTop(figureTop(another));
+        figure.setCenter(img);
+        figure.setBottom(buttons);
+
         root.setCenter(figure);
-        root.setBottom(another);
+        root.setBackground(background());
 
         var scene = new Scene(root, 1200, 800);
         stage.setScene(scene);
         stage.show();
     }
 
+    private void initFigureList() {
+        available.add("diamond steve");
+        available.add("creeper");
+        available.add("steve");
+        available.add("zombified piglin");
+    }
+
+    private GridPane figureTop(Button another){
+        var root = new GridPane();
+        root.setTranslateY(50);
+        root.addRow(0, playerFigure(), another);
+        return root;
+    }
+
     private Button chevron(String direction){
         var button = new Button();
-        var imageView = new ImageView(getClass().getResource("chevron_" + direction + ".png").toExternalForm());
+        var imageView = new ImageView(getClass().getResource("chevron_" + direction + ".jpg").toExternalForm());
         imageView.setFitWidth(70);
         imageView.setFitHeight(70);
         button.setGraphic(imageView);
@@ -232,7 +275,7 @@ public class Start {
     private Label playerFigure(){
         var label = new Label();
         label.setTranslateX(470);
-        label.setMaxHeight(50);
+        label.setMaxHeight(100);
         label.setMaxWidth(400);
         label.setText("Player's " + current + " figure");
         label.setFont(Font.font("Times New Roman", 40));
