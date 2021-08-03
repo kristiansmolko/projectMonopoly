@@ -19,6 +19,9 @@ public class Start {
     private final ArrayList<String> available = new ArrayList<>();
     private final ArrayList<String> figures = new ArrayList<>();
 
+    private static final String ROUNDER_BUTTON = "-fx-background-radius: 1em;";
+    private static final String FONT = "Times New Roman";
+
     public Start(Stage stage){
         var scene = new Scene(start(stage), 1200, 800);
         stage.setScene(scene);
@@ -58,8 +61,8 @@ public class Start {
 
     private Button startGame(Stage stage){
         var start = new Button("Start");
-        start.setFont(Font.font("Times New Roman", 50));
-        start.setStyle("-fx-background-radius: 1em;");
+        start.setFont(Font.font(FONT, 50));
+        start.setStyle(ROUNDER_BUTTON);
         start.setPrefHeight(100);
         start.setPrefWidth(200);
         start.setOnAction(e -> {
@@ -72,8 +75,8 @@ public class Start {
 
     private Button rulesShow(Stage stage){
         var rules = new Button("Rules");
-        rules.setFont(Font.font("Times New Roman", 50));
-        rules.setStyle("-fx-background-radius: 1em;");
+        rules.setFont(Font.font(FONT, 50));
+        rules.setStyle(ROUNDER_BUTTON);
         rules.setPrefHeight(100);
         rules.setPrefWidth(200);
         rules.setOnAction(e -> rules(stage));
@@ -82,8 +85,8 @@ public class Start {
 
     private Button quit(){
         var quit = new Button("Quit");
-        quit.setFont(Font.font("Times New Roman", 50));
-        quit.setStyle("-fx-background-radius: 1em;");
+        quit.setFont(Font.font(FONT, 50));
+        quit.setStyle(ROUNDER_BUTTON);
         quit.setPrefHeight(100);
         quit.setPrefWidth(200);
         quit.setOnAction(e -> System.exit(0));
@@ -91,7 +94,7 @@ public class Start {
     }
 
     private void rules(Stage stage){
-        String NEXT_PAGE = "Next page";
+        var nextPage = "Next page";
         var root = new BorderPane();
         root.setCenter(showRules());
         var buttons = new BorderPane();
@@ -103,14 +106,14 @@ public class Start {
             stage.setScene(scene);
             stage.show();
         });
-        var firstPage = new Button(NEXT_PAGE);
+        var firstPage = new Button(nextPage);
         var secondPage = new Button("Previous page");
         firstPage.setOnAction(e -> {
             var root1 = new BorderPane();
             root1.setCenter(showRules2());
             var moreButtons = new BorderPane();
             moreButtons.setLeft(secondPage);
-            var thirdPage = new Button(NEXT_PAGE);
+            var thirdPage = new Button(nextPage);
             moreButtons.setRight(thirdPage);
             thirdPage.setOnAction(e1 -> {
                 var root2 = new BorderPane();
@@ -128,7 +131,7 @@ public class Start {
             var root2 = new BorderPane();
             root2.setCenter(showRules());
             buttons.setRight(firstPage);
-            firstPage.setText(NEXT_PAGE);
+            firstPage.setText(nextPage);
             root2.setBottom(buttons);
             stage.setScene(new Scene(root2, 800, 800));
         });
@@ -218,8 +221,8 @@ public class Start {
         another.setTranslateX(700);
         another.setPrefWidth(100);
         another.setPrefHeight(100);
-        another.setStyle("-fx-background-radius: 1em;");
-        another.setFont(Font.font("Times New Roman", 25));
+        another.setStyle(ROUNDER_BUTTON);
+        another.setFont(Font.font(FONT, 25));
         another.setOnAction(e -> {
             if (current != numOfPlayers) {
                 figures.add(available.get(picture)+".png");
@@ -278,7 +281,7 @@ public class Start {
         label.setMaxHeight(100);
         label.setMaxWidth(400);
         label.setText("Player's " + current + " figure");
-        label.setFont(Font.font("Times New Roman", 40));
+        label.setFont(Font.font(FONT, 40));
         return label;
     }
 
