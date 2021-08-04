@@ -14,20 +14,22 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 public class Board {
-    private static ImageView background;
+    private ImageView background;
     private int color = 0;
     private int bgrndNum = 1;
 
+    private static final String FONT = "Times New Roman";
+
     public BorderPane makeBoard(){
-        BorderPane board = new BorderPane();
+        var board = new BorderPane();
         board.setMaxSize(1000,800);
         board.setPadding(new Insets(0));
-        GridPane bottom = new GridPane();
-        GridPane top = new GridPane();
-        GridPane left = new GridPane();
-        GridPane right = new GridPane();
+        var bottom = new GridPane();
+        var top = new GridPane();
+        var left = new GridPane();
+        var right = new GridPane();
 
-        Image backgroundImage = new Image("background.jpg");
+        var backgroundImage = new Image("background.jpg");
         background = new ImageView(backgroundImage);
         background.setFitWidth(800); background.setFitHeight(600);
 
@@ -81,8 +83,8 @@ public class Board {
     }
 
     private StackPane makeTile(String fileName, String name, int value){
-        StackPane tile = new StackPane();
-        Rectangle back = new Rectangle();
+        var tile = new StackPane();
+        var back = new Rectangle();
         back.setWidth(100); back.setHeight(100);
         if (color++ == 0)
             back.setFill(Color.LIMEGREEN);
@@ -90,14 +92,14 @@ public class Board {
             back.setFill(Color.GREEN);
         if (color > 1)
             color = 0;
-        ImageView img = new ImageView(new Image(fileName));
+        var img = new ImageView(new Image(fileName));
         img.setFitHeight(80); img.setFitWidth(80);
         img.setTranslateY(10);
-        Text desc = new Text(name);
+        var desc = new Text(name);
         desc.setTranslateY(-40);
-        desc.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 15));
-        Text price = new Text(String.valueOf(value));
-        price.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.ITALIC, 15));
+        desc.setFont(Font.font(FONT, FontWeight.BOLD, FontPosture.REGULAR, 15));
+        var price = new Text(String.valueOf(value));
+        price.setFont(Font.font(FONT, FontWeight.BOLD, FontPosture.ITALIC, 15));
         price.setTranslateY(40);
         price.setTranslateX(35);
         tile.setMaxHeight(100); tile.setMaxWidth(100);
@@ -106,60 +108,60 @@ public class Board {
     }
 
     private static StackPane makeStart(){
-        StackPane tile = new StackPane();
-        ImageView img = new ImageView("start.png");
+        var tile = new StackPane();
+        var img = new ImageView("start.png");
         img.setFitWidth(100); img.setFitHeight(100);
-        Text text = new Text("START");
-        text.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 30));
+        var text = new Text("START");
+        text.setFont(Font.font(FONT, FontWeight.BOLD, FontPosture.REGULAR, 30));
         text.setRotate(45);
         tile.getChildren().addAll(img, text);
         return tile;
     }
 
     private static StackPane makeChance(){
-        StackPane tile = new StackPane();
-        ImageView img = new ImageView("chest.jpg");
+        var tile = new StackPane();
+        var img = new ImageView("chest.jpg");
         img.setFitWidth(100); img.setFitHeight(100);
-        Text text = new Text("Chance");
-        text.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 30));
+        var text = new Text("Chance");
+        text.setFont(Font.font(FONT, FontWeight.BOLD, FontPosture.REGULAR, 30));
         text.setRotate(45);
         tile.getChildren().addAll(img, text);
         return tile;
     }
 
     private static StackPane makeVill(){
-        StackPane tile = new StackPane();
-        ImageView img = new ImageView("villager.png");
+        var tile = new StackPane();
+        var img = new ImageView("villager.png");
         img.setFitWidth(100); img.setFitHeight(100);
-        Text text = new Text("TAX");
-        text.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 30));
+        var text = new Text("TAX");
+        text.setFont(Font.font(FONT, FontWeight.BOLD, FontPosture.REGULAR, 30));
         text.setTranslateY(-20);
         tile.getChildren().addAll(img, text);
         return tile;
     }
 
     private static StackPane makeFree(){
-        StackPane tile = new StackPane();
-        ImageView img = new ImageView("water.jpg");
+        var tile = new StackPane();
+        var img = new ImageView("water.jpg");
         img.setFitWidth(100); img.setFitHeight(100);
-        Text text = new Text("FREE");
-        text.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 30));
+        var text = new Text("FREE");
+        text.setFont(Font.font(FONT, FontWeight.BOLD, FontPosture.REGULAR, 30));
         text.setRotate(45);
         tile.getChildren().addAll(img, text);
         return tile;
     }
 
     private StackPane makeJail(){
-        StackPane tile = new StackPane();
-        ImageView img = new ImageView("nether.png");
+        var tile = new StackPane();
+        var img = new ImageView("nether.png");
         img.setFitHeight(100); img.setFitWidth(100);
         tile.getChildren().addAll(img);
         return tile;
     }
 
     private StackPane makePortal(){
-        StackPane tile = new StackPane();
-        ImageView img = new ImageView("portal.png");
+        var tile = new StackPane();
+        var img = new ImageView("portal.png");
         img.setFitHeight(100); img.setFitWidth(100);
         tile.getChildren().addAll(img);
         return tile;
