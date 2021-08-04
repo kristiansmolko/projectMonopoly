@@ -1,3 +1,4 @@
+import extra.Chance;
 import extra.Player;
 import graphics.Board;
 import graphics.PlayerWindow;
@@ -13,9 +14,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -26,135 +24,24 @@ import javafx.util.Duration;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.Random;
+
+import static graphics.Graphics.*;
+import static extra.Util.*;
 
 public class Game {
     private static final Chance[] chances = createChances();
     private static int turn = 1;
     private static int chanceNum = 0;
     private static int numOfPlayers;
-    private static Rectangle rect = makeDice();
-    private static Label win = new Label();
+    private static final Rectangle rect = makeDice();
+    private static final Label win = new Label();
     private static Group center;
     private static ArrayList<String> tiles = new ArrayList<>();
     private static final int[] values = new int[] {200, 60, 60, 100, 80, 100, 100, 0, 120, 0, 140, 140, 160, 0, 180, 200,
             0, 220, 100, 220, 240, 260, 260, 0, 280, 0, 300, 300, 320, 0, 350, 400};
     private static MediaPlayer wood, villager, chestOpen, nether, ironHoe, eat, arrow, bow, water, ironPick, ironSword, shield, ironArmor,
             portalEffect, enchant, brewing, shulker, start, fanfare, loser;
-
-    public static Circle get1(Rectangle rect, int x){
-        var c = new Circle();
-        c.setCenterX(rect.getX() + x + (rect.getWidth()/2));
-        c.setCenterY(rect.getY() + (rect.getHeight()/2));
-        c.setRadius(8);
-        c.setFill(Color.BLACK);
-        return c;
-    }
-
-    public static Circle[] get2(Rectangle rect, int x){
-        var c1 = new Circle();
-        var c2 = new Circle();
-        c1.setCenterX(rect.getX() + x + (rect.getWidth()/2) + 10);
-        c1.setCenterY(rect.getY() + (rect.getHeight()/2) - 10);
-        c1.setRadius(8);
-        c1.setFill(Color.BLACK);
-        c2.setCenterX(rect.getX() + x + (rect.getWidth()/2) - 10);
-        c2.setCenterY(rect.getY() + (rect.getHeight()/2) + 10);
-        c2.setRadius(8);
-        c2.setFill(Color.BLACK);
-        return new Circle[] {c1,c2};
-    }
-
-    public static Circle[] get3(Rectangle rect, int x) {
-        var c1 = new Circle();
-        var c2 = new Circle();
-        var c3 = new Circle();
-        var set = new Circle[] {c1,c2,c3};
-        c1.setCenterX(rect.getX() + x + (rect.getWidth()/2) + 15);
-        c1.setCenterY(rect.getY() + (rect.getHeight()/2) - 15);
-        c2.setCenterX(rect.getX() + x + (rect.getWidth()/2));
-        c2.setCenterY(rect.getY() + (rect.getHeight()/2));
-        c3.setCenterX(rect.getX() + x + (rect.getWidth()/2) - 15);
-        c3.setCenterY(rect.getY() + (rect.getHeight()/2) + 15);
-        for (Circle c : set){
-            c.setFill(Color.BLACK);
-            c.setRadius(6);
-        }
-        return set;
-    }
-
-    public static Circle[] get4(Rectangle rect, int x) {
-        var c1 = new Circle();
-        var c2 = new Circle();
-        var c3 = new Circle();
-        var c4 = new Circle();
-        var set = new Circle[] {c1,c2,c3,c4};
-        c1.setCenterX(rect.getX() + x + (rect.getWidth()/2) + 13);
-        c1.setCenterY(rect.getY() + (rect.getHeight()/2) - 13);
-        c2.setCenterX(rect.getX() + x + (rect.getWidth()/2) + 13);
-        c2.setCenterY(rect.getY() + (rect.getHeight()/2) + 13);
-        c3.setCenterX(rect.getX() + x + (rect.getWidth()/2) - 13);
-        c3.setCenterY(rect.getY() + (rect.getHeight()/2) + 13);
-        c4.setCenterX(rect.getX() + x + (rect.getWidth()/2) - 13);
-        c4.setCenterY(rect.getY() + (rect.getHeight()/2) - 13);
-        for (Circle c : set){
-            c.setFill(Color.BLACK);
-            c.setRadius(6);
-        }
-        return set;
-    }
-
-    public static Circle[] get5(Rectangle rect, int x) {
-        var c1 = new Circle();
-        var c2 = new Circle();
-        var c3 = new Circle();
-        var c4 = new Circle();
-        var c5 = new Circle();
-        var set = new Circle[] {c1,c2,c3,c4,c5};
-        c1.setCenterX(rect.getX() + x + (rect.getWidth()/2) + 14);
-        c1.setCenterY(rect.getY() + (rect.getHeight()/2) - 14);
-        c2.setCenterX(rect.getX() + x + (rect.getWidth()/2) + 14);
-        c2.setCenterY(rect.getY() + (rect.getHeight()/2) + 14);
-        c3.setCenterX(rect.getX() + x + (rect.getWidth()/2) - 14);
-        c3.setCenterY(rect.getY() + (rect.getHeight()/2) + 14);
-        c4.setCenterX(rect.getX() + x + (rect.getWidth()/2) - 14);
-        c4.setCenterY(rect.getY() + (rect.getHeight()/2) - 14);
-        c5.setCenterX(rect.getX() + x + (rect.getWidth()/2));
-        c5.setCenterY(rect.getY() + (rect.getHeight()/2));
-        for (Circle c : set){
-            c.setFill(Color.BLACK);
-            c.setRadius(6);
-        }
-        return set;
-    }
-
-    public static Circle[] get6(Rectangle rect, int x){
-        var c1 = new Circle();
-        var c2 = new Circle();
-        var c3 = new Circle();
-        var c4 = new Circle();
-        var c5 = new Circle();
-        var c6 = new Circle();
-        var set = new Circle[] {c1,c2,c3,c4,c5,c6};
-        c1.setCenterX(rect.getX() + x + (rect.getWidth()/2) + 15);
-        c1.setCenterY(rect.getY() + (rect.getHeight()/2) - 15);
-        c2.setCenterX(rect.getX() + x + (rect.getWidth()/2) + 15);
-        c2.setCenterY(rect.getY() + (rect.getHeight()/2));
-        c3.setCenterX(rect.getX() + x + (rect.getWidth()/2) + 15);
-        c3.setCenterY(rect.getY() + (rect.getHeight()/2) + 15);
-        c4.setCenterX(rect.getX() + x + (rect.getWidth()/2) - 15);
-        c4.setCenterY(rect.getY() + (rect.getHeight()/2) - 15);
-        c5.setCenterX(rect.getX() + x + (rect.getWidth()/2) - 15);
-        c5.setCenterY(rect.getY() + (rect.getHeight()/2));
-        c6.setCenterX(rect.getX() + x + (rect.getWidth()/2) - 15);
-        c6.setCenterY(rect.getY() + (rect.getHeight()/2) + 15);
-        for (Circle c : set){
-            c.setFill(Color.BLACK);
-            c.setRadius(5);
-        }
-        return set;
-    }
 
     public static ArrayList<String> makeTiles(){
         var CHANCE = "CHANCE";
@@ -165,38 +52,12 @@ public class Game {
         return new ArrayList<>(Arrays.asList(tiles));
     }
 
-    public static Alert makeDialog(){
-        var alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Players");
-        alert.setHeaderText("Choose how many players");
-        alert.setContentText("Choose");
-        return alert;
-    }
-
-    public static Rectangle makeDice(){
-        var rect = new Rectangle(120,500,50,50);
-        var stops = new Stop[] {new Stop(0,Color.BLUE), new Stop(1, Color.AQUAMARINE)};
-        var linear = new LinearGradient(0,0,1,0,true, CycleMethod.NO_CYCLE, stops);
-        rect.setFill(linear);
-        rect.setStroke(Color.WHITE);
-        rect.setArcWidth(15);
-        rect.setArcHeight(15);
-        return rect;
-    }
-
     public static TranslateTransition moveBack(Rectangle rect, int x){
         var back = new TranslateTransition();
         back.setByX(-x);
         back.setDuration(Duration.millis(10));
         back.setNode(rect);
         return back;
-    }
-
-    public static ImageView makeFigure(Image img){
-        var iw = new ImageView(img);
-        iw.setFitWidth(50);
-        iw.setFitHeight(100);
-        return iw;
     }
 
     public static int randomNum(){
@@ -212,38 +73,6 @@ public class Game {
         rotate.setByAngle(360);
         rotate.setCycleCount(2);
         return new ParallelTransition(rect, translate, rotate);
-    }
-
-    private static Chance[] createChances(){
-        Random rnd = new Random();
-        var moveTo = "moveTo";
-        var money = "money";
-        var chances = new Chance[12];
-        var getMoveToExtra = new Chance("Move to the FREE square.", moveTo, 16);
-        var getloseMoney150 = new Chance("You lost 150.", money, -150);
-        var getMove3Squares = new Chance("Move 3 squares back!", "move", -3);
-        var getwinMoney150 = new Chance("You won 150.", money, 150);
-        var loseMoney50 = new Chance("You lost 50.", money, -50);
-        var getwinMoney350 = new Chance("You won 350.", money, 350);
-        var start = new Chance("Move to start and pick up 200.", moveTo, 0);
-        var getMoveToPortal = new Chance("Move to the portal.", moveTo, 25);
-        var getMoveToJail = new Chance("You got yourself to jail.", moveTo, 9);
-        var getMovetonearestSquare = new Chance("Move to the nearest square.", "move", 1);
-        var taxFree = new Chance("Next time you come to tax \n you don't have to pay it!", "tax", 0);
-        var getOutofJail = new Chance("Get out of jail card.","prison",0);
-        ArrayList<Chance> allChance = new ArrayList<>();
-        allChance.add(getloseMoney150); allChance.add(getOutofJail);
-        allChance.add(loseMoney50); allChance.add(getMovetonearestSquare);
-        allChance.add(start); allChance.add(getMoveToJail);
-        allChance.add(getMoveToExtra); allChance.add(taxFree);
-        allChance.add(getwinMoney150); allChance.add(getwinMoney350);
-        allChance.add(getMoveToPortal); allChance.add(getMove3Squares);
-        for (var i = 0; i < chances.length; i++){
-            var number = rnd.nextInt(allChance.size());
-            chances[i] = allChance.get(number);
-            allChance.remove(number);
-        }
-        return chances;
     }
 
     private static void makeSounds(){
@@ -321,25 +150,42 @@ public class Game {
             turn -= -1;
     }
 
+    private static TranslateTransition translateFigure = new TranslateTransition();
+    private static TranslateTransition translateFigure2 = new TranslateTransition();
+    private static TranslateTransition transY = new TranslateTransition();
+    private static TranslateTransition transY2 = new TranslateTransition();
+    private static TranslateTransition portal = new TranslateTransition();
+    private static TranslateTransition chanceMove = new TranslateTransition();
+    private static PauseTransition pauseMove = new PauseTransition();
+    private static FadeTransition fade = new FadeTransition();
+
+    private static void setMovesForFigure(ImageView figure){
+        translateFigure.setNode(figure);
+        transY.setNode(figure);
+        portal.setNode(figure);
+        chanceMove.setNode(figure);
+        fade.setNode(figure);
+    }
+
     public static BorderPane createGame(ArrayList<String> figures){
-        BorderPane root = new BorderPane();
-        BorderPane border = new BorderPane();
+        var root = new BorderPane();
+        var border = new BorderPane();
         center = new Group();
-        BorderPane buy = new BorderPane();
-        BorderPane right = new BorderPane();
-        GridPane playerWindows = new GridPane();
-        int x = 250; //move
+        var buy = new BorderPane();
+        var right = new BorderPane();
+        var playerWindows = new GridPane();
+        var x = 250; //move
         //moves
         TranslateTransition back = moveBack(rect, x);
         ParallelTransition par = parallel(rect, x);
-        TranslateTransition translateFigure = new TranslateTransition();
-        TranslateTransition translateFigure2 = new TranslateTransition();
-        TranslateTransition transY = new TranslateTransition();
-        TranslateTransition transY2 = new TranslateTransition();
-        TranslateTransition portal = new TranslateTransition();
-        TranslateTransition chanceMove = new TranslateTransition();
-        PauseTransition pauseMove = new PauseTransition();
-        FadeTransition fade = new FadeTransition();
+//        var translateFigure = new TranslateTransition();
+//        var translateFigure2 = new TranslateTransition();
+//        var transY = new TranslateTransition();
+//        var transY2 = new TranslateTransition();
+//        var portal = new TranslateTransition();
+//        var chanceMove = new TranslateTransition();
+//        var pauseMove = new PauseTransition();
+//        var fade = new FadeTransition();
         //creating sounds
         makeSounds();
         //dots in dice
@@ -349,88 +195,12 @@ public class Game {
         Circle[] set4 = get4(rect, x);
         Circle[] set5 = get5(rect, x);
         Circle[] set6 = get6(rect, x);
-        //dialog window
-
-/*
-        Alert alert = makeDialog();
-        ButtonType b1 = new ButtonType("Two");
-        ButtonType b2 = new ButtonType("Three");
-        ButtonType b3 = new ButtonType("Four");
-        ButtonType can = new ButtonType("Cancel");
-        alert.getButtonTypes().setAll(b1, b2, b3, can);
-        //get number of players
-        Optional<ButtonType> result = alert.showAndWait();
-        //button actions
-        if (result.get() == b1)
-            numOfPlayers = 2;
-        else if (result.get() == b2)
-            numOfPlayers = 3;
-        else if (result.get() == b3)
-            numOfPlayers = 4;
-        else if (result.get() == can)
-            System.exit(0);
-
-        ArrayList<String> available = new ArrayList<>();
-        available.add("diamond steve.png");
-        available.add("creeper.png");
-        available.add("steve.png");
-        available.add("zombified piglin.png");
-
-        ChoiceDialog<String> player1Choose = new ChoiceDialog<>(available.get(0), available);
-        player1Choose.setTitle("Player 1 figure");
-        player1Choose.setHeaderText("Player 1, choose your figure");
-        Optional<String> resultForP1 = player1Choose.showAndWait();
-        if (resultForP1.isEmpty())
-            System.exit(0);
-        else
-            available.remove(resultForP1.get());
-
-        ChoiceDialog<String> player2Choose = new ChoiceDialog<>(available.get(0), available);
-        player2Choose.setTitle("Player 2 figure");
-        player2Choose.setHeaderText("Player 2, choose your figure");
-        Optional<String> resultForP2 = player2Choose.showAndWait();
-        if (resultForP2.isEmpty())
-            System.exit(0);
-        else
-            available.remove(resultForP2.get());
-        ChoiceDialog<String> player3Choose = new ChoiceDialog<>(available.get(0), available);
-        player3Choose.setTitle("Player 3 figure");
-        player3Choose.setHeaderText("Player 3, choose your figure");
-        Optional<String> resultForP3 = Optional.empty();
-        ChoiceDialog<String> player4Choose = new ChoiceDialog<>(available.get(0), available);
-        player4Choose.setTitle("Player 4 figure");
-        player4Choose.setHeaderText("Player 4, choose your figure");
-        Optional<String> resultForP4 = Optional.empty();
-
-        if (numOfPlayers == 3){
-            resultForP3 = player3Choose.showAndWait();
-            if (resultForP3.isEmpty())
-                System.exit(0);
-            else
-                available.remove(resultForP3.get());
-        }
-        if (numOfPlayers == 4){
-            resultForP3 = player3Choose.showAndWait();
-            if (resultForP3.isEmpty())
-                System.exit(0);
-            else
-                available.remove(resultForP3.get());
-
-            player4Choose = new ChoiceDialog<>(available.get(0), available);
-            player4Choose.setTitle("Player 4 figure");
-            player4Choose.setHeaderText("Player 4, choose your figure");
-            resultForP4 = player4Choose.showAndWait();
-            if (resultForP4.isEmpty())
-                System.exit(0);
-            else
-                available.remove(resultForP4.get());
-        }*/
 
         //set new players
-        Player player1 = new Player(1);
-        Player player2 = new Player(2);
-        Player player3 = new Player(3);
-        Player player4 = new Player(4);
+        var player1 = new Player(1);
+        var player2 = new Player(2);
+        var player3 = new Player(3);
+        var player4 = new Player(4);
         numOfPlayers = figures.size();
         //add figures to players
         switch (numOfPlayers) {
@@ -439,12 +209,12 @@ public class Game {
                 player2.setFigure(figures.get(1));
                 player3.setFigure(figures.get(2));
                 }
-//            case 4 -> {
-//                player1.setFigure(resultForP1.get());
-//                player2.setFigure(resultForP2.get());
-//                player3.setFigure(resultForP3.get());
-//                player4.setFigure(resultForP4.get());
-//            }
+            case 4 -> {
+                player1.setFigure(figures.get(0));
+                player2.setFigure(figures.get(1));
+                player3.setFigure(figures.get(2));
+                player4.setFigure(figures.get(3));
+            }
             default -> {
                 player1.setFigure(figures.get(0));
                 player2.setFigure(figures.get(1));
@@ -464,12 +234,12 @@ public class Game {
         figure4.setTranslateX(920); figure4.setTranslateY(705);
 
         //player windows
-        PlayerWindow w1 = new PlayerWindow();
-        PlayerWindow w2 = new PlayerWindow();
-        PlayerWindow w3 = new PlayerWindow();
-        PlayerWindow w4 = new PlayerWindow();
+        var w1 = new PlayerWindow();
+        var w2 = new PlayerWindow();
+        var w3 = new PlayerWindow();
+        var w4 = new PlayerWindow();
 
-       Player[] playerList = new Player[numOfPlayers];
+        var playerList = new Player[numOfPlayers];
         playerList[0] = player1;
         playerList[1] = player2;
         if (player3.isPlaying())
@@ -477,10 +247,10 @@ public class Game {
         if (player4.isPlaying())
             playerList[3] = player4;
 
-        BorderPane P1W = w1.makeWindow(player1);
-        BorderPane P2W = w2.makeWindow(player2);
-        BorderPane P3W = w3.makeWindow(player3);
-        BorderPane P4W = w4.makeWindow(player4);
+        var P1W = w1.makeWindow(player1);
+        var P2W = w2.makeWindow(player2);
+        var P3W = w3.makeWindow(player3);
+        var P4W = w4.makeWindow(player4);
         //winner label
         win.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, FontPosture.REGULAR, 50));
         win.setTextFill(Color.RED);
@@ -488,7 +258,7 @@ public class Game {
         win.setTranslateX(140); win.setTranslateY(200);
 
         //game over
-        ImageView firework = new ImageView(new Image("fireworks.png"));
+        var firework = new ImageView(new Image("fireworks.png"));
         firework.setTranslateX(150); firework.setTranslateY(100);
         firework.setFitHeight(700); firework.setFitWidth(700);
 
@@ -523,9 +293,7 @@ public class Game {
             //values of tiles
             tiles = makeTiles();
 
-            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//       ALGORITH FOR MOVING DON'T FREAKING TOUCH IT, DON'T EVEN LOOK AT IT, I WARN YOU!
-            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
             translateFigure.setDuration(Duration.millis(2000));
             translateFigure2.setDuration(Duration.millis(2000));
             transY.setDuration(Duration.millis(2000));
@@ -536,7 +304,7 @@ public class Game {
             fade.setDuration(Duration.millis(5000));
             fade.stop();
             //console displaying player turn and action
-            TextArea console = new TextArea();
+            var console = new TextArea();
             console.setEditable(false);
             console.setMaxHeight(100);
             console.setMaxWidth(200);
@@ -548,13 +316,11 @@ public class Game {
             for (repeat = 0; repeat < 2; repeat++) {
                 for (Player player : playerList) {
                     repeat = 0;
+                    //case when player is defeated
                     if (player.isDefeated() && turn == player.getPos()) {
                         nextTurn();
-                        if (player.getPos() == 2 && numOfPlayers == 2)
-                            break;
-                        else if (player.getPos() == 3 && numOfPlayers == 3)
-                            break;
-                        else if (player.getPos() == 4 && numOfPlayers == 4)
+                        if ((player.getPos() == 2 && numOfPlayers == 2) || (player.getPos() == 3 && numOfPlayers == 3)
+                        || (player.getPos() == 4 && numOfPlayers == 4))
                             break;
                     }
                     //case when player is in prison
@@ -567,38 +333,19 @@ public class Game {
                             case 4 -> w4.update(player4);
                         }
                         nextTurn();
-                        if (player.getPos() == 2 && numOfPlayers == 2)
-                            break;
-                        else if (player.getPos() == 3 && numOfPlayers == 3)
-                            break;
-                        else if (player.getPos() == 4 && numOfPlayers == 4)
+                        if ((player.getPos() == 2 && numOfPlayers == 2) || (player.getPos() == 3 && numOfPlayers == 3)
+                                || (player.getPos() == 4 && numOfPlayers == 4))
                             break;
                     }
                     if (turn == player.getPos()) {
                         if (turn == 1) {
-                            translateFigure.setNode(figure1);
-                            transY.setNode(figure1);
-                            portal.setNode(figure1);
-                            chanceMove.setNode(figure1);
-                            fade.setNode(figure1);
+                            setMovesForFigure(figure1);
                         } else if (turn == 2) {
-                            translateFigure.setNode(figure2);
-                            transY.setNode(figure2);
-                            portal.setNode(figure2);
-                            chanceMove.setNode(figure2);
-                            fade.setNode(figure2);
+                            setMovesForFigure(figure2);
                         } else if (turn == 3) {
-                            translateFigure.setNode(figure3);
-                            transY.setNode(figure3);
-                            portal.setNode(figure3);
-                            chanceMove.setNode(figure3);
-                            fade.setNode(figure3);
+                            setMovesForFigure(figure3);
                         } else if (turn == 4) {
-                            translateFigure.setNode(figure4);
-                            transY.setNode(figure4);
-                            portal.setNode(figure4);
-                            chanceMove.setNode(figure4);
-                            fade.setNode(figure4);
+                            setMovesForFigure(figure4);
                         }
                         translateFigure.setByX(0);
                         translateFigure.setByY(0);
