@@ -13,31 +13,32 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
-import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 import java.io.File;
 
+import static graphics.Graphics.noJailPane;
+import static graphics.Graphics.noTaxPane;
+
 
 public class PlayerWindow {
     private Label money;
-    ImageView prison = new ImageView(new Image("jaildoor.png"));
-    StackPane notax = noTax();
-    StackPane noprison = noPrison();
+    private final ImageView prison = new ImageView(new Image("jaildoor.png"));
+    private final StackPane notax = noTaxPane();
+    private final StackPane noprison = noJailPane();
     private TextArea owns;
-    private GridPane center = new GridPane();
+    private final GridPane center = new GridPane();
     public static Media coinSound = new Media(new File("resources/coins.mp3").toURI().toString());
     ImageView moneyImg = new ImageView(new Image("dirt.png"));
     public static MediaPlayer coins = new MediaPlayer(coinSound);
 
     public BorderPane makeWindow(Player player){
-        BorderPane window = new BorderPane();
-        ImageView img = new ImageView(player.getFigure());
+        var window = new BorderPane();
+        var img = new ImageView(player.getFigure());
         img.setFitWidth(40); img.setFitHeight(60);
         img.setTranslateX(-10); img.setTranslateY(10);
         window.setLeft(img);
-        Label name = new Label("Player " + player.getPos());
+        var name = new Label("Player " + player.getPos());
         name.setMaxSize(120,20);
         money = new Label("Account: " + player.getAccount());
         money.setMaxSize(120,20);
@@ -84,7 +85,7 @@ public class PlayerWindow {
         else
             moneyImg.setTranslateX(-50);
 
-        Timeline timer1 = new Timeline(
+        var timer1 = new Timeline(
                 new KeyFrame(Duration.millis(2), e -> money.setTextFill(Color.LIMEGREEN)),
                 new KeyFrame(Duration.millis(3), e -> money.setTextFill(Color.BLACK))
         );
@@ -114,7 +115,7 @@ public class PlayerWindow {
         else
             moneyImg.setTranslateX(-50);
 
-        Timeline timer = new Timeline(
+        var timer = new Timeline(
                 new KeyFrame(Duration.millis(2), e -> money.setTextFill(Color.RED)),
                 new KeyFrame(Duration.millis(3), e -> money.setTextFill(Color.BLACK))
         );
@@ -127,29 +128,5 @@ public class PlayerWindow {
                 money.setTextFill(Color.RED);
             }
         });
-    }
-
-    private StackPane noPrison(){
-        StackPane stack = new StackPane();
-        ImageView noprison = new ImageView(new Image("jaildoor.png"));
-        ImageView remove = new ImageView(new Image("remove.png"));
-        noprison.setFitWidth(25); noprison.setFitHeight(25);
-        remove.setFitWidth(25); remove.setFitHeight(25);
-        stack.getChildren().addAll(noprison, remove);
-        return stack;
-    }
-
-    private StackPane noTax(){
-        StackPane stack = new StackPane();
-        ImageView noprison = new ImageView(new Image("villager.png"));
-        noprison.setFitWidth(25); noprison.setFitHeight(25);
-        Label tax = new Label("TAX");
-        tax.setFont(Font.font(10));
-        tax.setTranslateY(-5);
-        Line line = new Line(-10,10,10,-10);
-        line.setStroke(Color.RED);
-        line.setStrokeWidth(2);
-        stack.getChildren().addAll(noprison, tax, line);
-        return stack;
     }
 }
