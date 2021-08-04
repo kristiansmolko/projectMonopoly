@@ -1,13 +1,17 @@
 package graphics;
 
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 
 public class Graphics {
 
@@ -140,5 +144,29 @@ public class Graphics {
         rect.setArcWidth(15);
         rect.setArcHeight(15);
         return rect;
+    }
+
+    public static StackPane noJailPane(){
+        var noJail = new StackPane();
+        var noPrison = new ImageView(new Image("jaildoor.png"));
+        var remove = new ImageView(new Image("remove.png"));
+        noPrison.setFitWidth(25); noPrison.setFitHeight(25);
+        remove.setFitWidth(25); remove.setFitHeight(25);
+        noJail.getChildren().addAll(noPrison, remove);
+        return noJail;
+    }
+
+    public static StackPane noTaxPane(){
+        var stack = new StackPane();
+        var noTax = new ImageView(new Image("villager.png"));
+        noTax.setFitWidth(25); noTax.setFitHeight(25);
+        var tax = new Label("TAX");
+        tax.setFont(Font.font(10));
+        tax.setTranslateY(-5);
+        var line = new Line(-10,10,10,-10);
+        line.setStroke(Color.RED);
+        line.setStrokeWidth(2);
+        stack.getChildren().addAll(noTax, tax, line);
+        return stack;
     }
 }
