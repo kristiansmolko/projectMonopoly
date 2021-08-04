@@ -1,7 +1,9 @@
+package extra;
+
 public class Chance {
-    public String text;
-    public String action;
-    public int value;
+    private final String text;
+    private final String action;
+    private final int value;
 
     Chance(String text, String action, int value) {
         this.text = text;
