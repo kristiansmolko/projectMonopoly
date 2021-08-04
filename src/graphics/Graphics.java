@@ -3,6 +3,7 @@ package graphics;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -168,5 +169,10 @@ public class Graphics {
         line.setStrokeWidth(2);
         stack.getChildren().addAll(noTax, tax, line);
         return stack;
+    }
+
+    public static void fillDice(BorderPane root, Circle[] set2) {
+        for (Circle setC : set2)
+            root.getChildren().addAll(setC);
     }
 }
