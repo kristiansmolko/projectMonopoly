@@ -840,9 +840,8 @@ public class Game {
     private static boolean playerDefeated(Player player) {
         if (player.isDefeated() && turn == player.getPos()) {
             nextTurn();
-            if ((player.getPos() == 2 && numOfPlayers == 2) || (player.getPos() == 3 && numOfPlayers == 3)
-            || (player.getPos() == 4 && numOfPlayers == 4))
-                return true;
+            return (player.getPos() == 2 && numOfPlayers == 2) || (player.getPos() == 3 && numOfPlayers == 3)
+                    || (player.getPos() == 4 && numOfPlayers == 4);
         }
         return false;
     }
