@@ -431,11 +431,7 @@ public class Game {
                                                         if (player.getAccount() <= 0) {
                                                             player.lost();
                                                             console.setText("Player " + player.getPos() + " has lost!");
-                                                            switch (player.getPos()) {
-                                                                case 2 -> w2.update(player2);
-                                                                case 3 -> w3.update(player3);
-                                                                case 4 -> w4.update(player4);
-                                                            }
+                                                            updatePlayers(w1, w2, w3, w4, player);
                                                             findWinner(player1, player2, player3, player4);
                                                         }
                                                    } if (player1.isInPrison()) console.appendText("Psst! Player 1 is in prison.");
@@ -452,11 +448,7 @@ public class Game {
                                                         if (player.getAccount() <= 0) {
                                                             player.lost();
                                                             console.setText("Player " + player.getPos() + " has lost!");
-                                                            switch (player.getPos()) {
-                                                                case 1 -> w1.update(player1);
-                                                                case 3 -> w3.update(player3);
-                                                                case 4 -> w4.update(player4);
-                                                            }
+                                                            updatePlayers(w1, w2, w3, w4, player);
                                                             findWinner(player1, player2, player3, player4);
                                                         }
                                                     } if (player2.isInPrison()) console.appendText("Psst! Player 2 is in prison.");
@@ -473,11 +465,7 @@ public class Game {
                                                         if (player.getAccount() <= 0) {
                                                             player.lost();
                                                             console.setText("Player " + player.getPos() + " has lost!");
-                                                            switch (player.getPos()) {
-                                                                case 1 -> w1.update(player1);
-                                                                case 2 -> w2.update(player2);
-                                                                case 4 -> w4.update(player4);
-                                                            }
+                                                            updatePlayers(w1, w2, w3, w4, player);
                                                             findWinner(player1, player2, player3, player4);
                                                         }
                                                       } if (player3.isInPrison()) console.appendText("Psst! Player 3 is in prison.");
@@ -494,11 +482,7 @@ public class Game {
                                                         if (player.getAccount() <= 0) {
                                                             player.lost();
                                                             console.setText("Player " + player.getPos() + " has lost!");
-                                                            switch (player.getPos()) {
-                                                                case 1 -> w1.update(player1);
-                                                                case 2 -> w2.update(player2);
-                                                                case 3 -> w3.update(player3);
-                                                            }
+                                                            updatePlayers(w1, w2, w3, w4, player);
                                                             findWinner(player1, player2, player3, player4);
                                                         }
                                                       } if (player4.isInPrison()) console.appendText("Psst! Player 4 is in prison.");
@@ -514,12 +498,7 @@ public class Game {
                                                         if (player.getAccount() <= 0) {
                                                             player.lost();
                                                             console.setText("Player " + player.getPos() + " has lost!");
-                                                            switch (player.getPos()) {
-                                                                case 1 -> w1.update(player1);
-                                                                case 2 -> w2.update(player2);
-                                                                case 3 -> w3.update(player3);
-                                                                case 4 -> w4.update(player4);
-                                                            }
+                                                            updatePlayers(w1, w2, w3, w4, player);
                                                             findWinner(player1, player2, player3, player4);
                                                         }
                                                         buy.setTop(null);
@@ -571,12 +550,7 @@ public class Game {
                                                 } else {
                                                     player.getExtra().remove("prison");
                                                     console.appendText("You used your prisonFree chance.");
-                                                    switch (player.getPos()) {
-                                                        case 1 -> w1.update(player);
-                                                        case 2 -> w2.update(player);
-                                                        case 3 -> w3.update(player);
-                                                        case 4 -> w4.update(player);
-                                                    }
+                                                    updatePlayers(w1, w2, w3, w4, player);
                                                 }
                                             } else if (chances[chanceNum].getValue() == 16) {
                                                 chanceMove.setToX(20);
@@ -615,10 +589,7 @@ public class Game {
                                                         player.getExtra().remove("prison");
                                                         console.appendText("You used your prisonFree chance.");
                                                     }
-                                                     w1.update(player1);
-                                                     w2.update(player2);
-                                                     w3.update(player3);
-                                                     w4.update(player4);
+                                                    updatePlayers(w1, w2, w3, w4, player);
                                                 });
                                             }
                                         }
@@ -641,33 +612,18 @@ public class Game {
                                                 if (player.getAccount() <= 0) {
                                                     player.lost();
                                                     console.setText("Player " + player.getPos() + " has lost!");
-                                                    switch (player.getPos()) {
-                                                        case 1 -> w1.update(player1);
-                                                        case 2 -> w2.update(player2);
-                                                        case 3 -> w3.update(player3);
-                                                        case 4 -> w4.update(player4);
-                                                    }
+                                                    updatePlayers(w1, w2, w3, w4, player);
                                                     findWinner(player1, player2, player3, player4);
                                                 }
                                             }
                                         }
                                         case "prison" -> {
                                             player.addExtra("prison");
-                                            switch (player.getPos()) {
-                                                case 1 -> w1.update(player1);
-                                                case 2 -> w2.update(player2);
-                                                case 3 -> w3.update(player3);
-                                                case 4 -> w4.update(player4);
-                                            }
+                                            updatePlayers(w1, w2, w3, w4, player);
                                         }
                                         case "tax" -> {
                                             player.addExtra("tax");
-                                            switch (player.getPos()) {
-                                                case 1 -> w1.update(player1);
-                                                case 2 -> w2.update(player2);
-                                                case 3 -> w3.update(player3);
-                                                case 4 -> w4.update(player4);
-                                            }
+                                            updatePlayers(w1, w2, w3, w4, player);
                                         }
                                     }
                                     chanceNum++;
@@ -687,23 +643,13 @@ public class Game {
                                         if (player.getAccount() <= 0) {
                                             player.lost();
                                             console.setText("Player " + player.getPos() + " has lost!");
-                                            switch (player.getPos()) {
-                                                case 1 -> w1.update(player1);
-                                                case 2 -> w2.update(player2);
-                                                case 3 -> w3.update(player3);
-                                                case 4 -> w4.update(player4);
-                                            }
+                                            updatePlayers(w1, w2, w3, w4, player);
                                             findWinner(player1, player2, player3, player4);
                                         }
                                     } else {
                                         player.getExtra().remove("tax");
                                         console.appendText("You used your taxFree chance.");
-                                        switch (player.getPos()) {
-                                            case 1 -> w1.update(player);
-                                            case 2 -> w2.update(player);
-                                            case 3 -> w3.update(player);
-                                            case 4 -> w4.update(player);
-                                        }
+                                        updatePlayers(w1, w2, w3, w4, player);
                                     }
                                     break;
                                 case "JAIL":
@@ -729,11 +675,7 @@ public class Game {
                                             if (player.getAccount() <= 0) {
                                                 player.lost();
                                                 console.setText("Player " + player.getPos() + " has lost!");
-                                                switch (player.getPos()) {
-                                                    case 2 -> w2.update(player2);
-                                                    case 3 -> w3.update(player3);
-                                                    case 4 -> w4.update(player4);
-                                                }
+                                                updatePlayers(w1, w2, w3, w4, player);
                                                 findWinner(player1, player2, player3, player4);
                                             }
                                         } if (player1.isInPrison()) console.appendText("Psst! Player 1 is in prison.");
@@ -750,11 +692,7 @@ public class Game {
                                             if (player.getAccount() <= 0) {
                                                 player.lost();
                                                 console.setText("Player " + player.getPos() + " has lost!");
-                                                switch (player.getPos()) {
-                                                    case 1 -> w1.update(player1);
-                                                    case 3 -> w3.update(player3);
-                                                    case 4 -> w4.update(player4);
-                                                }
+                                                updatePlayers(w1, w2, w3, w4, player);
                                                 findWinner(player1, player2, player3, player4);
                                             }
                                          } if (player2.isInPrison()) console.appendText("Psst! Player 2 is in prison.");
@@ -771,11 +709,7 @@ public class Game {
                                             if (player.getAccount() <= 0) {
                                                 player.lost();
                                                 console.setText("Player " + player.getPos() + " has lost!");
-                                                switch (player.getPos()) {
-                                                    case 1 -> w1.update(player1);
-                                                    case 2 -> w2.update(player2);
-                                                    case 4 -> w4.update(player4);
-                                                }
+                                                updatePlayers(w1, w2, w3, w4, player);
                                                 findWinner(player1, player2, player3, player4);
                                             }
                                         } if (player3.isInPrison()) console.appendText("Psst! Player 3 is in prison.");
@@ -792,11 +726,7 @@ public class Game {
                                             if (player.getAccount() <= 0) {
                                                 player.lost();
                                                 console.setText("Player " + player.getPos() + " has lost!");
-                                                switch (player.getPos()) {
-                                                    case 1 -> w1.update(player1);
-                                                    case 2 -> w2.update(player2);
-                                                    case 3 -> w3.update(player3);
-                                                }
+                                                updatePlayers(w1, w2, w3, w4, player);
                                                 findWinner(player1, player2, player3, player4);
                                             }
                                          } if (player4.isInPrison()) console.appendText("Psst! Player 4 is in prison.");
@@ -812,12 +742,7 @@ public class Game {
                                             if (player.getAccount() <= 0) {
                                                 player.lost();
                                                 console.setText("Player " + player.getPos() + " has lost!");
-                                                switch (player.getPos()) {
-                                                    case 1 -> w1.update(player1);
-                                                    case 2 -> w2.update(player2);
-                                                    case 3 -> w3.update(player3);
-                                                    case 4 -> w4.update(player4);
-                                                }
+                                                updatePlayers(w1, w2, w3, w4, player);
                                                 findWinner(player1, player2, player3, player4);
                                             }
                                             buy.setTop(null);
@@ -905,10 +830,7 @@ public class Game {
                                                 player.getExtra().remove("prison");
                                                 console.appendText("You used your prisonFree chance.");
                                             }
-                                            w1.update(player1);
-                                            w2.update(player2);
-                                            w3.update(player3);
-                                            w4.update(player4);
+                                            updatePlayers(w1, w2, w3, w4, player);
                                         });
                                     });
                                 }
@@ -988,6 +910,15 @@ public class Game {
         border.setCenter(center);
         border.setRight(right);
         return border;
+    }
+
+    private static void updatePlayers(PlayerWindow w1, PlayerWindow w2, PlayerWindow w3, PlayerWindow w4, Player player) {
+        switch (player.getPos()) {
+            case 1 -> w1.update(player);
+            case 2 -> w2.update(player);
+            case 3 -> w3.update(player);
+            case 4 -> w4.update(player);
+        }
     }
 
     private static void buyTile(PlayerWindow w1, PlayerWindow w2, PlayerWindow w3, PlayerWindow w4, TextArea console, Player player) {
