@@ -69,7 +69,7 @@ public class Game {
     }
 
     public static int randomNum(){
-        Random rnd = new Random();
+        var rnd = new Random();
         return (rnd.nextInt(6)+1);
     }
 
@@ -395,55 +395,31 @@ public class Game {
                                                 if ((player1.getOwned().contains(tiles.get(player.getTile())))) {
                                                     if (player.getPos() == 1)
                                                         console.appendText(OWNED);
-                                                    else if (!player1.isInPrison()) {
+                                                    if (!player1.isInPrison()) {
                                                         payPlayer(player1, w1, console, player);
-                                                        loseMoney(w1, w2, w3, w4, player);
-                                                        if (player.getAccount() <= 0) {
-                                                            player.lost();
-                                                            consolePlayer(console, player, LOST);
-                                                            updatePlayers(w1, w2, w3, w4, player);
-                                                            findWinner(player1, player2, player3, player4);
-                                                        }
-                                                   } if (player1.isInPrison()) console.appendText("Psst! Player 1 is in prison.");
+                                                        loseMoneyAndCheckIfLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
+                                                    } else if (player1.isInPrison()) console.appendText("Psst! Player 1 is in prison.");
                                                 } else if ((player2.getOwned().contains(tiles.get(player.getTile())))) {
                                                     if (player.getPos() == 2)
                                                         console.appendText(OWNED);
-                                                    else if (!player2.isInPrison()) {
+                                                    if (!player2.isInPrison()) {
                                                         payPlayer(player2, w2, console, player);
-                                                        loseMoney(w1, w2, w3, w4, player);
-                                                        if (player.getAccount() <= 0) {
-                                                            player.lost();
-                                                            consolePlayer(console, player, LOST);
-                                                            updatePlayers(w1, w2, w3, w4, player);
-                                                            findWinner(player1, player2, player3, player4);
-                                                        }
-                                                    } if (player2.isInPrison()) console.appendText("Psst! Player 2 is in prison.");
+                                                        loseMoneyAndCheckIfLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
+                                                    } else if (player2.isInPrison()) console.appendText("Psst! Player 2 is in prison.");
                                                 } else if ((player3.getOwned().contains(tiles.get(player.getTile())))) {
                                                     if (player.getPos() == 3)
                                                         console.appendText(OWNED);
-                                                    else if (!player3.isInPrison()) {
+                                                    if (!player3.isInPrison()) {
                                                         payPlayer(player3, w3, console, player);
-                                                        loseMoney(w1, w2, w3, w4, player);
-                                                        if (player.getAccount() <= 0) {
-                                                            player.lost();
-                                                            consolePlayer(console, player, LOST);
-                                                            updatePlayers(w1, w2, w3, w4, player);
-                                                            findWinner(player1, player2, player3, player4);
-                                                        }
-                                                      } if (player3.isInPrison()) console.appendText("Psst! Player 3 is in prison.");
+                                                        loseMoneyAndCheckIfLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
+                                                    } else if (player3.isInPrison()) console.appendText("Psst! Player 3 is in prison.");
                                                 } else if ((player4.getOwned().contains(tiles.get(player.getTile())))) {
                                                     if (player.getPos() == 4)
                                                         console.appendText(OWNED);
-                                                    else if (!player4.isInPrison()) {
+                                                    if (!player4.isInPrison()) {
                                                         payPlayer(player4, w4, console, player);
-                                                        loseMoney(w1, w2, w3, w4, player);
-                                                        if (player.getAccount() <= 0) {
-                                                            player.lost();
-                                                            consolePlayer(console, player, LOST);
-                                                            updatePlayers(w1, w2, w3, w4, player);
-                                                            findWinner(player1, player2, player3, player4);
-                                                        }
-                                                      } if (player4.isInPrison()) console.appendText("Psst! Player 4 is in prison.");
+                                                        loseMoneyAndCheckIfLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
+                                                    } else if (player4.isInPrison()) console.appendText("Psst! Player 4 is in prison.");
                                                 } else {
                                                     var text1 = new Label("Do you want to buy \n" + tiles.get(player.getTile()) + " for " + values[player.getTile()] + "?");
                                                     text1.setTranslateX(20);
@@ -454,10 +430,7 @@ public class Game {
                                                     yes1.setOnAction(actionEvent12 -> {
                                                         buyTile(w1, w2, w3, w4, console, player);
                                                         if (player.getAccount() <= 0) {
-                                                            player.lost();
-                                                            consolePlayer(console, player, LOST);
-                                                            updatePlayers(w1, w2, w3, w4, player);
-                                                            findWinner(player1, player2, player3, player4);
+                                                            playerLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
                                                         }
                                                         buy.setTop(null);
                                                     });
@@ -561,13 +534,7 @@ public class Game {
                                                     case 4 -> w4.addAccount(player);
                                                 }
                                             else if (chances[chanceNum].getValue() < 0) {
-                                                loseMoney(w1, w2, w3, w4, player);
-                                                if (player.getAccount() <= 0) {
-                                                    player.lost();
-                                                    consolePlayer(console, player, LOST);
-                                                    updatePlayers(w1, w2, w3, w4, player);
-                                                    findWinner(player1, player2, player3, player4);
-                                                }
+                                                loseMoneyAndCheckIfLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
                                             }
                                         }
                                         case PRISON -> {
@@ -587,13 +554,7 @@ public class Game {
                                     if (!player.getExtra().contains("tax")) {
                                         player.takeFromAccount(values[player.getTile()]);
                                         console.appendText("\nPlayer " + player.getPos() + " paid tax: " + values[player.getTile()] + ".\n");
-                                        loseMoney(w1, w2, w3, w4, player);
-                                        if (player.getAccount() <= 0) {
-                                            player.lost();
-                                            consolePlayer(console, player, LOST);
-                                            updatePlayers(w1, w2, w3, w4, player);
-                                            findWinner(player1, player2, player3, player4);
-                                        }
+                                        loseMoneyAndCheckIfLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
                                     } else {
                                         player.getExtra().remove("tax");
                                         console.appendText("You used your taxFree chance.");
@@ -613,55 +574,31 @@ public class Game {
                                     if ((player1.getOwned().contains(tiles.get(player.getTile())))) {
                                         if (player.getPos() == 1)
                                             console.appendText(OWNED);
-                                        else if (!player1.isInPrison()) {
+                                        if (!player1.isInPrison()) {
                                             payPlayer(player1, w1, console, player);
-                                            loseMoney(w1, w2, w3, w4, player);
-                                            if (player.getAccount() <= 0) {
-                                                player.lost();
-                                                consolePlayer(console, player, LOST);
-                                                updatePlayers(w1, w2, w3, w4, player);
-                                                findWinner(player1, player2, player3, player4);
-                                            }
-                                        } if (player1.isInPrison()) console.appendText("Psst! Player 1 is in prison.");
+                                            loseMoneyAndCheckIfLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
+                                        } else if (player1.isInPrison()) console.appendText("Psst! Player 1 is in prison.");
                                     } else if ((player2.getOwned().contains(tiles.get(player.getTile())))) {
                                         if (player.getPos() == 2)
                                             console.appendText(OWNED);
-                                        else if (!player2.isInPrison()) {
+                                        if (!player2.isInPrison()) {
                                             payPlayer(player2, w2, console, player);
-                                            loseMoney(w1, w2, w3, w4, player);
-                                            if (player.getAccount() <= 0) {
-                                                player.lost();
-                                                consolePlayer(console, player, LOST);
-                                                updatePlayers(w1, w2, w3, w4, player);
-                                                findWinner(player1, player2, player3, player4);
-                                            }
-                                         } if (player2.isInPrison()) console.appendText("Psst! Player 2 is in prison.");
+                                            loseMoneyAndCheckIfLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
+                                        } else if (player2.isInPrison()) console.appendText("Psst! Player 2 is in prison.");
                                     } else if ((player3.getOwned().contains(tiles.get(player.getTile())))) {
                                         if (player.getPos() == 3)
                                             console.appendText(OWNED);
-                                        else if (!player3.isInPrison()) {
+                                        if (!player3.isInPrison()) {
                                             payPlayer(player3, w3, console, player);
-                                            loseMoney(w1, w2, w3, w4, player);
-                                            if (player.getAccount() <= 0) {
-                                                player.lost();
-                                                consolePlayer(console, player, LOST);
-                                                updatePlayers(w1, w2, w3, w4, player);
-                                                findWinner(player1, player2, player3, player4);
-                                            }
-                                        } if (player3.isInPrison()) console.appendText("Psst! Player 3 is in prison.");
+                                            loseMoneyAndCheckIfLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
+                                        } else if (player3.isInPrison()) console.appendText("Psst! Player 3 is in prison.");
                                     } else if ((player4.getOwned().contains(tiles.get(player.getTile())))) {
                                         if (player.getPos() == 4)
                                             console.appendText(OWNED);
-                                        else if (!player4.isInPrison()) {
+                                        if (!player4.isInPrison()) {
                                             payPlayer(player4, w4, console, player);
-                                            loseMoney(w1, w2, w3, w4, player);
-                                            if (player.getAccount() <= 0) {
-                                                player.lost();
-                                                consolePlayer(console, player, LOST);
-                                                updatePlayers(w1, w2, w3, w4, player);
-                                                findWinner(player1, player2, player3, player4);
-                                            }
-                                         } if (player4.isInPrison()) console.appendText("Psst! Player 4 is in prison.");
+                                            loseMoneyAndCheckIfLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
+                                        } else if (player4.isInPrison()) console.appendText("Psst! Player 4 is in prison.");
                                     } else {
                                         text = new Label("Do you want to buy \n" + tiles.get(player.getTile()) + " for " + values[player.getTile()] + "?");
                                         text.setTranslateX(20);
@@ -672,10 +609,7 @@ public class Game {
                                         yes.setOnAction(actionEvent12 -> {
                                             buyTile(w1, w2, w3, w4, console, player);
                                             if (player.getAccount() <= 0) {
-                                                player.lost();
-                                                consolePlayer(console, player, LOST);
-                                                updatePlayers(w1, w2, w3, w4, player);
-                                                findWinner(player1, player2, player3, player4);
+                                                playerLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
                                             }
                                             buy.setTop(null);
                                         });
@@ -696,7 +630,7 @@ public class Game {
                             if (nextTile > 9) {
                                 rest = ((nextTile - 9) * 100);
                                 translateFigure.setByX(-(move - rest));
-                                transY.setByY(-(((nextTile - 9) * 100)));
+                                transY.setByY(-((nextTile - 9) * 100));
                                 translateFigure.play();
                                 translateFigure.setOnFinished(actionEvent13 -> transY.play());
                                 actionEvent.consume();
@@ -721,7 +655,7 @@ public class Game {
                         if (player.getTile() >= 16 && player.getTile() < 25) {
                             if (nextTile > 25) {
                                 rest = ((nextTile - 25) * 100);
-                                translateFigure.setByX(move - (((nextTile - 25) * 100)));
+                                translateFigure.setByX(move - ((nextTile - 25) * 100));
                                 transY.setByY(rest);
                                 translateFigure.play();
                                 translateFigure.setOnFinished(actionEvent15 -> transY.play());
@@ -835,6 +769,19 @@ public class Game {
         border.setCenter(center);
         border.setRight(right);
         return border;
+    }
+
+    private static void loseMoneyAndCheckIfLose(Player player1, Player player2, Player player3, Player player4, PlayerWindow w1, PlayerWindow w2, PlayerWindow w3, PlayerWindow w4, TextArea console, Player player) {
+        loseMoney(w1, w2, w3, w4, player);
+        if (player.getAccount() <= 0)
+            playerLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
+    }
+
+    private static void playerLose(Player player1, Player player2, Player player3, Player player4, PlayerWindow w1, PlayerWindow w2, PlayerWindow w3, PlayerWindow w4, TextArea console, Player player) {
+        player.lost();
+        consolePlayer(console, player, LOST);
+        updatePlayers(w1, w2, w3, w4, player);
+        findWinner(player1, player2, player3, player4);
     }
 
     private static boolean playerDefeated(Player player) {
