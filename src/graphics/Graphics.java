@@ -1,18 +1,17 @@
 package graphics;
 
+import javafx.animation.*;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
+import javafx.scene.paint.*;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.util.Duration;
 
 public class Graphics {
 
@@ -174,5 +173,12 @@ public class Graphics {
     public static void fillDice(BorderPane root, Circle[] set2) {
         for (Circle setC : set2)
             root.getChildren().addAll(setC);
+    }
+
+    public static Rectangle chanceCard(){
+        var rectangle = new Rectangle(50, 100);
+        rectangle.setVisible(false);
+        rectangle.setFill(new ImagePattern(new Image("paper.jpg")));
+        return rectangle;
     }
 }
