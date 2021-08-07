@@ -11,6 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -66,6 +67,28 @@ public class Game {
         back.setDuration(Duration.millis(10));
         back.setNode(rect);
         return back;
+    }
+
+    public static Timeline expandChance(Rectangle rectangle){
+        rectangle.setVisible(true);
+        var widthValue = new KeyValue(rectangle.widthProperty(), rectangle.getWidth() + 200);
+        var heightValue = new KeyValue(rectangle.heightProperty(), rectangle.getHeight() + 100);
+        var frame = new KeyFrame(Duration.seconds(3), widthValue, heightValue);
+        return new Timeline(frame);
+    }
+
+    public static FadeTransition fadeChance(Rectangle rectangle){
+        var fade = new FadeTransition();
+        fade.setNode(rectangle);
+        fade.setToValue(0);
+        return fade;
+    }
+
+    public static FadeTransition fadeInChance(Rectangle rectangle){
+        var fadeIn = new FadeTransition();
+        fadeIn.setNode(rectangle);
+        fadeIn.setToValue(100);
+        return fadeIn;
     }
 
     public static int randomNum(){
@@ -258,6 +281,16 @@ public class Game {
         win.setText(win.getText().toUpperCase());
         win.setTranslateX(140); win.setTranslateY(200);
 
+        //chance card
+        var chanceCard = chanceCard();
+        var chanceSet = new StackPane();
+        var chanceText = new Label();
+        chanceText.setVisible(false);
+        chanceText.setFont(Font.font("Times New Roman", 24));
+        chanceSet.setTranslateX(450);
+        chanceSet.setTranslateY(400);
+        chanceSet.getChildren().addAll(chanceCard, chanceText);
+
         //game over
         var firework = new ImageView(new Image("fireworks.png"));
         firework.setTranslateX(150); firework.setTranslateY(100);
@@ -369,186 +402,205 @@ public class Game {
                             }
                             switch (tiles.get(player.getTile())) {
                                 case "CHANCE":
-                                    var text = new Label();
-                                    text.setText(chances[chanceNum].getText());
-                                    text.setTranslateX(20);
-                                    buy.setTop(text);
-                                    switch (chances[chanceNum].getAction()) {
-                                        case "move" -> {
-                                            if (player.getTile() < 9 && player.getTile() > 0) {
-                                                chanceMove.setToX(920 - (player.getTile() + chances[chanceNum].getValue()) * 100);
-                                                chanceMove.setToY(705);
-                                            } else if (player.getTile() < 25 && player.getTile() > 16) {
-                                                chanceMove.setToX((player.getTile() + chances[chanceNum].getValue() - 16) * 100 + 20);
-                                                chanceMove.setToY(5);
-                                            }
-                                            if (player.getTile() < 16 && player.getTile() > 9) {
-                                                chanceMove.setToY(705 - (player.getTile() + chances[chanceNum].getValue() - 9) * 100);
-                                                chanceMove.setToX(20);
-                                            } else if (player.getTile() < 32 && player.getTile() > 25) {
-                                                chanceMove.setToY(100 * (player.getTile() + chances[chanceNum].getValue() - 25));
-                                                chanceMove.setToX(920);
-                                            }
-                                            player.addTile(chances[chanceNum].getValue());
-                                            chanceMove.play();
-                                            chanceMove.setOnFinished(e -> {
-                                                if ((player1.getOwned().contains(tiles.get(player.getTile())))) {
-                                                    if (player.getPos() == 1)
-                                                        console.appendText(OWNED);
-                                                    if (!player1.isInPrison()) {
-                                                        payPlayer(player1, w1, console, player);
-                                                        loseMoneyAndCheckIfLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
-                                                    } else if (player1.isInPrison()) console.appendText("Psst! Player 1 is in prison.");
-                                                } else if ((player2.getOwned().contains(tiles.get(player.getTile())))) {
-                                                    if (player.getPos() == 2)
-                                                        console.appendText(OWNED);
-                                                    if (!player2.isInPrison()) {
-                                                        payPlayer(player2, w2, console, player);
-                                                        loseMoneyAndCheckIfLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
-                                                    } else if (player2.isInPrison()) console.appendText("Psst! Player 2 is in prison.");
-                                                } else if ((player3.getOwned().contains(tiles.get(player.getTile())))) {
-                                                    if (player.getPos() == 3)
-                                                        console.appendText(OWNED);
-                                                    if (!player3.isInPrison()) {
-                                                        payPlayer(player3, w3, console, player);
-                                                        loseMoneyAndCheckIfLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
-                                                    } else if (player3.isInPrison()) console.appendText("Psst! Player 3 is in prison.");
-                                                } else if ((player4.getOwned().contains(tiles.get(player.getTile())))) {
-                                                    if (player.getPos() == 4)
-                                                        console.appendText(OWNED);
-                                                    if (!player4.isInPrison()) {
-                                                        payPlayer(player4, w4, console, player);
-                                                        loseMoneyAndCheckIfLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
-                                                    } else if (player4.isInPrison()) console.appendText("Psst! Player 4 is in prison.");
-                                                } else {
-                                                    var text1 = new Label("Do you want to buy \n" + tiles.get(player.getTile()) + " for " + values[player.getTile()] + "?");
-                                                    text1.setTranslateX(20);
-                                                    var yes1 = new Button("Buy");
-                                                    yes1.setTranslateY(30);
-                                                    yes1.setTranslateX(70);
-                                                    yes1.setPrefSize(60, 40);
-                                                    yes1.setOnAction(actionEvent12 -> {
-                                                        buyTile(w1, w2, w3, w4, console, player);
-                                                        if (player.getAccount() <= 0) {
-                                                            playerLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
-                                                        }
-                                                        buy.setTop(null);
-                                                    });
-                                                    var buySetup = new GridPane();
-                                                    buySetup.setMaxSize(200, 70);
-                                                    buySetup.addRow(0, text1);
-                                                    buySetup.addRow(1, yes1);
-                                                    buy.setTop(buySetup);
-                                                }
-                                            }); //end of chM.sOF
-                                        }
-                                        case "moveTo" -> {
-                                            if (chances[chanceNum].getValue() == 0) {
-                                                chanceMove.setToX(920);
-                                                chanceMove.setToY(705);
-                                                player.addTile(-player.getTile());
-                                                player.addToAccount(200);
-                                                chanceMove.play();
-                                                chanceMove.setOnFinished(e1 -> {
-                                                    switch (player.getPos()) {
-                                                        case 1 -> w1.addAccount(player);
-                                                        case 2 -> w2.addAccount(player);
-                                                        case 3 -> w3.addAccount(player);
-                                                        case 4 -> w4.addAccount(player);
-                                                    }
-                                                });
-                                            } else if (chances[chanceNum].getValue() == 9) {
-                                                if (!player.getExtra().contains(PRISON)) {
-                                                    chanceMove.setToX(20);
+                                    chanceCard.setWidth(100);
+                                    chanceCard.setHeight(50);
+                                    var fadeIn = fadeInChance(chanceCard);
+                                    fadeIn.play();
+                                    chanceCard.setVisible(false);
+                                    var expandChance = expandChance(chanceCard);
+                                    fadeIn.setOnFinished(e -> expandChance.play());
+                                    var pauseChance = new PauseTransition(Duration.millis(4000));
+                                    var fadeChance = fadeChance(chanceCard);
+                                    expandChance.setOnFinished(expand -> {
+                                        chanceText.setText(chances[chanceNum].getText());
+                                        chanceText.setVisible(true);
+                                        pauseChance.play();
+                                    });
+                                    pauseChance.setOnFinished(pause -> fadeChance.play());
+                                    fadeChance.setOnFinished(fade -> {
+                                        chanceText.setVisible(false);
+                                        var text = new Label();
+                                        text.setText(chances[chanceNum].getText());
+                                        text.setTranslateX(20);
+                                        buy.setTop(text);
+                                        switch (chances[chanceNum].getAction()) {
+                                            case "move" -> {
+                                                if (player.getTile() < 9 && player.getTile() > 0) {
+                                                    chanceMove.setToX(920 - (player.getTile() + chances[chanceNum].getValue()) * 100);
                                                     chanceMove.setToY(705);
+                                                } else if (player.getTile() < 25 && player.getTile() > 16) {
+                                                    chanceMove.setToX((player.getTile() + chances[chanceNum].getValue() - 16) * 100 + 20);
+                                                    chanceMove.setToY(5);
+                                                }
+                                                if (player.getTile() < 16 && player.getTile() > 9) {
+                                                    chanceMove.setToY(705 - (player.getTile() + chances[chanceNum].getValue() - 9) * 100);
+                                                    chanceMove.setToX(20);
+                                                } else if (player.getTile() < 32 && player.getTile() > 25) {
+                                                    chanceMove.setToY(100 * (player.getTile() + chances[chanceNum].getValue() - 25));
+                                                    chanceMove.setToX(920);
+                                                }
+                                                player.addTile(chances[chanceNum].getValue());
+                                                chanceMove.play();
+                                                chanceMove.setOnFinished(e -> {
+                                                    if ((player1.getOwned().contains(tiles.get(player.getTile())))) {
+                                                        if (player.getPos() == 1)
+                                                            console.appendText(OWNED);
+                                                        if (!player1.isInPrison()) {
+                                                            payPlayer(player1, w1, console, player);
+                                                            loseMoneyAndCheckIfLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
+                                                        } else if (player1.isInPrison()) console.appendText("Psst! Player 1 is in prison.");
+                                                    } else if ((player2.getOwned().contains(tiles.get(player.getTile())))) {
+                                                        if (player.getPos() == 2)
+                                                            console.appendText(OWNED);
+                                                        if (!player2.isInPrison()) {
+                                                            payPlayer(player2, w2, console, player);
+                                                            loseMoneyAndCheckIfLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
+                                                        } else if (player2.isInPrison()) console.appendText("Psst! Player 2 is in prison.");
+                                                    } else if ((player3.getOwned().contains(tiles.get(player.getTile())))) {
+                                                        if (player.getPos() == 3)
+                                                            console.appendText(OWNED);
+                                                        if (!player3.isInPrison()) {
+                                                            payPlayer(player3, w3, console, player);
+                                                            loseMoneyAndCheckIfLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
+                                                        } else if (player3.isInPrison()) console.appendText("Psst! Player 3 is in prison.");
+                                                    } else if ((player4.getOwned().contains(tiles.get(player.getTile())))) {
+                                                        if (player.getPos() == 4)
+                                                            console.appendText(OWNED);
+                                                        if (!player4.isInPrison()) {
+                                                            payPlayer(player4, w4, console, player);
+                                                            loseMoneyAndCheckIfLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
+                                                        } else if (player4.isInPrison()) console.appendText("Psst! Player 4 is in prison.");
+                                                    } else {
+                                                        var text1 = new Label("Do you want to buy \n" + tiles.get(player.getTile()) + " for " + values[player.getTile()] + "?");
+                                                        text1.setTranslateX(20);
+                                                        var yes1 = new Button("Buy");
+                                                        yes1.setTranslateY(30);
+                                                        yes1.setTranslateX(70);
+                                                        yes1.setPrefSize(60, 40);
+                                                        yes1.setOnAction(actionEvent12 -> {
+                                                            buyTile(w1, w2, w3, w4, console, player);
+                                                            if (player.getAccount() <= 0) {
+                                                                playerLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
+                                                            }
+                                                            buy.setTop(null);
+                                                        });
+                                                        var buySetup = new GridPane();
+                                                        buySetup.setMaxSize(200, 70);
+                                                        buySetup.addRow(0, text1);
+                                                        buySetup.addRow(1, yes1);
+                                                        buy.setTop(buySetup);
+                                                    }
+                                                }); //end of chM.sOF
+                                            }
+                                            case "moveTo" -> {
+                                                if (chances[chanceNum].getValue() == 0) {
+                                                    chanceMove.setToX(920);
+                                                    chanceMove.setToY(705);
+                                                    player.addTile(-player.getTile());
+                                                    player.addToAccount(200);
+                                                    chanceMove.play();
+                                                    chanceMove.setOnFinished(e1 -> {
+                                                        switch (player.getPos()) {
+                                                            case 1 -> w1.addAccount(player);
+                                                            case 2 -> w2.addAccount(player);
+                                                            case 3 -> w3.addAccount(player);
+                                                            case 4 -> w4.addAccount(player);
+                                                        }
+                                                    });
+                                                } else if (chances[chanceNum].getValue() == 9) {
+                                                    if (!player.getExtra().contains(PRISON)) {
+                                                        chanceMove.setToX(20);
+                                                        chanceMove.setToY(705);
+                                                        if (player.getTile() < 9)
+                                                            player.addTile(9 - player.getTile());
+                                                        else
+                                                            player.addTile(-(player.getTile() - 9));
+                                                        chanceMove.play();
+                                                        chanceMove.setOnFinished(e -> {
+                                                            outOfPrison(player1);
+                                                            outOfPrison(player2);
+                                                            outOfPrison(player3);
+                                                            outOfPrison(player4);
+                                                            player.toPrison();
+                                                            nether.play();
+                                                            w1.update(player1);
+                                                            w2.update(player2);
+                                                            w3.update(player3);
+                                                            w4.update(player4);
+                                                        });
+                                                    } else {
+                                                        player.getExtra().remove(PRISON);
+                                                        console.appendText("You used your prisonFree chance.");
+                                                        updatePlayers(w1, w2, w3, w4, player);
+                                                    }
+                                                } else if (chances[chanceNum].getValue() == 16) {
+                                                    chanceMove.setToX(20);
+                                                    chanceMove.setToY(5);
+                                                    if (player.getTile() < 16)
+                                                        player.addTile(16 - player.getTile());
+                                                    else
+                                                        player.addTile(-(player.getTile() - 16));
+                                                    chanceMove.play();
+                                                    chanceMove.setOnFinished(e -> water.play());
+
+                                                } else if (chances[chanceNum].getValue() == 25) {
+                                                    chanceMove.setToX(920);
+                                                    chanceMove.setToY(5);
                                                     if (player.getTile() < 9)
                                                         player.addTile(9 - player.getTile());
                                                     else
                                                         player.addTile(-(player.getTile() - 9));
                                                     chanceMove.play();
                                                     chanceMove.setOnFinished(e -> {
+                                                        portal.setToX(20);
+                                                        portal.setToY(705);
+                                                        pauseMove.play();
+                                                        portalEffect.play();
+                                                    });
+                                                    pauseMove.setOnFinished(e -> portal.play());
+                                                    if (!player.getExtra().contains(PRISON)) {
                                                         outOfPrison(player1);
                                                         outOfPrison(player2);
                                                         outOfPrison(player3);
                                                         outOfPrison(player4);
                                                         player.toPrison();
-                                                        nether.play();
-                                                        w1.update(player1);
-                                                        w2.update(player2);
-                                                        w3.update(player3);
-                                                        w4.update(player4);
-                                                    });
-                                                } else {
-                                                    player.getExtra().remove(PRISON);
-                                                    console.appendText("You used your prisonFree chance.");
-                                                    updatePlayers(w1, w2, w3, w4, player);
-                                                }
-                                            } else if (chances[chanceNum].getValue() == 16) {
-                                                chanceMove.setToX(20);
-                                                chanceMove.setToY(5);
-                                                if (player.getTile() < 16)
-                                                    player.addTile(16 - player.getTile());
-                                                else
-                                                    player.addTile(-(player.getTile() - 16));
-                                                chanceMove.play();
-                                                chanceMove.setOnFinished(e -> water.play());
-
-                                            } else if (chances[chanceNum].getValue() == 25) {
-                                                chanceMove.setToX(920);
-                                                chanceMove.setToY(5);
-                                                if (player.getTile() < 9)
-                                                    player.addTile(9 - player.getTile());
-                                                else
-                                                    player.addTile(-(player.getTile() - 9));
-                                                chanceMove.play();
-                                                chanceMove.setOnFinished(e -> {
-                                                    portal.setToX(20);
-                                                    portal.setToY(705);
-                                                    pauseMove.play();
-                                                    portalEffect.play();
-                                                });
-                                                pauseMove.setOnFinished(e -> portal.play());
-                                                if (!player.getExtra().contains(PRISON)) {
-                                                    outOfPrison(player1);
-                                                    outOfPrison(player2);
-                                                    outOfPrison(player3);
-                                                    outOfPrison(player4);
-                                                    player.toPrison();
-                                                }
-                                                portal.setOnFinished(e -> {
-                                                    if (player.getExtra().contains(PRISON)){
-                                                        player.getExtra().remove(PRISON);
-                                                        console.appendText("You used your prisonFree chance.");
                                                     }
-                                                    updatePlayers(w1, w2, w3, w4, player);
-                                                });
-                                            }
-                                        }
-                                        case "money" -> {
-                                            player.addToAccount(chances[chanceNum].getValue());
-                                            if (chances[chanceNum].getValue() > 0)
-                                                switch (player.getPos()) {
-                                                    case 1 -> w1.addAccount(player);
-                                                    case 2 -> w2.addAccount(player);
-                                                    case 3 -> w3.addAccount(player);
-                                                    case 4 -> w4.addAccount(player);
+                                                    portal.setOnFinished(e -> {
+                                                        if (player.getExtra().contains(PRISON)){
+                                                            player.getExtra().remove(PRISON);
+                                                            console.appendText("You used your prisonFree chance.");
+                                                        }
+                                                        updatePlayers(w1, w2, w3, w4, player);
+                                                    });
                                                 }
-                                            else if (chances[chanceNum].getValue() < 0) {
-                                                loseMoneyAndCheckIfLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
+                                            }
+                                            case "money" -> {
+                                                player.addToAccount(chances[chanceNum].getValue());
+                                                if (chances[chanceNum].getValue() > 0)
+                                                    switch (player.getPos()) {
+                                                        case 1 -> w1.addAccount(player);
+                                                        case 2 -> w2.addAccount(player);
+                                                        case 3 -> w3.addAccount(player);
+                                                        case 4 -> w4.addAccount(player);
+                                                    }
+                                                else if (chances[chanceNum].getValue() < 0) {
+                                                    loseMoneyAndCheckIfLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
+                                                }
+                                            }
+                                            case PRISON -> {
+                                                player.addExtra(PRISON);
+                                                updatePlayers(w1, w2, w3, w4, player);
+                                            }
+                                            case "tax" -> {
+                                                player.addExtra("tax");
+                                                updatePlayers(w1, w2, w3, w4, player);
                                             }
                                         }
-                                        case PRISON -> {
-                                            player.addExtra(PRISON);
-                                            updatePlayers(w1, w2, w3, w4, player);
-                                        }
-                                        case "tax" -> {
-                                            player.addExtra("tax");
-                                            updatePlayers(w1, w2, w3, w4, player);
-                                        }
-                                    }
-                                    chanceNum++;
-                                    if (chanceNum == 12)
-                                        chanceNum = 0;
+                                        chanceNum++;
+                                        if (chanceNum == 12)
+                                            chanceNum = 0;
+                                        fadeChance.stop();
+                                    });
                                     break;
                                 case "TAX":
                                     if (!player.getExtra().contains("tax")) {
@@ -600,7 +652,7 @@ public class Game {
                                             loseMoneyAndCheckIfLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
                                         } else if (player4.isInPrison()) console.appendText("Psst! Player 4 is in prison.");
                                     } else {
-                                        text = new Label("Do you want to buy \n" + tiles.get(player.getTile()) + " for " + values[player.getTile()] + "?");
+                                        var text = new Label("Do you want to buy \n" + tiles.get(player.getTile()) + " for " + values[player.getTile()] + "?");
                                         text.setTranslateX(20);
                                         var yes = new Button("Buy");
                                         yes.setTranslateY(30);
@@ -763,6 +815,7 @@ public class Game {
         }
         center.getChildren().add(figure2);
         center.getChildren().add(figure1);
+        center.getChildren().add(chanceSet);
         center.getChildren().add(root);
 
         //game setup
