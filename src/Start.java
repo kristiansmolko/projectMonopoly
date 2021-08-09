@@ -10,7 +10,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -21,7 +20,6 @@ public class Start {
     private int picture = 0;
     private int numOfPlayers = 2;
     private final ArrayList<String> available = new ArrayList<>();
-//    private final ArrayList<String> figures = new ArrayList<>();
     private final Map<String, String> figures = new LinkedHashMap<>();
 
     private static final String ROUNDER_BUTTON = "-fx-background-radius: 1em;";
@@ -223,7 +221,6 @@ public class Start {
         buttons.setHgap(50);
 
         var playerNameField = playerNameField();
-        var playerName = "";
 
         var another = new Button("Next");
         another.setTranslateX(400);
@@ -295,7 +292,6 @@ public class Start {
         text.setTranslateX(300);
         text.setMaxHeight(80);
         text.setMaxWidth(300);
-//        label.setText("Player's " + current + " figure");
         text.setFont(Font.font(FONT, 40));
         return text;
     }
