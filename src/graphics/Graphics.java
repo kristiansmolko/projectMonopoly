@@ -1,5 +1,6 @@
 package graphics;
 
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -178,5 +179,13 @@ public class Graphics {
         rectangle.setVisible(false);
         rectangle.setFill(new ImagePattern(new Image("paper.jpg")));
         return rectangle;
+    }
+
+    public static Button getBuyButton(){
+        var yes1 = new Button("Buy");
+        yes1.setTranslateY(30);
+        yes1.setTranslateX(70);
+        yes1.setPrefSize(60, 40);
+        return yes1;
     }
 }
