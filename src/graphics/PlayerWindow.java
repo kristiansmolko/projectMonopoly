@@ -38,7 +38,7 @@ public class PlayerWindow {
         img.setFitWidth(40); img.setFitHeight(60);
         img.setTranslateX(-10); img.setTranslateY(10);
         window.setLeft(img);
-        var name = new Label("Player " + player.getPos());
+        var name = new Label(player.getName());
         name.setMaxSize(120,20);
         money = new Label("Account: " + player.getAccount());
         money.setMaxSize(120,20);
