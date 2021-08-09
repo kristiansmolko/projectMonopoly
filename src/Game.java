@@ -45,10 +45,7 @@ public class Game {
     private static MediaPlayer wood, villager, chestOpen, nether, ironHoe, eat, arrow, bow, water, ironPick, ironSword, shield, ironArmor,
             portalEffect, enchant, brewing, shulker, start, fanfare, loser;
 
-    private static final String P1WON = "Player 1 has WON this game!";
-    private static final String P2WON = "Player 2 has WON this game!";
-    private static final String P3WON = "Player 3 has WON this game!";
-    private static final String P4WON = "Player 4 has WON this game!";
+    private static final String PWON = " has WON this game!";
     private static final String PRISON = "prison";
     private static final String OWNED = "You own this tile.";
     private static final String LOST = " has lost!\n";
@@ -848,7 +845,7 @@ public class Game {
     }
 
     private static void consolePlayer(TextArea console, Player player, String s) {
-        console.setText("Player " + player.getPos() + s);
+        console.setText(player.getName() + s);
     }
 
     private static void loseMoney(PlayerWindow w1, PlayerWindow w2, PlayerWindow w3, PlayerWindow w4, Player player) {
@@ -956,99 +953,54 @@ public class Game {
         var firework = new ImageView(new Image("fireworks.png"));
         firework.setTranslateX(150); firework.setTranslateY(100);
         firework.setFitHeight(700); firework.setFitWidth(700);
-        if (player1.getAccount() <= 0){
-            win.setText(P2WON);
-            center.getChildren().add(win);
-            turn = 0;
-            fanfare.play();
-            center.getChildren().add(firework);
-            FadeTransition blink = blink(firework, center);
-            blink.play();
-        }
-        else if (player2.getAccount() <= 0){
-            win.setText(P1WON);
-            center.getChildren().add(win);
-            turn = 0;
-            fanfare.play();
-            center.getChildren().add(firework);
-            FadeTransition blink = blink(firework, center);
-            blink.play();
-        }
+        if (player1.getAccount() <= 0)
+            win.setText(player2.getName() + PWON);
+        else if (player2.getAccount() <= 0)
+            win.setText(player1.getName() + PWON);
+        center.getChildren().add(win);
+        turn = 0;
+        fanfare.play();
+        center.getChildren().add(firework);
+        FadeTransition blink = blink(firework, center);
+        blink.play();
     }
 
     private static void playerWinner(Player player1, Player player2, Player player3){
         var firework = new ImageView(new Image("fireworks.png"));
         firework.setTranslateX(150); firework.setTranslateY(100);
         firework.setFitHeight(700); firework.setFitWidth(700);
-        if (player1.getAccount() <= 0 && player2.getAccount() <= 0){
-            win.setText(P3WON);
-            center.getChildren().add(win);
-            turn = 0;
-            fanfare.play();
-            center.getChildren().add(firework);
-            FadeTransition blink = blink(firework, center);
-            blink.play();
-        }
-        else if (player1.getAccount() <= 0 && player3.getAccount() <= 0){
-            win.setText(P2WON);
-            center.getChildren().add(win);
-            turn = 0;
-            fanfare.play();
-            center.getChildren().add(firework);
-            FadeTransition blink = blink(firework, center);
-            blink.play();
-        }
-        else if (player2.getAccount() <= 0 && player3.getAccount() <= 0){
-            win.setText(P1WON);
-            center.getChildren().add(win);
-            turn = 0;
-            fanfare.play();
-            center.getChildren().add(firework);
-            FadeTransition blink = blink(firework, center);
-            blink.play();
-        }
+        if (player1.getAccount() <= 0 && player2.getAccount() <= 0)
+            win.setText(player3.getName() + PWON);
+        else if (player1.getAccount() <= 0 && player3.getAccount() <= 0)
+            win.setText(player2.getName() + PWON);
+        else if (player2.getAccount() <= 0 && player3.getAccount() <= 0)
+            win.setText(player1.getName() + PWON);
+        center.getChildren().add(win);
+        turn = 0;
+        fanfare.play();
+        center.getChildren().add(firework);
+        FadeTransition blink = blink(firework, center);
+        blink.play();
     }
 
     private static void playerWinner(Player player1, Player player2, Player player3, Player player4){
         var firework = new ImageView(new Image("fireworks.png"));
         firework.setTranslateX(150); firework.setTranslateY(100);
         firework.setFitHeight(700); firework.setFitWidth(700);
-        if (player1.getAccount() <= 0 && player2.getAccount() <= 0 && player3.getAccount() <= 0){
-            win.setText(P4WON);
-            center.getChildren().add(win);
-            turn = 0;
-            fanfare.play();
-            center.getChildren().add(firework);
-            FadeTransition blink = blink(firework, center);
-            blink.play();
-        }
-        else if (player1.getAccount() <= 0 && player2.getAccount() <= 0 && player4.getAccount() <= 0){
-            win.setText(P3WON);
-            center.getChildren().add(win);
-            turn = 0;
-            fanfare.play();
-            center.getChildren().add(firework);
-            FadeTransition blink = blink(firework, center);
-            blink.play();
-        }
-        else if (player1.getAccount() <= 0 && player3.getAccount() <= 0 && player4.getAccount() <= 0){
-            win.setText(P2WON);
-            center.getChildren().add(win);
-            turn = 0;
-            fanfare.play();
-            center.getChildren().add(firework);
-            FadeTransition blink = blink(firework, center);
-            blink.play();
-        }
-        else if (player2.getAccount() <= 0 && player3.getAccount() <= 0 && player4.getAccount() <= 0){
-            win.setText(P1WON);
-            center.getChildren().add(win);
-            turn = 0;
-            fanfare.play();
-            center.getChildren().add(firework);
-            FadeTransition blink = blink(firework, center);
-            blink.play();
-        }
+        if (player1.getAccount() <= 0 && player2.getAccount() <= 0 && player3.getAccount() <= 0)
+            win.setText(player4.getName() + PWON);
+        else if (player1.getAccount() <= 0 && player2.getAccount() <= 0 && player4.getAccount() <= 0)
+            win.setText(player3.getName() + PWON);
+        else if (player1.getAccount() <= 0 && player3.getAccount() <= 0 && player4.getAccount() <= 0)
+            win.setText(player2.getName() + PWON);
+        else if (player2.getAccount() <= 0 && player3.getAccount() <= 0 && player4.getAccount() <= 0)
+            win.setText(player1.getName() + PWON);
+        center.getChildren().add(win);
+        turn = 0;
+        fanfare.play();
+        center.getChildren().add(firework);
+        FadeTransition blink = blink(firework, center);
+        blink.play();
     }
 
 }
