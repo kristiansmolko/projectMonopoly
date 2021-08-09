@@ -23,10 +23,7 @@ import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import static graphics.Graphics.*;
 import static extra.Util.*;
@@ -39,7 +36,7 @@ public class Game {
     private static final Rectangle rect = makeDice();
     private static final Label win = new Label();
     private static Group center;
-    private static ArrayList<String> tiles = new ArrayList<>();
+    private static List<String> tiles = new ArrayList<>();
     private static final int[] values = new int[] {200, 60, 60, 100, 80, 100, 100, 0, 120, 0, 140, 140, 160, 0, 180, 200,
             0, 220, 100, 220, 240, 260, 260, 0, 280, 0, 300, 300, 320, 0, 350, 400};
     private static MediaPlayer wood, villager, chestOpen, nether, ironHoe, eat, arrow, bow, water, ironPick, ironSword, shield, ironArmor,
@@ -49,9 +46,9 @@ public class Game {
     private static final String PRISON = "prison";
     private static final String OWNED = "You own this tile.";
     private static final String LOST = " has lost!\n";
-    private static final String usedPrisonChance = "You used your prisonFree chance.";
+    private static final String USED_PRISON_CHANCE = "You used your prisonFree chance.";
 
-    public static ArrayList<String> makeTiles(){
+    public static List<String> makeTiles(){
         var chance = "CHANCE";
         var tiles = new String[] {"START", "Wood", "Stick", "TAX", "Crafting Table", "Stone Pickaxe",
                 "Cobblestone", chance, "Iron Ore", "JAIL", "Iron Hoe", "Wheat", "Carrot", chance, "Arrow",
@@ -477,15 +474,11 @@ public class Game {
                                                     } else {
                                                         var text1 = new Label("Do you want to buy \n" + tiles.get(player.getTile()) + " for " + values[player.getTile()] + "?");
                                                         text1.setTranslateX(20);
-                                                        var yes1 = new Button("Buy");
-                                                        yes1.setTranslateY(30);
-                                                        yes1.setTranslateX(70);
-                                                        yes1.setPrefSize(60, 40);
+                                                        var yes1 = getBuyButton();
                                                         yes1.setOnAction(actionEvent12 -> {
                                                             buyTile(w1, w2, w3, w4, console, player);
-                                                            if (player.getAccount() <= 0) {
+                                                            if (player.getAccount() <= 0)
                                                                 playerLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
-                                                            }
                                                             buy.setTop(null);
                                                         });
                                                         var buySetup = new GridPane();
@@ -534,7 +527,7 @@ public class Game {
                                                         });
                                                     } else {
                                                         player.getExtra().remove(PRISON);
-                                                        console.appendText(usedPrisonChance);
+                                                        console.appendText(USED_PRISON_CHANCE);
                                                         updatePlayers(w1, w2, w3, w4, player);
                                                     }
                                                 } else if (chances[chanceNum].getValue() == 16) {
@@ -572,7 +565,7 @@ public class Game {
                                                     portal.setOnFinished(e -> {
                                                         if (player.getExtra().contains(PRISON)){
                                                             player.getExtra().remove(PRISON);
-                                                            console.appendText(usedPrisonChance);
+                                                            console.appendText(USED_PRISON_CHANCE);
                                                         }
                                                         updatePlayers(w1, w2, w3, w4, player);
                                                     });
@@ -658,15 +651,11 @@ public class Game {
                                     } else {
                                         var text = new Label("Do you want to buy \n" + tiles.get(player.getTile()) + " for " + values[player.getTile()] + "?");
                                         text.setTranslateX(20);
-                                        var yes = new Button("Buy");
-                                        yes.setTranslateY(30);
-                                        yes.setTranslateX(70);
-                                        yes.setPrefSize(60, 40);
+                                        var yes = getBuyButton();
                                         yes.setOnAction(actionEvent12 -> {
                                             buyTile(w1, w2, w3, w4, console, player);
-                                            if (player.getAccount() <= 0) {
+                                            if (player.getAccount() <= 0)
                                                 playerLose(player1, player2, player3, player4, w1, w2, w3, w4, console, player);
-                                            }
                                             buy.setTop(null);
                                         });
                                         var buySetup = new GridPane();
@@ -743,7 +732,7 @@ public class Game {
                                         portal.setOnFinished(e1 -> {
                                             if (player.getExtra().contains(PRISON)){
                                                 player.getExtra().remove(PRISON);
-                                                console.appendText(usedPrisonChance);
+                                                console.appendText(USED_PRISON_CHANCE);
                                             }
                                             updatePlayers(w1, w2, w3, w4, player);
                                         });
