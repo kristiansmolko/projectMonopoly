@@ -25,6 +25,7 @@ import javafx.util.Duration;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Random;
 
 import static graphics.Graphics.*;
@@ -198,7 +199,7 @@ public class Game {
         fade.setNode(figure);
     }
 
-    public static BorderPane createGame(ArrayList<String> figures){
+    public static BorderPane createGame(Map<String, String> figures){
         var root = new BorderPane();
         var border = new BorderPane();
         center = new Group();
@@ -229,19 +230,19 @@ public class Game {
         //add figures to players
         switch (numOfPlayers) {
             case 3 -> {
-                player1.setFigure(figures.get(0));
-                player2.setFigure(figures.get(1));
-                player3.setFigure(figures.get(2));
+                setPlayer(player1, figures, 1);
+                setPlayer(player2, figures, 2);
+                setPlayer(player3, figures, 3);
                 }
             case 4 -> {
-                player1.setFigure(figures.get(0));
-                player2.setFigure(figures.get(1));
-                player3.setFigure(figures.get(2));
-                player4.setFigure(figures.get(3));
+                setPlayer(player1, figures, 1);
+                setPlayer(player2, figures, 2);
+                setPlayer(player3, figures, 3);
+                setPlayer(player4, figures, 4);
             }
             default -> {
-                player1.setFigure(figures.get(0));
-                player2.setFigure(figures.get(1));
+                setPlayer(player1, figures, 1);
+                setPlayer(player2, figures, 2);
                 }
         }
 
