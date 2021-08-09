@@ -1,6 +1,7 @@
 package extra;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Random;
 
 public class Util {
@@ -35,5 +36,32 @@ public class Util {
             allChance.remove(number);
         }
         return chances;
+    }
+
+    public static String getPlayerName(Map<String, String> map, int position){
+        var pos = 1;
+        for(Map.Entry<String, String> entry : map.entrySet()){
+            if (pos == position)
+                return entry.getKey();
+            else
+                pos -= -1;
+        }
+        return "";
+    }
+
+    public static String getPlayerFigure(Map<String, String> map, int position){
+        var pos = 1;
+        for(Map.Entry<String, String> entry : map.entrySet()){
+            if (pos == position)
+                return entry.getValue();
+            else
+                pos -= -1;
+        }
+        return "";
+    }
+
+    public static void setPlayer(Player player, Map<String, String> map, int position){
+        player.setFigure(getPlayerFigure(map, position));
+        player.setName(getPlayerName(map, position));
     }
 }
