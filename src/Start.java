@@ -2,6 +2,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -9,6 +10,9 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static extra.Rules.*;
 
@@ -17,7 +21,8 @@ public class Start {
     private int picture = 0;
     private int numOfPlayers = 2;
     private final ArrayList<String> available = new ArrayList<>();
-    private final ArrayList<String> figures = new ArrayList<>();
+//    private final ArrayList<String> figures = new ArrayList<>();
+    private final Map<String, String> figures = new LinkedHashMap<>();
 
     private static final String ROUNDER_BUTTON = "-fx-background-radius: 1em;";
     private static final String FONT = "Times New Roman";
@@ -217,30 +222,34 @@ public class Start {
         buttons.setTranslateX(500);
         buttons.setHgap(50);
 
+        var playerNameField = playerNameField();
+        var playerName = "";
+
         var another = new Button("Next");
-        another.setTranslateX(700);
+        another.setTranslateX(400);
         another.setPrefWidth(100);
         another.setPrefHeight(100);
         another.setStyle(ROUNDER_BUTTON);
         another.setFont(Font.font(FONT, 25));
         another.setOnAction(e -> {
             if (current != numOfPlayers) {
-                figures.add(available.get(picture)+".png");
+                figures.put(playerNameField.getText().trim(), available.get(picture)+".png");
                 available.remove(picture);
                 picture = 0;
                 next();
-                figure.setTop(figureTop(another));
+                playerNameField.setText("");
+                figure.setTop(figureTop(playerNameField, another));
                 img.setImage(new Image(available.get(picture) + ".png"));
                 root.setCenter(figure);
                 if (current == numOfPlayers) another.setText("Play");
             } else {
-                figures.add(available.get(picture)+".png");
+                figures.put(playerNameField.getText().trim(), available.get(picture)+".png");
                 stage.setScene(new Scene(Game.createGame(figures), 1200, 800));
                 stage.show();
             }
         });
 
-        figure.setTop(figureTop(another));
+        figure.setTop(figureTop(playerNameField, another));
         figure.setCenter(img);
         figure.setBottom(buttons);
 
@@ -259,10 +268,16 @@ public class Start {
         available.add("zombified piglin");
     }
 
-    private GridPane figureTop(Button another){
+    private GridPane figureTop(TextField text, Button another){
         var root = new GridPane();
         root.setTranslateY(50);
-        root.addRow(0, playerFigure(), another);
+
+        var label = new Label("Player's name:");
+        label.setTranslateX(250);
+        label.setMaxHeight(80);
+        label.setFont(Font.font(FONT, 40));
+
+        root.addRow(0, label, text, another);
         return root;
     }
 
@@ -275,14 +290,14 @@ public class Start {
         return button;
     }
 
-    private Label playerFigure(){
-        var label = new Label();
-        label.setTranslateX(470);
-        label.setMaxHeight(100);
-        label.setMaxWidth(400);
-        label.setText("Player's " + current + " figure");
-        label.setFont(Font.font(FONT, 40));
-        return label;
+    private TextField playerNameField(){
+        var text = new TextField();
+        text.setTranslateX(300);
+        text.setMaxHeight(80);
+        text.setMaxWidth(300);
+//        label.setText("Player's " + current + " figure");
+        text.setFont(Font.font(FONT, 40));
+        return text;
     }
 
     private void next(){
