@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class Player {
     private int account;
     private int pos, tile = 0;
+    private String name;
     private ArrayList<String> owned;
     private Image figure;
     private boolean inPrison, defeated;
@@ -18,6 +19,7 @@ public class Player {
         owned = new ArrayList<>();
         extra = new ArrayList<>();
         pos = num;
+        name = "Player " + pos;
         inPrison = false;
         defeated = false;
     }
@@ -25,6 +27,10 @@ public class Player {
     public int getAccount() {
         return account;
     }
+
+    public String getName() { return name; }
+
+    public void setName(String name) { this.name = name; }
 
     public void setAccount(int account) {
         this.account = account;
