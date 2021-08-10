@@ -1,8 +1,15 @@
 package extra;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
+
+import static extra.API.getAPIForBadWords;
 
 public class Util {
     private static final Random rnd = new Random();
@@ -63,5 +70,20 @@ public class Util {
     public static void setPlayer(Player player, Map<String, String> map, int position){
         player.setFigure(getPlayerFigure(map, position));
         player.setName(getPlayerName(map, position));
+    }
+
+    public static boolean checkIfNameOk(String name) {
+        if (name.length() <= 3 || name.length() >= 15) return false;
+        HttpResponse<String> response = null;
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://community-purgomalum.p.rapidapi.com/containsprofanity?text="+name))
+                    .header("x-rapidapi-key", getAPIForBadWords())
+                    .header("x-rapidapi-host", "community-purgomalum.p.rapidapi.com")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) { e.printStackTrace(); }
+        return !response.body().equals("true");
     }
 }
