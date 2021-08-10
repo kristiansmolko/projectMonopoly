@@ -1,19 +1,28 @@
+import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static extra.Rules.*;
+import static extra.Util.checkIfNameOk;
 
 public class Start {
     private int current = 1;
@@ -188,6 +197,7 @@ public class Start {
         return button;
     }
 
+    private final TextField playerNameField = playerNameField();
     private void figureChoose(Stage stage){
         var root = new BorderPane();
 
@@ -220,7 +230,7 @@ public class Start {
         buttons.setTranslateX(500);
         buttons.setHgap(50);
 
-        var playerNameField = playerNameField();
+        var stack = infoAboutName();
 
         var another = new Button("Next");
         another.setTranslateX(400);
@@ -228,25 +238,9 @@ public class Start {
         another.setPrefHeight(100);
         another.setStyle(ROUNDER_BUTTON);
         another.setFont(Font.font(FONT, 25));
-        another.setOnAction(e -> {
-            if (current != numOfPlayers) {
-                figures.put(playerNameField.getText().trim(), available.get(picture)+".png");
-                available.remove(picture);
-                picture = 0;
-                next();
-                playerNameField.setText("");
-                figure.setTop(figureTop(playerNameField, another));
-                img.setImage(new Image(available.get(picture) + ".png"));
-                root.setCenter(figure);
-                if (current == numOfPlayers) another.setText("Play");
-            } else {
-                figures.put(playerNameField.getText().trim(), available.get(picture)+".png");
-                stage.setScene(new Scene(Game.createGame(figures), 1200, 800));
-                stage.show();
-            }
-        });
+        another.setOnAction(nextButtonClickEvent(stack, img, another, stage));
 
-        figure.setTop(figureTop(playerNameField, another));
+        figure.setTop(figureTop(playerNameField, another, stack));
         figure.setCenter(img);
         figure.setBottom(buttons);
 
@@ -258,6 +252,92 @@ public class Start {
         stage.show();
     }
 
+    private EventHandler<ActionEvent> nextButtonClickEvent(StackPane stack, ImageView img, Button another, Stage stage){
+        return actionEvent -> {
+            if (current != numOfPlayers) {
+                if (!checkIfNameOk(playerNameField.getText().trim())) {
+                    badEntry(playerNameField);
+                    setupNameInfo(stack);
+                } else {
+                    figures.put(playerNameField.getText().trim(), available.get(picture) + ".png");
+                    available.remove(picture);
+                    picture = 0;
+                    next();
+                    playerNameField.setText("");
+                    img.setImage(new Image(available.get(picture) + ".png"));
+                }
+                if (current == numOfPlayers) another.setText("Play");
+            } else {
+                if (!checkIfNameOk(playerNameField.getText().trim())) {
+                    badEntry(playerNameField);
+                    setupNameInfo(stack);
+                } else {
+                    figures.put(playerNameField.getText().trim(), available.get(picture) + ".png");
+                    stage.setScene(new Scene(Game.createGame(figures), 1200, 800));
+                    stage.show();
+                }
+            }
+        };
+    }
+
+    private StackPane infoAboutName(){
+        var stack = new StackPane();
+        stack.setVisible(false);
+        var rectangle = new Rectangle(250, 90);
+        rectangle.setFill(new ImagePattern(new Image("paper.jpg")));
+        rectangle.setTranslateX(250);
+        rectangle.setTranslateY(60);
+        var label = new Label("- use appropriate words" +
+                "\n- should be longer than 3 characters" +
+                "\n- shouldn't be longer than 15 characters");
+        label.setTranslateX(240);
+        label.setTranslateY(60);
+
+        stack.getChildren().addAll(rectangle, label);
+
+        return stack;
+    }
+
+    private void setupNameInfo(StackPane stack){
+        var timer = new Timeline(
+                new KeyFrame(Duration.millis(1000), e -> appearNameInfo(stack)),
+                new KeyFrame(Duration.millis(7000), e -> disappearNameInfo(stack))
+        );
+        timer.setCycleCount(1);
+        timer.play();
+    }
+
+    private void appearNameInfo(StackPane stack){
+        stack.setVisible(true);
+        var fade = new FadeTransition();
+        fade.setToValue(100);
+        fade.setNode(stack);
+        fade.play();
+    }
+
+    private void disappearNameInfo(StackPane stack){
+        var fade = new FadeTransition();
+        fade.setDuration(Duration.millis(3000));
+        fade.setToValue(0);
+        fade.setNode(stack);
+        fade.play();
+        fade.setOnFinished(e -> stack.setVisible(false));
+    }
+
+    private Timeline badEntryTimer(TextField textField){
+        var timer = new Timeline(
+                new KeyFrame(Duration.millis(1), e -> textField.setStyle("-fx-border-color: red; -fx-border-width: 2px")),
+                new KeyFrame(Duration.millis(3000), e -> textField.setStyle("-fx-border-color: gray; -fx-border-width: 2px"))
+        );
+        timer.setCycleCount(1);
+        return timer;
+    }
+
+    private void badEntry(TextField text){
+        var timer = badEntryTimer(text);
+        timer.play();
+    }
+
     private void initFigureList() {
         available.add("diamond steve");
         available.add("creeper");
@@ -265,7 +345,7 @@ public class Start {
         available.add("zombified piglin");
     }
 
-    private GridPane figureTop(TextField text, Button another){
+    private GridPane figureTop(TextField text, Button another, StackPane stack){
         var root = new GridPane();
         root.setTranslateY(50);
 
@@ -274,7 +354,7 @@ public class Start {
         label.setMaxHeight(80);
         label.setFont(Font.font(FONT, 40));
 
-        root.addRow(0, label, text, another);
+        root.addRow(0, label, text, another, stack);
         return root;
     }
 
